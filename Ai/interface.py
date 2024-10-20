@@ -1,7 +1,8 @@
 import streamlit as st
 import pymongo
 from langchain_core.messages import AIMessage, HumanMessage
-
+import uuid
+from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
 from rag_mongo_v2 import return_rag_chain
 user_icon="icons/person.png"
@@ -55,6 +56,19 @@ if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'current_user' not in st.session_state:
     st.session_state.current_user = {'name': '', 'username': ''}
+def create_new_chat():
+    new_chat_id = str(uuid.uuid4())
+    st.session_state.chat_sessions[new_chat_id] = {
+        "messages": [{"role": "assistant", "content": "How may I help you today?"}],
+        "history": InMemoryChatMessageHistory()
+    }
+    st.session_state.current_chat_id = new_chat_id
+    open_chat(new_chat_id)
+
+# Initialize chat sessions if not already done
+if "chat_sessions" not in st.session_state:
+    st.session_state.chat_sessions = {}
+    create_new_chat()  # Create the first chat session
 
 # Functions for page navigation
 def go_to_login():
@@ -71,6 +85,9 @@ def logout():
     st.session_state.current_user = {'name': '', 'username': ''}
     go_to_login()  # Return to the login page
     st.rerun()  # Reload the page after logging out
+
+def switch_chat(chat_id):
+    st.session_state.current_chat_id = chat_id
 
 # Welcome page
 if st.session_state.page == 'welcome':
@@ -139,14 +156,31 @@ elif st.session_state.page == 'signup':
                 st.error("Username already exists. Please choose a different one.")
 # Nutrition buddy page after successful sign up or login
 if st.session_state.page == 'nutrition_buddy' and st.session_state.logged_in:
+
+    # Sidebar with user info and logout button
+    with st.sidebar:
+        st.write(f"Welcome, {st.session_state.current_user['name']}!")
+        if st.button("Show User Info"):
+            st.write(f"Username: {st.session_state.current_user['username']}")
+            st.write(f"Name: {st.session_state.current_user['name']}")
+        
+        # Logout button
+        if st.button("Logout"):
+            logout()  # Execute logout process
+    with st.sidebar:
+        st.subheader("Chat Sessions")
+        if st.button("New Chat"):
+            create_new_chat()
+        for chat_id in st.session_state.chat_sessions:
+            if st.button(f"Chat {chat_id[:8]}", key=chat_id):
+                switch_chat(chat_id)
     # Initialize the Nutrition buddy page
     st.header("🥦 Nutrition buddy 🤓!")
-    user=st.session_state.current_user['username']
     # Check if open_chat returns anything and initialize chat_with_history
-    chat_with_history = open_chat(user)
+    chat_with_history = open_chat(st.session_state.current_chat_id)
     if chat_with_history is None:
         chat_with_history = MongoDBChatMessageHistory(
-            session_id=user,
+            session_id=st.session_state.current_chat_id,
             connection_string=uri,
             database_name="nutrition_buddy",
             collection_name="history"
@@ -168,23 +202,11 @@ if st.session_state.page == 'nutrition_buddy' and st.session_state.logged_in:
         with  st.chat_message("assistant",avatar=bot_icon):
             st.write(assistant_response)
 
-    # Sidebar with user info and logout button
-    with st.sidebar:
-        st.write(f"Welcome, {st.session_state.current_user['name']}!")
-        if st.button("Show User Info"):
-            st.write(f"Username: {st.session_state.current_user['username']}")
-            st.write(f"Name: {st.session_state.current_user['name']}")
-        
-        # Logout button
-        if st.button("Logout"):
-            logout()  # Execute logout process
-
     # Initialize session state for current response if not already
     if "current_response" not in st.session_state:
         st.session_state.current_response = ""
 
-    # Display previous messages
-
+ 
 
     
 
