@@ -20,14 +20,15 @@
 
     <div class="signUp-part2" *ngIf="genderChosen">
         <h1 class="text-align-center brand-light-green font-size-50">Your goals, our mission.</h1>
-        <form action="" class="FLEX-COL">
+        <form action="" >
 
-            <div *ngFor="let q of questionsList">
+            <div *ngFor="let q of questionsList" class="FLEX-COL">
                 <label class="white font-size-20">{{q.question}}</label>
                 <input
                 [type]="q.type"
                 [placeholder]="q.placeholder"
                 [required]="q.required"
+                class="defaultInput"
                 />
             </div>
        <!--      <label for="email" class="white font-size-20">Email</label>

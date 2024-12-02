@@ -3,9 +3,12 @@ import { QuestionsService } from './services/questions.service';
 
 @Component({
   selector: 'app-sign-up',
+  standalone: false,
+  
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss'
 })
+
 export class SignUpComponent implements OnInit {
 
   genderChosen:boolean = false;
@@ -23,3 +26,4 @@ export class SignUpComponent implements OnInit {
     });
   }
 }
+
