@@ -1,0 +1,30 @@
+<div class="login-container FLEX-COL center-content bg-brand-black">
+    <h1 class="text-align-center brand-light-green font-size-50">Become the better version of yourself</h1>
+    <div class="login-part" *ngIf="!showForgetPassword">
+        <form action="submit" class="FLEX-COL ">
+            <label for="email" class="white font-size-20">Username/Email</label>
+            <input type="email" name="email" id="email" required>
+
+            <label for="password" class="white font-size-20">Password</label>
+            <input type="password" name="password" id="password" required>
+
+            <a href="#" (click)="toggleForgetPassword()">Forgot your password?</a>
+
+            <button type="submit" class="bg-brand-light-green brand-black font-size-20">Login</button>
+
+            <p class="text-align-center white font-size-20">New User? <a href=""> Register!</a></p>
+        </form>
+    </div>
+
+    <div class="forgetPass-part" *ngIf="showForgetPassword">
+
+        <img src="/assets/images/arrow-button.svg" alt="return button" (click)="toggleForgetPassword()">
+        <form action="submit" class="FLEX-COL formForgetPass">
+            <label for="emailPass" class="white font-size-20">Enter your email</label>
+            <input type="email" name="emailPass" id="emailPass" required>
+
+            <button type="submit" class="bg-brand-light-green brand-black font-size-20">Continue</button>
+
+        </form>
+    </div>
+</div>

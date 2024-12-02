@@ -1,0 +1,47 @@
+.login-container {
+    height: 100vh;
+    padding: 1em;
+    box-sizing: border-box;
+    background: url("/assets/images/background.png") no-repeat center center / cover;
+
+
+    .login-part {
+        width: 75%;
+    }
+
+    .forgetPass-part {
+        width: 75%;
+
+        img {
+            height: 24px;
+            width: 24px;
+            margin-bottom: 15px;
+        }
+    }
+
+    form {
+        width: 100%;
+
+        label,
+        input,
+        a,
+        button {
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        input,
+        button {
+            height: 30px;
+            height: 30px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        a {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: none;
+        }
+    }
+}
