@@ -2,11 +2,13 @@
     height: 100vh;
     padding: 1em;
     box-sizing: border-box;
-    background: url("/assets/images/background.png") no-repeat center center / cover;
+    background: url("/assets/images/bg.svg") no-repeat center center / cover;
 
 
     .login-part {
-        width: 75%;
+        background: url("/assets/images/bg.svg") no-repeat center center / cover;
+        width: 70%;
+        padding: 2em;
     }
 
     .forgetPass-part {
@@ -19,6 +21,8 @@
         }
     }
 
+
+
     form {
         width: 100%;
 
@@ -26,5 +30,29 @@
         a {
             margin-bottom: 15px;
         }
+
+        .input-container {
+            position: relative;
+
+            input {
+                width: 100%;
+                padding: 1em 2.2em;
+                box-sizing: border-box;
+            }
+
+            .passInput::placeholder {
+                position: relative;
+                top: 5px;
+            }
+
+            img {
+                position: absolute;
+                top: 33%;
+                left: 5px;
+                transform: translateY(-50%);
+                height: 24px;
+            }
+        }
+
     }
 }

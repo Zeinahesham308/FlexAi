@@ -1,8 +1,8 @@
 .signUp-container {
     height: 100vh;
-    padding: 1em;
+    padding: 1em 5em;
     box-sizing: border-box;
-    background: url("/assets/images/background.png") no-repeat center center / cover;
+    background: url("/assets/images/bg8.jpg") no-repeat center center / cover;
 
 
     label {
@@ -22,16 +22,25 @@
     }
 
     .signUp-part2 {
+
+        .btns{
+            width:150px;
+        }
         button {
             width: 55px;
-            position: relative;
-            left: 530px;
-            background: transparent;
             margin-top: 15px;
 
             img {
                 width: 55px;
             }
+        }
+
+        .btns{
+            width: 100%;
+        }
+        .submitBtn,
+        .prevBtn{
+            background: transparent;
         }
     }
 }

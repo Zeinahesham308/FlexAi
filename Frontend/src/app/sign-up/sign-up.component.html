@@ -20,27 +20,90 @@
 
     <div class="signUp-part2" *ngIf="genderChosen">
         <h1 class="text-align-center brand-light-green font-size-50">Your goals, our mission.</h1>
-        <form action="" >
+        <form #signUpForm="ngForm" (ngSubmit)="onNextClick(signUpForm)">
 
-            <div *ngFor="let q of questionsList" class="FLEX-COL">
-                <label class="white font-size-20">{{q.question}}</label>
-                <input
-                [type]="q.type"
-                [placeholder]="q.placeholder"
-                [required]="q.required"
-                class="defaultInput"
-                />
+            <div *ngFor="let q of displayedQuestions" class="FLEX-COL">
+
+                <div *ngIf="q.id===5">
+                    <div class="units FLEX-COL ">
+                        <label class="white font-size-20">Units</label>
+                        <select name="units" id="units" [(ngModel)]="selectedHeightUnit" class="defaultInput">
+                            <option value="cm">Centimeters (cm)</option>
+                            <option value="ft">Feet (ft)</option>
+                            <option value="in">Inches (in)</option>
+                        </select>
+
+                        <label for="{{q.id}}" class="white font-size-20">{{q.question}} ({{selectedHeightUnit}})</label>
+                        <input *ngIf="q.type === 'text'" [type]="q.type" [id]="q.id" [name]="q.id.toString()"
+                            [(ngModel)]="q.answer" [placeholder]="q.placeholder" [required]="q.required"
+                            class="defaultInput" />
+
+                    </div>
+                </div>
+
+                <div *ngIf="q.id===6 || q.id===7">
+                    <div class="units FLEX-COL ">
+                        <label class="white font-size-20">Units</label>
+                        <select name="Wunits" id="Wunits" [(ngModel)]="selectedWeightUnit" class="defaultInput">
+                            <option value="Kg" selected>Kg</option>
+                            <option value="Ib">Ib</option>
+                        </select>
+
+                        <label for="{{q.id}}" class="white font-size-20">{{q.question}} ({{selectedWeightUnit}})</label>
+                        <input *ngIf="q.type === 'text'" [type]="q.type" [id]="q.id" [name]="q.id.toString()"
+                            [(ngModel)]="q.answer" [placeholder]="q.placeholder" [required]="q.required"
+                            class="defaultInput" />
+
+                    </div>
+                </div>
+
+                <!-- Question 10 - Conditional rendering for question 11 -->
+                <div *ngIf="q.id === 10">
+                    <label class="white font-size-20">{{q.question}}</label>
+                    <div *ngFor="let option of q.options">
+                        <label class="white font-size-20">
+                            <input [type]="q.type" [name]="q.id.toString()" [value]="option" [(ngModel)]="selectedLocation" />
+                            {{ option }}
+                        </label>
+                    </div>
+                </div>
+                
+
+                <!-- Question 11 - Only visible if answer to question 10 is "Home" -->
+                <div *ngIf="q.id === 11 && selectedLocation === 'Home'">
+                    <label class="white font-size-20">{{q.question}}</label>
+                    <input *ngIf="q.type === 'text'" [type]="q.type" [id]="q.id" [name]="q.id.toString()"
+                        [(ngModel)]="q.answer" [placeholder]="q.placeholder" [required]="q.required"
+                        class="defaultInput" />
+                </div>
+
+                <div class="FLEX-COL" *ngIf="q.id!==5 && q.id!==6 && q.id!==7 && q.id!==10 && q.id!==11">
+                    <label for="{{q.id}}" class="white font-size-20">{{q.question}}</label>
+                    <input *ngIf="q.type === 'text'|| q.type === 'email' || q.type === 'password'" [type]="q.type"
+                        [id]="q.id" [name]="q.id.toString()" [(ngModel)]="q.answer" [placeholder]="q.placeholder"
+                        [required]="q.required" class="defaultInput" />
+
+                    <!--    ana m4 3amla bind ly answer 34an kant bt3ml bug 2ly hwa b2dr a-select kaza 7aga   -->
+                    <div *ngIf="q.type === 'radio'" class="FLEX-COL">
+                        <label *ngFor="let option of q.options" class="white font-size-20">
+                            <input [type]="q.type" [name]="'gender'" [value]="option" [required]="q.required" />
+                            {{ option }}
+                        </label>
+                    </div>
+                </div>
+
             </div>
-       <!--      <label for="email" class="white font-size-20">Email</label>
-            <input type="email" name="email" id="email" class="defaultInput" required>
+            <div class="btns FLEX justify-space-between align-center">
+                <button type="button" class="defaultButton  FLEX center-content prevBtn"
+                    (click)="goToPreviousQuestion()"
+                    [disabled]="currentIndex === 0 || currentIndex === 1|| currentIndex === 2">
+                    <img src="/assets/images/Lwhite-arrow.png" alt="back button"></button>
 
-            <label for="name" class="white font-size-20">Name</label>
-            <input type="text" name="name" id="name" class="defaultInput" required>
+                <button type="submit" class="defaultButton  FLEX center-content submitBtn"
+                    [disabled]="signUpForm.invalid">
+                    <img src="/assets/images/white-arrow.png" alt="next button"></button>
+            </div>
 
-            <label for="password" class="white font-size-20">Password</label>
-            <input type="password" name="password" id="password" class="defaultInput" required> -->
-
-            <button class="defaultButton  FLEX center-content"><img src="/assets/images/white-arrow.png" alt="next button"></button>
         </form>
     </div>
 </div>
