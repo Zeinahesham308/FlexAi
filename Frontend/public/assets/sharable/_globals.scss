@@ -1,0 +1,40 @@
+/*------------------------------------------------------- GLOBALS ---------------------------------------------------------*/
+
+
+.INLINE{
+    display: inline;
+}
+.FLEX{
+    display: flex;
+}
+
+.FLEX-COL{
+    display: flex;
+    flex-direction: column;
+}
+
+.justify-center{
+    justify-content: center;
+}
+
+
+.justify-space-between{
+    justify-content: space-between;
+}
+
+.justify-flex-end{
+    justify-content: flex-end;
+}
+
+.align-center{
+    align-items: center;
+}
+
+.center-content{
+    justify-content: center;
+    align-items: center;
+}
+
+.text-align-center{
+    text-align: center;
+}

@@ -1,0 +1,42 @@
+/*------------------------------------------------------- COLORS ---------------------------------------------------------*/
+
+@import 'variables';
+
+/*---------------------------------------------------- COLORS CLASSES ----------------------------------------------------*/
+
+$colors-map:(
+    'black-20':$black-20,
+    'black-80':$black-80,
+    'black':$black,
+    'white':$white,
+    'off-white':$off-white,
+
+    'brand-black':$brand-black,
+    'brand-light-green':$brand-light-green,
+    'brand-dark-green':$brand-dark-green,
+    'brand-grey':$brand-grey,
+
+);
+
+@each $key,$value in $colors-map{
+    .#{$key}{
+        color:$value;
+    }
+}
+
+
+$bg-colors-map:(
+    'bg-black-80':$black-80,
+    'bg-white':$white,
+    'bg-brand-black':$brand-black,
+    'bg-brand-light-green':$brand-light-green,
+    'bg-brand-dark-green':$brand-dark-green,
+    'bg-brand-grey':$brand-grey,
+);
+
+@each $key,$value in $bg-colors-map{
+    .#{$key}{
+        background-color:$value;
+    }
+}
+

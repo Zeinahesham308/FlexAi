@@ -1,0 +1,42 @@
+/*------------------------------------------------------- Typograpghy ---------------------------------------------------------*/
+
+@import 'variables';
+
+/*---------------------------------------------------- TYPOGRAPHY CLASSES ----------------------------------------------------*/
+
+$font-family-map:(
+    'font-family-Playfair':$font-family-Playfair,
+    'font-family-Roboto':$font-family-Roboto
+);
+
+@each $key,$value in $font-family-map{
+    .#{$key}{
+        font-family:$value;
+    }
+}
+
+$font-size-map:(
+'font-size-8':$font-size-8,
+ 'font-size-16':$font-size-16,
+ 'font-size-20':$font-size-20,
+ 'font-size-24':$font-size-24,
+ 'font-size-36':$font-size-36,
+ 'font-size-50':$font-size-50
+);
+
+@each $key,$value in $font-size-map{
+    .#{$key}{
+        font-size:$value;
+    }
+}
+
+$font-weight-map:(
+    'font-weight-regular':$font-weight-regular,
+    'font-weight-bold':$font-weight-bold,
+);
+
+@each $key,$value in $font-weight-map{
+    .#{$key}{
+        font-weight:$value;
+    }
+}
