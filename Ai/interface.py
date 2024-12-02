@@ -44,7 +44,8 @@ def get_rag_chain():
 rag_chain = get_rag_chain()
 
 # MongoDB connection
-uri = "mongodb+srv://hossam6ht:12345@cluster0.tuiqy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+uri = "mongodb+srv://hossam7ht:12345@cluster0.i2o3g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
 client = pymongo.MongoClient(uri)
 db = client['nutrition_buddy']   
 users_collection = db['users']
