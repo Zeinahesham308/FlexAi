@@ -1,0 +1,45 @@
+<div class="signUp-container FLEX-COL center-content font-family-brand">
+    <div class="signUp-part1" *ngIf="!genderChosen">
+        <h1 class="text-align-center brand-light-green font-size-50">Become the better version of yourself</h1>
+        <p class="text-align-center white font-size-20">Unlock your path to a healthier lifestyle with personalized
+            workout and nutrition plans! Our platform uses AI to create effective and enjoyable routines tailored just
+            for you!</p>
+
+        <div class="gender-choice ">
+            <div class="FLEX-COL center-content">
+                <label for="gender" class="white font-size-20"> Select your gender</label><br>
+                <div class="choices  FLEX justify-space-between">
+                    <button type="button" class="bg-brand-light-green brand-black font-size-20 defaultButton"
+                        (click)="setGender()">Male</button>
+                    <button type="button" class="bg-brand-light-green brand-black font-size-20 defaultButton"
+                        (click)="setGender()">Female</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="signUp-part2" *ngIf="genderChosen">
+        <h1 class="text-align-center brand-light-green font-size-50">Your goals, our mission.</h1>
+        <form action="" class="FLEX-COL">
+
+            <div *ngFor="let q of questionsList">
+                <label class="white font-size-20">{{q.question}}</label>
+                <input
+                [type]="q.type"
+                [placeholder]="q.placeholder"
+                [required]="q.required"
+                />
+            </div>
+       <!--      <label for="email" class="white font-size-20">Email</label>
+            <input type="email" name="email" id="email" class="defaultInput" required>
+
+            <label for="name" class="white font-size-20">Name</label>
+            <input type="text" name="name" id="name" class="defaultInput" required>
+
+            <label for="password" class="white font-size-20">Password</label>
+            <input type="password" name="password" id="password" class="defaultInput" required> -->
+
+            <button class="defaultButton  FLEX center-content"><img src="/assets/images/white-arrow.png" alt="next button"></button>
+        </form>
+    </div>
+</div>

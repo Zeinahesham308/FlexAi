@@ -1,18 +1,18 @@
-<div class="login-container FLEX-COL center-content bg-brand-black">
+<div class="login-container FLEX-COL center-content bg-brand-black font-family-brand">
     <h1 class="text-align-center brand-light-green font-size-50">Become the better version of yourself</h1>
     <div class="login-part" *ngIf="!showForgetPassword">
         <form action="submit" class="FLEX-COL ">
             <label for="email" class="white font-size-20">Username/Email</label>
-            <input type="email" name="email" id="email" required>
+            <input type="email" name="email" id="email" class="defaultInput" required>
 
             <label for="password" class="white font-size-20">Password</label>
-            <input type="password" name="password" id="password" required>
+            <input type="password" name="password" id="password" class="defaultInput" required>
 
-            <a href="#" (click)="toggleForgetPassword()">Forgot your password?</a>
+            <a href="#" (click)="toggleForgetPassword()" class="LINK">Forgot your password?</a>
 
-            <button type="submit" class="bg-brand-light-green brand-black font-size-20">Login</button>
+            <button type="submit" class="bg-brand-light-green brand-black font-size-20 defaultButton">Login</button>
 
-            <p class="text-align-center white font-size-20">New User? <a href=""> Register!</a></p>
+            <p class="text-align-center white font-size-20">New User? <a href="" class="LINK"> Register!</a></p>
         </form>
     </div>
 
@@ -21,9 +21,9 @@
         <img src="/assets/images/arrow-button.svg" alt="return button" (click)="toggleForgetPassword()">
         <form action="submit" class="FLEX-COL formForgetPass">
             <label for="emailPass" class="white font-size-20">Enter your email</label>
-            <input type="email" name="emailPass" id="emailPass" required>
+            <input type="email" name="emailPass" id="emailPass" class="defaultInput" required>
 
-            <button type="submit" class="bg-brand-light-green brand-black font-size-20">Continue</button>
+            <button type="submit" class="bg-brand-light-green brand-black font-size-20 defaultButton">Continue</button>
 
         </form>
     </div>

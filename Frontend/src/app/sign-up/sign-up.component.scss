@@ -1,0 +1,37 @@
+.signUp-container {
+    height: 100vh;
+    padding: 1em;
+    box-sizing: border-box;
+    background: url("/assets/images/background.png") no-repeat center center / cover;
+
+
+    label {
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    .signUp-part1 {
+        .choices {
+            width: 200px;
+
+            button {
+                width: 90px;
+            }
+
+        }
+    }
+
+    .signUp-part2 {
+        button {
+            width: 55px;
+            position: relative;
+            left: 530px;
+            background: transparent;
+            margin-top: 15px;
+
+            img {
+                width: 55px;
+            }
+        }
+    }
+}

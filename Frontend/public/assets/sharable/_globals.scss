@@ -38,3 +38,26 @@
 .text-align-center{
     text-align: center;
 }
+
+.LINK{
+    text-decoration: none;
+    cursor: pointer;
+    color: #007bff;
+}
+
+.IBraduis{
+    border-radius: 10px;
+}
+
+.defaultButton{
+    border: none;
+    height: 30px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+}
+
+.defaultInput{
+    height: 30px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+}

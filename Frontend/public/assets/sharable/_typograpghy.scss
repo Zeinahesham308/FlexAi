@@ -5,8 +5,7 @@
 /*---------------------------------------------------- TYPOGRAPHY CLASSES ----------------------------------------------------*/
 
 $font-family-map:(
-    'font-family-Playfair':$font-family-Playfair,
-    'font-family-Roboto':$font-family-Roboto
+    'font-family-brand':$font-family-brand,
 );
 
 @each $key,$value in $font-family-map{

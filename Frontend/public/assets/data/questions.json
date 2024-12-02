@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "question": "Name",
+      "type": "text",
+      "placeholder": "Enter your name",
+      "required": true
+    },
+    {
+      "id": 2,
+      "question": "Emailcd",
+      "type": "email",
+      "placeholder": "Enter your email",
+      "required": true
+    },
+    {
+      "id": 3,
+      "question": "Create a password",
+      "type": "password",
+      "placeholder": "Enter your password",
+      "required": true
+    }
+  ]
+  
