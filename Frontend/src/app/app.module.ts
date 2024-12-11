@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { TestComponent } from './test/test.component';
 
 
 
@@ -16,7 +17,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     AppComponent,
     HomePageComponent,
     LoginComponent,
-    SignUpComponent
+    SignUpComponent,
+    TestComponent
   ],
   imports: [
     BrowserModule,
