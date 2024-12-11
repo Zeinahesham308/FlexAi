@@ -38,7 +38,7 @@ def load_and_process_pdfs(pdf_folder_path):
             pdf_path = os.path.join(pdf_folder_path, file)
             loader = PyPDFLoader(pdf_path)
             documents.extend(loader.load())
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2500, chunk_overlap=400)
     splits = text_splitter.split_documents(documents)
     return splits
 
@@ -52,25 +52,14 @@ def return_rag_chain( ):
     
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
-
     splits = load_and_process_pdfs("nuitrions")
-    
-    
-    
-# vectorstore = Milvus.from_documents( If the vectorstore is not found, it will be created.
-#     documents=splits,
-#     embedding=embeddings,
-#     connection_args={
-#         "uri": "tcp://192.168.1.2:19530", 
-#     },
-#     collection_name="nutritionsNew",
-#     drop_old=True,  
-# )
-    vectorstore = Milvus(
-    
+    splits = load_and_process_pdfs("nuitrions")
+    vectorstore = Milvus.from_documents(
+    splits,
    embeddings,
     connection_args={"uri": "tcp://192.168.1.2:19530"},
     collection_name="nutritionsNew"  # Name of your existing collection
+    
 )
     print("Vectorstore created successfully")
     # %%
@@ -84,17 +73,21 @@ def return_rag_chain( ):
     
 )
     # %%
+
     system_prompt = (
-        "You are an assistant for question-answering tasks. "
-        "Use the following pieces of retrieved context to answer "
-        "the question. If you don't know the answer, say that you "
-        "don't know. "
-        "dont mention the context in your answer"
-        "if the context is not relevant to the question, answer the question without context."
-        "\n\n"
-        "{context}"
-    )
-    
+    "You are an assistant for question-answering tasks. "
+    "Use the following pieces of retrieved context to answer the question. "
+    "If the context provides a clear answer, prioritize it. "
+    "If the context is incomplete or ambiguous, supplement it with your own knowledge, "
+    "as long as your knowledge does not contradict the context. "
+    "If you don't know the answer based on both the context and your knowledge, explicitly state that you don't know. "
+    "Do not summarize unless explicitly requested or the question explicitly mentions summarization. "
+    "Do not reference or mention the context explicitly in your answer. "
+    "If the context is irrelevant to the question, answer based solely on your knowledge."
+    "\n\n"
+    "{context}"
+)
+
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", system_prompt),
@@ -103,7 +96,8 @@ def return_rag_chain( ):
     )
      
     question_answer_chain = create_stuff_documents_chain(llm, prompt)
-    retriever = vectorstore.as_retriever()
+    retriever = vectorstore.as_retriever(search_kwargs={"top_k": 17})  # Set top_k=5 here
+
     
     contextualize_q_system_prompt = (
         "Given a chat history and the latest user question "
@@ -139,4 +133,4 @@ def return_rag_chain( ):
     question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
     rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
     
-    return rag_chain
+    return rag_chain,llm
