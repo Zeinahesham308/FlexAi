@@ -5,7 +5,7 @@
     "type": "text",
     "placeholder": "Enter your name",
     "required": true,
-    "answer": ""
+    "answerplaceholder": "name"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "type": "email",
     "placeholder": "Enter your email",
     "required": true,
-    "answer": ""
+    "answerplaceholder": "email"
   },
   {
     "id": 3,
@@ -21,7 +21,7 @@
     "type": "password",
     "placeholder": "Enter your password",
     "required": true,
-    "answer": ""
+    "answerplaceholder": "password"
   },
   {
     "id": 4,
@@ -34,7 +34,7 @@
       "50+"
     ],
     "required": true,
-    "answer": ""
+    "answerplaceholder": "age"
   },
   {
     "id": 5,
@@ -42,7 +42,7 @@
     "type": "text",
     "placeholder": "Enter your height",
     "required": true,
-    "answer": ""
+    "answerplaceholder": "height"
   },
   {
     "id": 6,
@@ -50,7 +50,7 @@
     "type": "text",
     "placeholder": "Enter your current weight",
     "required": true,
-    "answer": ""
+    "answerplaceholder": "Currentweight"
 
   },
   {
@@ -59,7 +59,7 @@
     "type": "text",
     "placeholder": "Enter your target weight",
     "required": true,
-    "answer": ""
+    "answerplaceholder": "Targetweight"
 
   },
   {
@@ -72,7 +72,7 @@
       "Heavy"
     ],
     "required": true,
-    "answer": ""
+    "answerplaceholder": "bodyType"
   },
   {
     "id": 9,
@@ -84,7 +84,7 @@
       "Get shredded"
     ],
     "required": true,
-    "answer": ""
+    "answerplaceholder": "goal"
   },
   {
     "id": 10,
@@ -95,7 +95,7 @@
       "Gym"
     ],
     "required": true,
-    "answer": ""
+    "answerplaceholder": "place"
   },
   {
     "id": 11,
@@ -107,7 +107,7 @@
       "Full equipment"
     ],
     "required": true,
-    "answer": ""
+    "answerplaceholder": "equipments"
   },
   {
     "id": 12,
@@ -120,6 +120,6 @@
       "Let us decide"
     ],
     "required": true,
-    "answer": ""
+    "answerplaceholder": "time"
   }
 ]

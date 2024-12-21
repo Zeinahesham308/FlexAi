@@ -6,4 +6,5 @@ export interface Questions {
     required: boolean;
     answer: string;
     options?: string[];  // Optional, for questions that are radio buttonsF
+    answerplaceholder: any;
 }
