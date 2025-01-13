@@ -1,6 +1,5 @@
 # %%
 # %%
-import streamlit as st
 from langchain_ollama import OllamaEmbeddings
 from langchain_milvus import Milvus
 
@@ -14,7 +13,7 @@ from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-
+from langchain_community.vectorstores import FAISS
 
 
 from langchain_groq import ChatGroq
@@ -46,6 +45,9 @@ def load_and_process_pdfs(pdf_folder_path):
 # %%
 from pymilvus import connections , utility ,db
 
+def initialize_vectorstore(splits,embd):
+    return FAISS.from_documents(documents=splits, embedding=embd)
+
 
  
 def return_rag_chain( ):
@@ -53,19 +55,14 @@ def return_rag_chain( ):
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
     splits = load_and_process_pdfs("nuitrions")
-    splits = load_and_process_pdfs("nuitrions")
-    vectorstore = Milvus.from_documents(
-    splits,
-   embeddings,
-    connection_args={"uri": "tcp://192.168.1.2:19530"},
-    collection_name="nutritionsNew"  # Name of your existing collection
+    vectorstore = initialize_vectorstore(splits,embeddings)
     
-)
+
     print("Vectorstore created successfully")
     # %%
     os.environ["GROQ_API_KEY"] = "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"
     llm = ChatGroq(
-    model="llama-3.1-70b-versatile",
+    model="llama-3.3-70b-versatile",
     temperature=0,
     max_tokens=None,
     timeout=None,
@@ -133,4 +130,4 @@ def return_rag_chain( ):
     question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
     rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
     
-    return rag_chain,llm
+    return rag_chain
