@@ -8,6 +8,7 @@ from langchain_community.document_loaders import PyPDFLoader
 import os
 from langchain_core.prompts import ChatPromptTemplate
 
+
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
@@ -29,6 +30,7 @@ from langchain_groq import ChatGroq
 #paraphrase-MiniLM-L6-v2 choose better one
 
 
+
 # %%
 def load_and_process_pdfs(pdf_folder_path):
     documents = []
@@ -37,6 +39,7 @@ def load_and_process_pdfs(pdf_folder_path):
             pdf_path = os.path.join(pdf_folder_path, file)
             loader = PyPDFLoader(pdf_path)
             documents.extend(loader.load())
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2500, chunk_overlap=400)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=2500, chunk_overlap=400)
     splits = text_splitter.split_documents(documents)
     return splits
@@ -71,7 +74,21 @@ def return_rag_chain( ):
 )
     # %%
 
+
     system_prompt = (
+    "You are an assistant for question-answering tasks. "
+    "Use the following pieces of retrieved context to answer the question. "
+    "If the context provides a clear answer, prioritize it. "
+    "If the context is incomplete or ambiguous, supplement it with your own knowledge, "
+    "as long as your knowledge does not contradict the context. "
+    "If you don't know the answer based on both the context and your knowledge, explicitly state that you don't know. "
+    "Do not summarize unless explicitly requested or the question explicitly mentions summarization. "
+    "Do not reference or mention the context explicitly in your answer. "
+    "If the context is irrelevant to the question, answer based solely on your knowledge."
+    "\n\n"
+    "{context}"
+)
+
     "You are an assistant for question-answering tasks. "
     "Use the following pieces of retrieved context to answer the question. "
     "If the context provides a clear answer, prioritize it. "
@@ -93,6 +110,8 @@ def return_rag_chain( ):
     )
      
     question_answer_chain = create_stuff_documents_chain(llm, prompt)
+    retriever = vectorstore.as_retriever(search_kwargs={"top_k": 17})  # Set top_k=5 here
+
     retriever = vectorstore.as_retriever(search_kwargs={"top_k": 17})  # Set top_k=5 here
 
     
