@@ -1,4 +1,17 @@
 /*------------------------------------------------------- GLOBALS ---------------------------------------------------------*/
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+/* Disable autofill styles for all inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important; /* Transparent background */
+  -webkit-text-fill-color: inherit !important; /* Inherit text color */
+  transition: background-color 5000s ease-in-out 0s; /* Prevent background color from changing */
+}
+
 
 
 .INLINE{

@@ -1,35 +1,64 @@
 <div [class.sign-up-mode]="isSignUpMode" class="container font-family-brand">
     <div class="forms-container">
         <div class="signin-signup">
-
-            <form #loginForm="ngForm" action="#" class="sign-in-form FLEX-COL center-content">
+            <form #loginForm="ngForm" action="#" class="sign-in-form  FLEX-COL center-content">
                 <h2 class="title brand-light-green">Sign In</h2>
 
-                <div class="input-field" [ngClass]="{ 'input-error': username.invalid && username.touched }">
-                    <i class="fas fa-user"></i>
-                    <input type="text" aria-label="Username" placeholder="Username" name="username"
-                        [(ngModel)]="userLogin.name" required #username="ngModel" />
-                    <!-- Display error message FLEX center-content if username is invalid -->
-                    <div *ngIf="username.invalid && username.touched" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                <!-- Username Field -->
+                <div
+                    class="max-w-[380px] w-full bg-gray-100 my-5 h-[55px] rounded-full grid grid-cols-[15%,85%] px-1 relative mb-7">
+                    <!-- Icon -->
+                    <i class="fas fa-user text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+                    <!-- Input Field -->
+                    <input type="text" id="username" placeholder=" " name="username" [(ngModel)]="userLogin.name"
+                        required #username="ngModel"
+                        class="bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800 peer" />
+
+                    <!-- Floating Label -->
+                    <label for="username"
+                        class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400">
+                        Username
+                    </label>
+
+                    <!-- Error Message -->
+                    <div *ngIf="username.invalid && username.touched"
+                        class="error-message flex items-center mt-2 text-red-500">
+                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2"></i>
                         Username is required!
                     </div>
                 </div>
 
-                <div class="input-field" [ngClass]="{ 'input-error': password.invalid && password.touched }">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" aria-label="Password" placeholder="Password" name="password"
-                        [(ngModel)]="userLogin.password" required #password="ngModel" />
-                    <!-- Display error message FLEX center-content if password is invalid -->
-                    <div *ngIf="password.invalid && password.touched" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                <!-- Password Field -->
+                <div
+                    class="max-w-[380px] w-full bg-gray-100 my-5 h-[55px] rounded-full grid grid-cols-[15%,85%] px-1 relative mb-7">
+                    <!-- Icon -->
+                    <i class="fas fa-lock text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+                    <!-- Input Field -->
+                    <input type="password" id="password" placeholder=" " name="password"
+                        [(ngModel)]="userLogin.password" required #password="ngModel"
+                        class="bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800 peer" />
+
+                    <!-- Floating Label -->
+                    <label for="password"
+                        class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400">
+                        Password
+                    </label>
+
+                    <!-- Error Message -->
+                    <div *ngIf="password.invalid && password.touched"
+                        class="error-message flex items-center mt-2 text-red-500">
+                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2"></i>
                         Password is required!
                     </div>
                 </div>
 
+                <!-- Submit Button -->
                 <input type="submit" value="Login" class="btn solid" (click)="loginUser(loginForm)"
                     [disabled]="loginForm.invalid" />
 
+                <!-- Social Media -->
                 <p class="social-text brand-light-green">Or Sign in with social platforms</p>
                 <div class="social-media FLEX justify-center">
                     <a href="#" class="social-icon FLEX center-content">
@@ -46,208 +75,7 @@
                     </a>
                 </div>
             </form>
-
-            <form #signUpForm="ngForm" action="#" class="sign-up-form FLEX-COL center-content">
-                <h2 class="title brand-light-green">Sign Up</h2>
-                <!-- Display the first 3 questionsList if currentQuestionIndex is 0 -->
-                <div *ngIf="currentQuestionIndex === 0">
-                    <!-- Question 1: Name -->
-                    <div class="input-field" [ngClass]="{ 'input-error': name.invalid && name.touched }">
-                        <i class="fas fa-user"></i>
-                        <input type="text" aria-label="Username" placeholder="Enter your name" name="name" required
-                            [(ngModel)]="userAnswers.name" #name="ngModel" />
-                        <div *ngIf="name.invalid && name.touched" class="error-message FLEX align-center">
-                            <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i> Name
-                            is required!
-                        </div>
-                    </div>
-
-                    <!-- Question 2: Email -->
-                    <div class="input-field" [ngClass]="{ 'input-error': email.invalid && email.touched }">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" aria-label="Email" placeholder="Enter your email" name="email" required
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" [(ngModel)]="userAnswers.email"
-                            #email="ngModel" />
-                        <div *ngIf="email.invalid && email.touched" class="error-message FLEX align-center">
-                            <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i> Please
-                            enter a valid email.
-                        </div>
-                    </div>
-
-                    <!-- Question 3: Create a password -->
-                    <div class="input-field" [ngClass]="{ 'input-error': password.invalid && password.touched }">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" aria-label="Password" placeholder="Enter your password" name="password"
-                            required minlength="8" [(ngModel)]="userAnswers.password" #password="ngModel" />
-                        <div *ngIf="password.invalid && password.touched" class="error-message FLEX align-center">
-                            <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
-                            Password is required and must be at least 8
-                            characters long.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Question 4: Age -->
-                <div *ngIf="currentQuestionIndex === 1" class="radio-field"
-                    [ngClass]="{'input-error': !userAnswers['age'] && isTouched}">
-                    <label for="age">Choose your age</label>
-                    <div class="choices FLEX-COL">
-                        <label *ngFor="let option of questionsList[3].options">
-                            <input type="radio" name="age" [value]="option" required [(ngModel)]="userAnswers['age']"
-                                (blur)="setTouched()" />
-                            {{ option }}
-                        </label>
-                    </div>
-                    <div *ngIf="!userAnswers['age'] && isTouched" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
-                        Age is required!
-                    </div>
-                </div>
-
-                <!-- Question 5: Height -->
-                <div *ngIf="currentQuestionIndex === 2" class="input-field"
-                    [ngClass]="{ 'input-error': height.invalid && height.touched }">
-                    <i class="fas fa-ruler"></i>
-                    <input type="text" aria-label="Height" placeholder="Enter your height" name="height" required
-                        pattern="^[1-9][0-9]{1,2}$" [(ngModel)]="userAnswers['height']" #height="ngModel" />
-                    <div *ngIf="height.invalid && height.touched" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i> Please
-                        enter a valid height!
-                    </div>
-                </div>
-
-                <div *ngIf="currentQuestionIndex === 3" class="input-field"
-                    [ngClass]="{ 'input-error': Currentweight.invalid && Currentweight.touched }">
-                    <i class="fas fa-weight"></i>
-                    <input type="text" aria-label="Current weight" placeholder="Enter your weight" name="weight"
-                        [(ngModel)]="userAnswers['Currentweight']" #Currentweight="ngModel" required
-                        pattern="^[1-9][0-9]{1,2}$" />
-                    <div *ngIf="Currentweight.invalid && Currentweight.touched" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i> Please
-                        enter a valid weight!
-                    </div>
-                </div>
-
-                <div *ngIf="currentQuestionIndex === 4" class="input-field"
-                    [ngClass]="{ 'input-error': targetWeight.invalid && targetWeight.touched }">
-                    <i class="fas fa-weight"></i>
-                    <input type="text" aria-label="Target weight" placeholder="Enter your target weight"
-                        name="targetWeight" required [(ngModel)]="userAnswers['Targetweight']" #targetWeight="ngModel"
-                        pattern="^[1-9][0-9]{1,2}$" />
-                    <div *ngIf="targetWeight.invalid && targetWeight.touched" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i> Please
-                        enter a valid weight!
-                    </div>
-                </div>
-
-                <div *ngIf="currentQuestionIndex === 5" class="radio-field  FLEX-COL"
-                    [ngClass]="{'input-error': !userAnswers['bodyType'] && isTouched}">
-                    <label for="body-type">Choose your body type</label>
-                    <div class="choices FLEX-COL">
-                        <label *ngFor="let option of questionsList[7].options">
-                            <input type="radio" name="body-type" [value]="option" required
-                                [(ngModel)]="userAnswers['bodyType']" (blur)="setTouched()" />
-                            {{ option }}
-                        </label>
-                    </div>
-                    <div *ngIf="!userAnswers['bodyType']" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
-                        Body type is required!
-                    </div>
-                </div>
-
-                <div *ngIf="currentQuestionIndex === 6" class="radio-field"
-                    [ngClass]="{'input-error': !userAnswers['goal'] && isTouched}">
-                    <label for="goal">Choose your goal</label>
-                    <div class="choices FLEX-COL">
-                        <label *ngFor="let option of questionsList[8].options">
-                            <input type="radio" name="goal" [value]="option" required [(ngModel)]="userAnswers['goal']"
-                                (blur)="setTouched()" />
-                            {{ option }}
-                        </label>
-                    </div>
-                    <div *ngIf="!userAnswers['goal']" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
-                        Goal is required!
-                    </div>
-                </div>
-
-                <div *ngIf="currentQuestionIndex === 7" class="radio-field"
-                    [ngClass]="{'input-error': !userAnswers['place'] && isTouched}">
-                    <label for="workout-place">Choose your place of workout</label>
-                    <div class="choices FLEX-COL">
-                        <label *ngFor="let option of questionsList[9].options">
-                            <input type="radio" name="workout-place" [value]="option" required
-                                [(ngModel)]="userAnswers['place']" (blur)="setTouched()" />
-                            {{ option }}
-                        </label>
-                    </div>
-                    <div *ngIf="!userAnswers['goal']" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
-                        Place of workout is required!
-                    </div>
-                </div>
-
-                <div *ngIf="currentQuestionIndex === 8" class="radio-field"
-                    [ngClass]="{'input-error': !userAnswers['equipments'] && isTouched}">
-                    <label for="equipment">Which type of equipment do you have access to?</label>
-                    <div class="choices FLEX-COL">
-                        <label *ngFor="let option of questionsList[10].options">
-                            <input type="radio" name="equipment" [value]="option" required
-                                [(ngModel)]="userAnswers['equipments']" (blur)="setTouched()" />
-                            {{ option }}
-                        </label>
-                    </div>
-                    <div *ngIf="!userAnswers['equipments']" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
-                        Available equipment is required!
-                    </div>
-                </div>
-
-                <div *ngIf="currentQuestionIndex === 9" class="radio-field"
-                    [ngClass]="{'input-error': !userAnswers['time'] && isTouched}">
-                    <label for="workout-time">How much time can you invest into your workout?</label>
-                    <div class="choices FLEX-COL">
-                        <label *ngFor="let option of questionsList[11].options">
-                            <input type="radio" name="workout-time" [value]="option" required
-                                [(ngModel)]="userAnswers['time']" (blur)="setTouched()" />
-                            {{ option }}
-                        </label>
-                    </div>
-                    <div *ngIf="!userAnswers['time']" class="error-message FLEX align-center">
-                        <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
-                        Available time is required!
-                    </div>
-                </div>
-
-                <div class="button-container">
-                    <button type="button" (click)="prevQuestion()" *ngIf="currentQuestionIndex > 0"
-                        class="prev-btn btn solid">
-                        Previous
-                    </button>
-                    <!-- Next Button -->
-                    <!--  <button type="button" (click)="nextQuestion()"
-                        [disabled]="!userAnswers[questionsList[disableNextIndex].answerplaceholder]"
-                        *ngIf="currentQuestionIndex < questionsList.length - 3" class="next-btn btn solid">
-                        Next
-                    </button> -->
-
-                    <button type="button" class="next-btn btn solid" *ngIf="currentQuestionIndex === 0"
-                        [disabled]="!isCurrentStepValid(signUpForm)" (click)="nextQuestion()">
-                        Next
-                    </button>
-
-                    <button type="button" class="next-btn btn solid"
-                        [disabled]="!userAnswers[questionsList[disableNextIndex].answerplaceholder]"
-                        *ngIf="currentQuestionIndex > 0 &&currentQuestionIndex < questionsList.length - 3" (click)="nextQuestion()">
-                        Next
-                    </button>
-                    <button type="submit" *ngIf="currentQuestionIndex === questionsList.length - 3"
-                        class="submit-btn btn" (click)="signup()">  <!--(click)="submitForm()"  -->
-                        Submit
-                    </button>
-                </div>
-            </form>
+            <app-signup-form></app-signup-form>
         </div>
     </div>
 

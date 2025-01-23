@@ -25,6 +25,17 @@
   },
   {
     "id": 4,
+    "question": "Select your gender",
+    "type": "radio",
+    "options": [
+      "Male",
+      "Female"
+    ],
+    "required": true,
+    "answerplaceholder": "age"
+  },
+  {
+    "id": 5,
     "question": "Choose your age",
     "type": "radio",
     "options": [
@@ -37,7 +48,7 @@
     "answerplaceholder": "age"
   },
   {
-    "id": 5,
+    "id": 6,
     "question": "Height",
     "type": "text",
     "placeholder": "Enter your height",
@@ -45,7 +56,7 @@
     "answerplaceholder": "height"
   },
   {
-    "id": 6,
+    "id": 7,
     "question": " Current Weight",
     "type": "text",
     "placeholder": "Enter your current weight",
@@ -54,7 +65,7 @@
 
   },
   {
-    "id": 7,
+    "id": 8,
     "question": " Target Weight",
     "type": "text",
     "placeholder": "Enter your target weight",
@@ -63,7 +74,7 @@
 
   },
   {
-    "id": 8,
+    "id": 9,
     "question": "Choose your body type",
     "type": "radio",
     "options": [
@@ -75,7 +86,7 @@
     "answerplaceholder": "bodyType"
   },
   {
-    "id": 9,
+    "id": 10,
     "question": "Choose your goal",
     "type": "radio",
     "options": [
@@ -87,7 +98,7 @@
     "answerplaceholder": "goal"
   },
   {
-    "id": 10,
+    "id": 11,
     "question": "Choose your place of your workout",
     "type": "radio",
     "options": [
@@ -98,7 +109,7 @@
     "answerplaceholder": "place"
   },
   {
-    "id": 11,
+    "id": 12,
     "question": "Which type of equipment do you have access to?",
     "type": "radio",
     "options": [
@@ -110,7 +121,7 @@
     "answerplaceholder": "equipments"
   },
   {
-    "id": 12,
+    "id": 13,
     "question": "How much time can you invest into your workout?",
     "type": "radio",
     "options": [

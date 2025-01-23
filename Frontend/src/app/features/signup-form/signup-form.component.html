@@ -1,0 +1,286 @@
+<form [formGroup]="signupForm" class="sign-up-form FLEX-COL center-content" (ngSubmit)="onSubmit()">
+    <h2 class="title brand-light-green">Sign Up</h2>
+    <div [ngSwitch]="currentQuestionIndex">
+        <!-- Display the first 3 questionsList if currentQuestionIndex is 0 -->
+        <div *ngSwitchCase="0">
+            <!-- Question 1: Name -->
+            <div class="input-field relative"
+                >
+                <!-- Icon -->
+                <i class="fas fa-user text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+                <!-- Input Field -->
+                <input type="text" placeholder=" " formControlName="name" aria-label="Username" aria-required="true"
+                    class="peer bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800" />
+
+                <!-- Floating Label -->
+                <label for="name"
+                    class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400 pointer-events-none">
+                    Name/Username
+                </label>
+
+                <!-- Error Message -->
+                <div *ngIf="getControl('name').invalid && getControl('name').touched"
+                    class="error-message flex items-center mt-2 text-red-500">
+                    <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2" style="color: #ff4d4d;"></i>
+                    Name is required!
+                </div>
+            </div>
+
+            <!-- Question 2: Email -->
+            <div class="input-field relative"
+                [ngClass]="{ 'input-error': getControl('email').invalid && getControl('email').touched }">
+                <!-- Icon -->
+                <i class="fas fa-envelope text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+                <!-- Input Field -->
+                <input type="email" placeholder=" " formControlName="email" aria-label="Email" aria-required="true"
+                    class="peer bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800" />
+
+                <!-- Floating Label -->
+                <label for="email"
+                    class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400 pointer-events-none">
+                    Enter your email
+                </label>
+
+                <!-- Error Message -->
+                <div *ngIf="getControl('email').invalid && getControl('email').touched"
+                    class="error-message flex items-center mt-2 text-red-500">
+                    <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2" style="color: #ff4d4d;"></i>
+                    Please enter a valid email.
+                </div>
+            </div>
+
+            <!-- Question 3: Create a password -->
+            <div class="input-field relative"
+                [ngClass]="{ 'input-error': getControl('password').invalid && getControl('password').touched }">
+                <!-- Icon -->
+                <i class="fas fa-lock text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+                <!-- Input Field -->
+                <input type="password" placeholder=" " formControlName="password" aria-label="Password"
+                    aria-required="true"
+                    class="peer bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800" />
+
+                <!-- Floating Label -->
+                <label for="password"
+                    class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400 pointer-events-none">
+                    Create a password
+                </label>
+
+                <!-- Error Message -->
+                <div *ngIf="getControl('password').invalid && getControl('password').touched"
+                    class="error-message flex items-center mt-2 text-red-500">
+                    <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2" style="color: #ff4d4d;"></i>
+                    Password is required and must be at least 8 characters long.
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4: Gender-->
+        <div *ngSwitchCase="1" class="radio-field"
+            [ngClass]="{'input-error':getControl('gender').invalid && getControl('gender').touched}">
+            <label for="age">Select your gender</label>
+            <div class="choices FLEX-COL">
+                <label *ngFor="let option of getCurrentQuestionOptions()">
+                    <input type="radio" formControlName="gender" [value]="option" aria-label="gender"
+                        aria-required="true" />
+                    {{ option }}
+                </label>
+            </div>
+            <div *ngIf="getControl('gender').invalid && getControl('gender').touched"
+                class="error-message FLEX align-center">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                Gender is required!
+            </div>
+        </div>
+
+        <!-- Question 5: Age -->
+        <div *ngSwitchCase="2" class="radio-field"
+            [ngClass]="{'input-error':getControl('age').invalid && getControl('age').touched}">
+            <label for="age">Choose your age</label>
+            <div class="choices FLEX-COL">
+                <label *ngFor="let option of getCurrentQuestionOptions()">
+                    <input type="radio" formControlName="age" [value]="option" aria-label="Age" aria-required="true" />
+                    {{ option }}
+                </label>
+            </div>
+            <div *ngIf="getControl('age').invalid && getControl('age').touched" class="error-message FLEX align-center">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                Age is required!
+            </div>
+        </div>
+
+        <!-- Question 6: Height -->
+        <div *ngSwitchCase="3" class="input-field relative"
+            [ngClass]="{ 'input-error': getControl('height').invalid && getControl('height').touched }">
+            <!-- Icon -->
+            <i class="fas fa-ruler text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+            <!-- Input Field -->
+            <input type="number" placeholder=" " formControlName="height" aria-label="Height" aria-required="true"
+                class="peer bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800" />
+
+            <!-- Floating Label -->
+            <label for="height"
+                class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400 pointer-events-none">
+                Enter your height in cm
+            </label>
+
+            <!-- Error Message -->
+            <div *ngIf="getControl('height').invalid && getControl('height').touched"
+                class="error-message flex items-center mt-2 text-red-500">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2" style="color: #ff4d4d;"></i>
+                Please enter a valid height between 100 and 250 cm!
+            </div>
+        </div>
+        <!-- Question 7:  Current Weight -->
+        <div *ngSwitchCase="4" class="input-field relative"
+            [ngClass]="{ 'input-error': getControl('currentWeight').invalid && getControl('currentWeight').touched }">
+            <!-- Icon -->
+            <i class="fas fa-weight text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+            <!-- Input Field -->
+            <input type="number" placeholder=" " formControlName="currentWeight" aria-label="Current weight"
+                aria-required="true"
+                class="peer bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800" />
+
+            <!-- Floating Label -->
+            <label for="currentWeight"
+                class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400 pointer-events-none">
+                Enter your weight in kg
+            </label>
+
+            <!-- Error Message -->
+            <div *ngIf="getControl('currentWeight').invalid && getControl('currentWeight').touched"
+                class="error-message flex items-center mt-2 text-red-500">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2" style="color: #ff4d4d;"></i>
+                Please enter a valid weight between 30 and 300 kg!
+            </div>
+        </div>
+        <!-- Question 8:  Target Weight -->
+        <div *ngSwitchCase="5" class="input-field relative"
+            [ngClass]="{ 'input-error': getControl('targetWeight').invalid && getControl('targetWeight').touched }">
+            <!-- Icon -->
+            <i class="fas fa-weight text-center leading-[55px] text-gray-400 transition duration-500 text-lg"></i>
+
+            <!-- Input Field -->
+            <input type="number" placeholder=" " formControlName="targetWeight" aria-label="Target weight"
+                aria-required="true"
+                class="peer bg-transparent outline-none border-none leading-none font-semibold text-lg text-gray-800" />
+
+            <!-- Floating Label -->
+            <label for="targetWeight"
+                class="absolute left-[15%] top-1/2 transform -translate-y-1/2 text-lg text-gray-400 transition-all duration-200 ease-in-out peer-focus:top-2 peer-focus:text-sm peer-focus:text-brand-dark-green peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-lg peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-400 pointer-events-none">
+                Enter your target weight in kg
+            </label>
+
+            <!-- Error Message -->
+            <div *ngIf="getControl('targetWeight').invalid && getControl('targetWeight').touched"
+                class="error-message flex items-center mt-2 text-red-500">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg mr-2" style="color: #ff4d4d;"></i>
+                Please enter a valid weight between 30 and 300 kg!
+            </div>
+        </div>
+        <!-- Question 9:  Body Type -->
+        <div *ngSwitchCase="6" class="radio-field  FLEX-COL"
+            [ngClass]="{'input-error': getControl('bodyType').invalid && getControl('bodyType').touched}">
+            <label for="body-type">Choose your body type</label>
+            <div class="choices FLEX-COL">
+                <label *ngFor="let option of getCurrentQuestionOptions()">
+                    <input type="radio" formControlName="bodyType" [value]="option" aria-label="Body type"
+                        aria-required="true" />
+                    {{ option }}
+                </label>
+            </div>
+            <div *ngIf="getControl('bodyType').invalid && getControl('bodyType').touched"
+                class="error-message FLEX align-center">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                Body type is required!
+            </div>
+        </div>
+        <!-- Question 10:  Goal -->
+        <div *ngSwitchCase="7" class="radio-field"
+            [ngClass]="{'input-error': getControl('goal').invalid && getControl('goal').touched}">
+            <label for="goal">Choose your goal</label>
+            <div class="choices FLEX-COL">
+                <label *ngFor="let option of getCurrentQuestionOptions()">
+                    <input type="radio" formControlName="goal" [value]="option" aria-label="Goal"
+                        aria-required="true" />
+                    {{ option }}
+                </label>
+            </div>
+            <div *ngIf="getControl('goal').invalid && getControl('goal').touched"
+                class="error-message FLEX align-center">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                Goal is required!
+            </div>
+        </div>
+        <!-- Question 11:  Place of Workout -->
+        <div *ngSwitchCase="8" class="radio-field"
+            [ngClass]="{'input-error': getControl('place').invalid && getControl('place').touched}">
+            <label for="workout-place">Choose your place of workout</label>
+            <div class="choices FLEX-COL">
+                <label *ngFor="let option of getCurrentQuestionOptions()">
+                    <input type="radio" formControlName="place" [value]="option" aria-label="Place of workout"
+                        aria-required="true" (change)="onWorkoutPlaceChange(option)" />
+                    {{ option }}
+                </label>
+            </div>
+            <div *ngIf="getControl('place').invalid && getControl('place').touched"
+                class="error-message FLEX align-center">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                Place of workout is required!
+            </div>
+        </div>
+        <!-- Question 12:  Equipment  (Skipped if workoutPlace is not "Home") -->
+        <div *ngIf="workoutPlace === 'Home' && currentQuestionIndex === 9" class="radio-field"
+            [ngClass]="{'input-error':getControl('equipments').invalid && getControl('equipments').touched}">
+            <label for="equipment">Which type of equipment do you have access to?</label>
+            <div class="choices FLEX-COL">
+                <label *ngFor="let option of getCurrentQuestionOptions()">
+                    <input type="radio" formControlName="equipments" [value]="option" aria-label="Equipments"
+                        aria-required="true" />
+                    {{ option }}
+                </label>
+            </div>
+            <div *ngIf="getControl('equipments').invalid && getControl('equipments').touched"
+                class="error-message FLEX align-center">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                Available equipment is required!
+            </div>
+        </div>
+        <!-- Question 13:  Time -->
+        <div *ngSwitchCase="10" class="radio-field"
+            [ngClass]="{'input-error': getControl('time').invalid && getControl('time').touched}">
+            <label for="workout-time">How much time can you invest into your workout?</label>
+            <div class="choices FLEX-COL">
+                <label *ngFor="let option of getCurrentQuestionOptions()">
+                    <input type="radio" formControlName="time" [value]="option" aria-label="Time"
+                        aria-required="true" />
+                    {{ option }}
+                </label>
+            </div>
+            <div *ngIf="getControl('time').invalid && getControl('time').touched"
+                class="error-message FLEX align-center">
+                <i class="fa-solid fa-circle-exclamation fa-shake fa-lg" style="color: #ff4d4d;"></i>
+                Available time is required!
+            </div>
+        </div>
+    </div>
+
+    <div class="button-container FLEX">
+        <button type="button" (click)="prevQuestion()" *ngIf="currentQuestionIndex > 0" class="prev-btn btn solid">
+            Previous
+        </button>
+        <!-- Next Button -->
+        <button type="button" (click)="nextQuestion()" [disabled]='!isNextButtonEnabled()'
+            *ngIf="currentQuestionIndex !== lastQuestionIndex" class="next-btn btn solid"
+            [title]="!isNextButtonEnabled() ? 'Please fill all fields correctly' : ''">
+            Next
+        </button>
+        <button type="submit" *ngIf="currentQuestionIndex === lastQuestionIndex" class="submit-btn btn">
+            Submit
+        </button>
+    </div>
+</form>

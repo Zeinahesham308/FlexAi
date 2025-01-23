@@ -8,7 +8,7 @@
 
 .container {
   position: relative;
-  width: 100%;
+  min-width: 100%;
   background-color: #1a4331;
   min-height: 100vh;
   overflow: hidden;
@@ -42,6 +42,16 @@ form {
   grid-row: 1 / 2;
 }
 
+// So that two forms stack on top of each other not vertically 
+app-signup-form {
+  display: grid;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 form.sign-up-form {
   opacity: 0;
   z-index: 1;
@@ -56,7 +66,7 @@ form.sign-in-form {
   margin-bottom: 10px;
 }
 
-.input-field {
+.input-field{
   max-width: 380px;
   width: 100%;
   background-color: #f0f0f0;
@@ -67,6 +77,8 @@ form.sign-in-form {
   grid-template-columns: 15% 85%;
   padding: 0 0.4rem;
   position: relative;
+  margin-bottom: 1.8rem;
+
 
   i {
     text-align: center;
@@ -92,10 +104,11 @@ form.sign-in-form {
   }
 }
 
-.input-error {
-  margin-bottom: 35px;   /* Increase space between fields when error exists */
-  border: 3px solid red;
 
+
+
+.input-error {
+  border: 3px solid red;
 }
 
 .radio-field {
@@ -164,13 +177,14 @@ form.sign-in-form {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
 .error-message {
   gap: 10px;
   min-width: 380px;
   max-height: 20px;
   color: #ff4d4d;
   font-size: 0.875rem;
-  margin-top: 10px;
+  margin-top: 7px;
   padding-left: 5px;
   font-weight: bold;
   animation: fadeIn 0.3s ease-out;
