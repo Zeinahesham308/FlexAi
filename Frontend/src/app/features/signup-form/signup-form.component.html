@@ -279,7 +279,7 @@
             [title]="!isNextButtonEnabled() ? 'Please fill all fields correctly' : ''">
             Next
         </button>
-        <button type="submit" *ngIf="currentQuestionIndex === lastQuestionIndex" class="submit-btn btn">
+        <button type="submit" *ngIf="currentQuestionIndex === lastQuestionIndex" class="submit-btn btn" [disabled]="attempingSignUp">
             Submit
         </button>
     </div>

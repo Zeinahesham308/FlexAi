@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Enable CORS for Angular during development
 const corsOptions = {
-    origin: 'http://localhost:4200', 
+    origin: '*', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -19,6 +19,21 @@ app.use(cors(corsOptions));
 // Routes
 app.use('/api/users', userRoutes); // Backend API routes for user operations
 
+app.use((err, req, res, next) => {
+    console.error(`[Error] ${err.message}`);
+    
+    const statusCode = err.statusCode || 500; // Default to 500 if statusCode is not set
+    const response = {
+      message: err.message || "Internal Server Error",
+    };
+  
+    if (process.env.NODE_ENV === "development") {
+      // Include stack trace only in development mode
+      response.stack = err.stack;
+    }
+  
+    res.status(statusCode).json(response);
+  });
 
 if (process.env.NODE_ENV === 'production') {
     

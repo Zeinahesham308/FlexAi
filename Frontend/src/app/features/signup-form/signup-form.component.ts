@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Questions } from '../../models/questions';
-import { UserAnswers } from '../../models/user-answers';
 import { QuestionsService } from '../../services/questions.service';
-import { SignupService } from '../../services/signup.service';
-
-
+import { UserSignupInterface } from '../../models/user.signup.interface';
 /**
  * SignupFormComponent handles the user signup process.
  * It dynamically loads questions, validates user inputs and submits the form data to API.
@@ -21,29 +18,34 @@ export class SignupFormComponent implements OnInit {
   questionsList: Questions[] = [];
   lastQuestionIndex!: number; // Index of the last question (excluding the first three fields)
   currentQuestionIndex = 0;
-  userAnswers!: UserAnswers;
+  signupData!: UserSignupInterface;
   workoutPlace: string = '';
 
-  constructor(private questionsService: QuestionsService, private signUpService: SignupService,
-    private formBuilder: FormBuilder
-  ) { }
+  @Input() SignUpEvent: EventEmitter<UserSignupInterface> = new EventEmitter<UserSignupInterface>();
+  @Input() attempingSignUp = false;
+
+  constructor(
+    private questionsService: QuestionsService,
+    private formBuilder: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     // Fetch questions
     this.questionsService.getQuestions().subscribe((data) => {
       this.questionsList = data;
       this.lastQuestionIndex = this.questionsList.length - 3;
-      console.log("Questions List:", this.questionsList);
+      console.log('Questions List:', this.questionsList);
     });
 
     // Initialize form
     this.initializeForm();
 
     // Initialize userAnswers with default values
-    this.userAnswers = {
+    this.signupData = {
       name: '',
       email: '',
-      password: ''
+      password: '',
+      userAnswers: {},
     };
   }
 
@@ -58,9 +60,18 @@ export class SignupFormComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8)]],
       gender: ['', Validators.required],
       age: ['', Validators.required],
-      height: ['', [Validators.required, Validators.min(100), Validators.max(250)]],  // Height between 100 and 250 cm
-      currentWeight: ['', [Validators.required, Validators.min(30), Validators.max(300)]], // Weight between 30 and 300 kg
-      targetWeight: ['', [Validators.required, Validators.min(30), Validators.max(300)]], // Weight between 30 and 300 kg
+      height: [
+        '',
+        [Validators.required, Validators.min(100), Validators.max(250)],
+      ], // Height between 100 and 250 cm
+      currentWeight: [
+        '',
+        [Validators.required, Validators.min(30), Validators.max(300)],
+      ], // Weight between 30 and 300 kg
+      targetWeight: [
+        '',
+        [Validators.required, Validators.min(30), Validators.max(300)],
+      ], // Weight between 30 and 300 kg
       bodyType: ['', Validators.required],
       goal: ['', Validators.required],
       place: ['', Validators.required],
@@ -89,7 +100,12 @@ export class SignupFormComponent implements OnInit {
       const firstThreeControls = ['name', 'email', 'password'];
 
       console.log('First Three Controls:', firstThreeControls); // Debugging
-      console.log('First Three Validity:', firstThreeControls.map((controlName) => this.signupForm.get(controlName)?.valid)); // Debugging
+      console.log(
+        'First Three Validity:',
+        firstThreeControls.map(
+          (controlName) => this.signupForm.get(controlName)?.valid
+        )
+      ); // Debugging
 
       return firstThreeControls.every((controlName) => {
         const control = this.signupForm.get(controlName);
@@ -122,7 +138,6 @@ export class SignupFormComponent implements OnInit {
       // Otherwise, go to the previous question
       this.currentQuestionIndex--;
     }
-  
   }
 
   /**
@@ -131,30 +146,43 @@ export class SignupFormComponent implements OnInit {
    */
   onSubmit(): void {
     if (this.signupForm.valid) {
+      //disable the form submit
       // Dynamically populate userAnswers with form values
       Object.keys(this.signupForm.controls).forEach((controlName) => {
-        this.userAnswers[controlName] = this.signupForm.get(controlName)?.value;
+        if (
+          controlName === 'name' ||
+          controlName == 'email' ||
+          controlName == 'password'
+        ) {
+          this.signupData[controlName] =
+            this.signupForm.get(controlName)?.value;
+          return;
+        }
+        this.signupData.userAnswers[controlName] =
+          this.signupForm.get(controlName)?.value;
       });
 
-      console.log('User Answers:', this.userAnswers); // Debugging
+      console.log('User Answers:', this.signupData); // Debugging
+
+      this.SignUpEvent.emit(this.signupData);
 
       // Send userAnswers to the API
-      this.signUpService.signUp(this.userAnswers).subscribe({
-        next: (response) => {
-          console.log('API Response:', response);
-          alert('Signup successful!');
-          // Handle success (e.g., show a success message or navigate to another page)
-        },
-        error: (err) => {
-          console.error('API Error:', err);
-          alert('An error occurred. Please try again.');
-          // Handle error (e.g., show an error message)
-        },
-      });
+      // this.signUpService.signUp(this.userAnswers).subscribe({
+      //   next: (response) => {
+      //     console.log('API Response:', response);
+      //     alert('Signup successful!');
+      //     // Handle success (e.g., show a success message or navigate to another page)
+      //   },
+      //   error: (err) => {
+      //     console.error('API Error:', err);
+      //     alert('An error occurred. Please try again.');
+      //     // Handle error (e.g., show an error message)
+      //   },
+      // });
     } else {
       // Check if the form is invalid due to the question of index 9
       const equipmentsControl = this.signupForm.get('equipments'); // Replace 'question9' with the actual control name
-  
+
       if (this.workoutPlace !== 'home' && equipmentsControl?.invalid) {
         // If workoutPlace is not 'home' and question9 is invalid, remove the error for question9
         equipmentsControl.setErrors(null); // Clear the errors for question9
@@ -179,5 +207,3 @@ export class SignupFormComponent implements OnInit {
     this.workoutPlace = value;
   }
 }
-
-
