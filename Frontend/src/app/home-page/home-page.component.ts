@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -8,8 +9,14 @@ import { Component } from '@angular/core';
 })
 export class HomePageComponent {
 
+  constructor(private router: Router) { }
+
   scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  navigateToChatbot() {
+    this.router.navigate(['/chatbot']); // Navigate to the chatbot page
+}
 
 }

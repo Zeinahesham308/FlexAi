@@ -12,7 +12,7 @@ import { UserLoginInterface } from '../models/user.login.interface';
 export class AuthService {
   private baseUrl = environment.baseUrl;
 
-  // readonly loginUrl = `${this.baseUrl}/api/users/login`;
+
 
   constructor(private http: HttpClient) {}
 

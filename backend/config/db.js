@@ -1,12 +1,20 @@
 const mongoose = require('mongoose');
+const fs = require('fs');
+const yaml = require('js-yaml');
+const path = require('path');
 
-mongoose.connect('mongodb://127.0.0.1:27017/Login-tut', {
+const fileContents = fs.readFileSync(path.join(__dirname, '../../Ai/config.yaml'), 'utf8');
+const config = yaml.load(fileContents);
+
+const db = mongoose.createConnection('mongodb://127.0.0.1:27017/Login-tut', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}).then(() => {
-    console.log('Connected to MongoDB');
-}).catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
-});
+})
 
-module.exports = mongoose;
+const chatbot_db = mongoose.createConnection(`mongodb+srv://${config['mongodb']['user']}:${config['mongodb']['password']}@cluster0.i2o3g.mongodb.net/flexdb?retryWrites=true&w=majority&appName=Cluster0`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+
+module.exports = {db, chatbot_db};
+

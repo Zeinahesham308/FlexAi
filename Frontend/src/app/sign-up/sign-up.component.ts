@@ -62,8 +62,9 @@ export class SignUpComponent implements OnInit {
   loginUser(form: NgForm): void {
     if (form.valid) {
       this.authService.loginUser(this.userLogin).subscribe({
-        next: (data) => {
-          console.log('Login successful:', data);
+        next: (response: any) => {
+          console.log('Login successful:', response);
+          localStorage.setItem('userData', JSON.stringify(response.data));
           // navigate to the home page
           this.router.navigate(['/home']);
         },

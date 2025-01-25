@@ -7,7 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './home-page/home-page.component';
-import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { StreamlitEmbedComponent } from './streamlit-embed/streamlit-embed.component';
 import { SignupFormComponent } from './features/signup-form/signup-form.component';
@@ -21,7 +20,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
   declarations: [
     AppComponent,
     HomePageComponent,
-    LoginComponent,
     SignUpComponent,
     StreamlitEmbedComponent,
     ChatbotComponent,
