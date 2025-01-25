@@ -9,6 +9,7 @@ import yaml
 from yaml.loader import SafeLoader
 from langchain_mongodb.chat_message_histories import MongoDBChatMessageHistory
 from RAG import return_rag_chain
+from bson import ObjectId
 
 user_icon = "icons/person.png"
 bot_icon = "icons/bot.png"
@@ -23,7 +24,7 @@ def open_chat(session_id: str):
         chat_with_history = MongoDBChatMessageHistory(
             session_id=session_id,
             connection_string=connection_string,
-            database_name="RAG",
+            database_name="flexdb",
             collection_name="history"
         )
         print("test")
@@ -51,27 +52,40 @@ def open_chat(session_id: str):
 
     return chat_with_history
 
-def load_sessions(username):
-    sessions = db["sessions"].find({"username": username})
-    return [session["session_id"] for session in sessions]
 
-def create_new_session(username):
-    session_id = f"{username}_session_{len(load_sessions(username)) + 1}"
-    db["sessions"].insert_one({"username": username, "session_id": session_id})
-    return session_id
 
 # Set up the page
 st.set_page_config(page_title="🥦 Nutrition buddy 🤓!")
 load_CSS()
 
 # Set a default username (since login is removed)
-st.session_state.username = "default_user"
+query_params = st.experimental_get_query_params()
+st.session_state.userid = query_params.get("userid", ["unknown"])[0]
+
 
 @st.cache_resource
 def get_rag_chain():
     return return_rag_chain()
 
 rag_chain = get_rag_chain()
+def load_sessions(userid):
+    oid2 = ObjectId(userid)
+    user = users_collection.find_one({"_id": oid2})
+    st.session_state.username = user["username"]
+    if user and "sessions" in user:
+        return user["sessions"]  # Return the list of sessions
+    return []
+def create_new_session(userid,username):
+    # Generate a new session ID
+    session_id = f"{username}_session_{len(load_sessions(userid)) + 1}"
+    oid2 = ObjectId(userid)
+    # Append the new session to the user's sessions list
+    users_collection.update_one(
+        {"_id": oid2},  # Filter by username
+        {"$push": {"sessions": session_id}}  # Append the new session ID
+    )
+    
+    return session_id
 
 # Load MongoDB configuration from YAML
 with open('config.yaml') as file:
@@ -83,13 +97,13 @@ client = pymongo.MongoClient(uri)
 db = client['test']
 users_collection = db['users']
 connection_string = uri
-
 # Initialize session state
 if 'current_session' not in st.session_state:
     st.session_state.current_session = None
+st.session_state.sessions_list = load_sessions(st.session_state.userid)
+print(st.session_state.sessions_list)
 if 'sessions_list' not in st.session_state:
     st.session_state.sessions_list = ["default_user_session_8","default_user_session_9","default_user_session_5"]
-st.session_state.sessions_list = ["default_user_session_8","default_user_session_9","default_user_session_5","default_user_session_11"] # delete this later
 # Directly navigate to the Nutrition Buddy page
 st.session_state.page = 'nutrition_buddy'
 
@@ -104,22 +118,19 @@ if st.session_state.page == 'nutrition_buddy':
         st.markdown("-----")
         st.write("Session")
         if st.button("New Session", key="new_session_button"):  
-            new_session_id = create_new_session( username="default_user_session_11")
-            # st.session_state.sessions_list.append(new_session_id)
-            # st.session_state.current_session = new_session_id
+            new_session_id = create_new_session( userid=st.session_state.userid,username=user)
             st.rerun()
         for session in st.session_state.sessions_list:
             if st.button(session, key=f"session_button_{session}"):
                 st.session_state.current_session = session
                 st.rerun()
-    #st.session_state.current_session = "default_user_session_11"# take value here
     if st.session_state.current_session:
         chat_with_history = open_chat(st.session_state.current_session)
         if chat_with_history is None:
             chat_with_history = MongoDBChatMessageHistory(
                 session_id="default_user_session_11",
                 connection_string=uri,
-                database_name="RAG",
+                database_name="flexdb",
                 collection_name="history"
             )
 
