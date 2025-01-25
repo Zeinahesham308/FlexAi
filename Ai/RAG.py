@@ -1,5 +1,4 @@
-# %%
-# %%
+
 from langchain_ollama import OllamaEmbeddings
 from langchain_milvus import Milvus
 
@@ -19,14 +18,6 @@ from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
  
 
-# %%
-
- 
- 
-# %%
-
-
-# %%
 def load_and_process_pdfs(pdf_folder_path):
     documents = []
     for file in os.listdir(pdf_folder_path):
@@ -40,7 +31,6 @@ def load_and_process_pdfs(pdf_folder_path):
     return splits
 
 
-# %%
 from pymilvus import connections , utility ,db
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)

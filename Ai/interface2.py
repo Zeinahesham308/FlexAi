@@ -105,7 +105,7 @@ def create_new_session(userid,username):
                 database_name="flexdb",
                 collection_name="history"
             )
-            user_prompt = f"{user_info}generate me a wrokout plan for the userinfo"
+            user_prompt = f"Create a personalized workout plan for me. I am {user_info['age']} years old, {user_info['gender']}, {user_info['height']} cm tall, and weigh {user_info['currentWeight']} kg. My goal is to {user_info['goal']}, and I have {user_info['time']} available daily for workouts."
             user_div = f"""
             <div class="chat-row row-reverse">
                 <img class="chat-icon" src="app/static/person.png" width="32" height="32"/>
