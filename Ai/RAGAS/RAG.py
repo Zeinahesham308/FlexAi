@@ -8,7 +8,8 @@ from langchain_community.document_loaders import PyPDFLoader
 import os
 from langchain_core.prompts import ChatPromptTemplate
 
-
+import yaml
+from yaml.loader import SafeLoader
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_history_aware_retriever
 from langchain_core.prompts import MessagesPlaceholder
@@ -47,7 +48,8 @@ def load_and_process_pdfs(pdf_folder_path):
 
 # %%
 from pymilvus import connections , utility ,db
-
+with open('config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 def initialize_vectorstore(splits,embd):
     return FAISS.from_documents(documents=splits, embedding=embd)
 
@@ -63,7 +65,7 @@ def return_rag_chain( ):
 
     print("Vectorstore created successfully")
     # %%
-    os.environ["GROQ_API_KEY"] = "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"
+    os.environ["GROQ_API_KEY"] = config['groq']['apiKey']
     llm = ChatGroq(
     model="llama-3.3-70b-versatile",
     temperature=0,

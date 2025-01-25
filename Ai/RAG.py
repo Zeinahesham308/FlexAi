@@ -16,7 +16,7 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.vectorstores import FAISS
 
-
+from
 from langchain_groq import ChatGroq
  
 
@@ -63,7 +63,7 @@ def return_rag_chain( ):
 
     print("Vectorstore created successfully")
     # %%
-    os.environ["GROQ_API_KEY"] = "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"
+    os.environ["GROQ_API_KEY"] = 
     llm = ChatGroq(
     model="llama-3.3-70b-versatile",
     temperature=0,
