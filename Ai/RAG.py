@@ -25,10 +25,6 @@ from langchain_groq import ChatGroq
  
 # %%
 
-# load the local model 
-#paraphrase-MiniLM-L6-v2 choose better one
-
-
 
 # %%
 def load_and_process_pdfs(pdf_folder_path):
@@ -57,8 +53,24 @@ def return_rag_chain( ):
     
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
-    splits = load_and_process_pdfs("nuitrions")
-    vectorstore = initialize_vectorstore(splits,embeddings)
+    #splits = load_and_process_pdfs("nuitrions")
+    #vectorstore = initialize_vectorstore(splits,embeddings)
+#     vectorstore = Milvus.from_documents(
+#     documents=splits,
+#     embedding=embeddings,
+#     connection_args={
+#        "uri": f"tcp://{config['milvus']['host']}:19530",  # Replace with the correct IP and port
+#     },
+#     collection_name="RAGCollection",    
+#     drop_old=True,  # Drop the old Milvus collection if it exists
+# )
+    vectorstore = Milvus(
+  embeddings,
+    connection_args={
+        "uri": f"tcp://{config['milvus']['host']}:19530",  
+    },
+    collection_name="RAGCollection",    
+)
     
 
     print("Vectorstore created successfully")
@@ -101,7 +113,6 @@ def return_rag_chain( ):
     question_answer_chain = create_stuff_documents_chain(llm, prompt)
     retriever = vectorstore.as_retriever(search_kwargs={"top_k": 17})  # Set top_k=5 here
 
-    retriever = vectorstore.as_retriever(search_kwargs={"top_k": 17})  # Set top_k=5 here
 
     
     contextualize_q_system_prompt = (

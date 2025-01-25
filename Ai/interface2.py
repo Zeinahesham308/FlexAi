@@ -68,15 +68,16 @@ def get_rag_chain():
 
 rag_chain = get_rag_chain()
 def load_sessions(userid):
+    print(userid)
     oid2 = ObjectId(userid)
     user = users_collection.find_one({"_id": oid2})
-    st.session_state.username = user["username"]
     if user and "sessions" in user:
         return user["sessions"]  # Return the list of sessions
     return []
 def load_user_info(userid):
     oid2 = ObjectId(userid)
     user = users_collection.find_one({"_id": oid2})
+    st.session_state.username = user["username"]
     user_answers = user["userAnswers"]
     print(user_answers)
     return user_answers
@@ -147,10 +148,11 @@ if 'current_session' not in st.session_state:
     st.session_state.current_session = None
 st.session_state.sessions_list = load_sessions(st.session_state.userid)
 if 'sessions_list' not in st.session_state:
-    create_new_session(st.session_state.userid, st.session_state.username)
+    session_id = create_new_session(st.session_state.userid, st.session_state.username)
+    st.session_state.current_session = new_session_id
 # Directly navigate to the Nutrition Buddy page
 st.session_state.page = 'nutrition_buddy'
-
+load_user_info(st.session_state.userid)
 # Nutrition Buddy page
 if st.session_state.page == 'nutrition_buddy':
     st.header("🥦 Nutrition buddy 🤓!")
@@ -163,6 +165,7 @@ if st.session_state.page == 'nutrition_buddy':
         st.write("Session")
         if st.button("New Session", key="new_session_button"):  
             new_session_id = create_new_session( userid=st.session_state.userid,username=user)
+            st.session_state.current_session = new_session_id
             st.rerun()
         for session in st.session_state.sessions_list:
             if st.button(session, key=f"session_button_{session}"):
