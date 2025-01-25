@@ -58,8 +58,11 @@ st.set_page_config(page_title="🥦 Nutrition buddy 🤓!")
 load_CSS()
 
 # Set a default username (since login is removed)
-query_params = st.experimental_get_query_params()
-st.session_state.userid = query_params.get("userid", ["unknown"])[0]
+userid = st.query_params["userid"]
+if userid:
+    st.session_state.username = userid
+else:
+    st.session_state.username = "Guest"
 
 
 @st.cache_resource
