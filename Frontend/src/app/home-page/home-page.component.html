@@ -6,7 +6,7 @@
         <nav class="bg-brand-grey">
             <ul class="FLEX justify-space-between align-center">
                 <li><a routerLink="/home" class="brand-dark-green">Home</a></li>
-                <li><a href="/flexai" class="brand-dark-green">FlexAI</a></li>
+                <li><a href="/chatbot" class="brand-dark-green">FlexAI</a></li>
                 <li><a href="#" class="brand-dark-green">Programs</a></li>
                 <li><a href="#" class="brand-dark-green">About</a></li>
             </ul>
@@ -166,5 +166,15 @@
             </button>
         </div>
     </footer>
+    <div class="chatbot-container" (click)="navigateToChatbot()">
+        <div class="chat chat-end "> <!-- Use chat-end to align to the right -->
+            <div class="chat-image avatar ">
+                <div class="w-12 h-12 rounded-full bg-[#dbebab] flex items-center justify-center">
+                    <i class="fas fa-comment-dots text-white text-2xl"></i>
+                </div>
+            </div>
+            <div class="chat-bubble bg-[#dbebab] text-[#2E8B57]">Chat with us</div>
+        </div>
+    </div>
 
 </div>
