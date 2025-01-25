@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
+const UserChatBot = require('../models/chatBotUserModel');
+
 
 exports.signup = async (req, res, next) => {
     try{
@@ -12,8 +14,12 @@ exports.signup = async (req, res, next) => {
             });
         }
 
+        const newChatbotUser = new UserChatBot({ username: name , userAnswers: userAnswers });
+        await newChatbotUser.save();
+    
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword, userAnswers });
+        const newUser = new User({ name, email, password: hashedPassword, userAnswers, chatbotId: newChatbotUser._id });
 
         await newUser.save();
         return res.status(201).json({
@@ -43,6 +49,11 @@ exports.login = async (req, res) => {
         if (isPasswordMatch) {
             return res.status(200).json({
                 message: "Login successful",
+                data: {
+                    name: name,
+                    chatbotId: user.chatbotId,
+                    userId: user._id,
+                }
             });
         } else {
             return res.status(401).json({
