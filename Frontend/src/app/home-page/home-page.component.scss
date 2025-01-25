@@ -71,6 +71,10 @@ main {
 
 footer {
     padding: 3em;
+    text-align: center;
+    .upper-container{
+        gap: 1em;
+    }
 
     ul {
         list-style: none;
@@ -95,7 +99,7 @@ footer {
     }
 
     .social-media {
-        width: 108px;
+        width: 100%;
 
         .social-media-icon {
             height: 46px;
@@ -117,6 +121,7 @@ footer {
 
     }
 }
+
 @media (max-width: 767px) {
     .header {
         padding: 1em;
@@ -168,9 +173,8 @@ footer {
             flex-wrap: wrap; // Allow columns to wrap on smaller screens
             gap: 1em; // Add spacing between columns
 
-            > div {
-                flex: 1 1 200px; // Allow columns to grow and shrink
-                margin-bottom: 1em; // Add spacing between rows
+            >div {
+                margin-bottom: 3em; // Add spacing between rows
             }
 
             h3 {
@@ -199,11 +203,22 @@ footer {
         }
     }
 }
+
 @media (max-width: 570px) {
-    .logo-img{
-        width:160px;
+    .logo-img {
+        width: 160px;
     }
-    .header{
+
+    .header {
         justify-content: center;
+    }
+
+    footer {
+        text-align: center; /* Center text in the footer */
+
+        .upper-container {
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally */
+        }
     }
 }
