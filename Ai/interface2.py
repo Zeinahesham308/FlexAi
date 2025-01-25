@@ -27,7 +27,6 @@ def open_chat(session_id: str):
             database_name="flexdb",
             collection_name="history"
         )
-        print("test")
 
         for message in chat_with_history.messages:
             div = f"""
@@ -75,15 +74,61 @@ def load_sessions(userid):
     if user and "sessions" in user:
         return user["sessions"]  # Return the list of sessions
     return []
+def load_user_info(userid):
+    oid2 = ObjectId(userid)
+    user = users_collection.find_one({"_id": oid2})
+    user_answers = user["userAnswers"]
+    print(user_answers)
+    return user_answers
+    info={}
 def create_new_session(userid,username):
     # Generate a new session ID
-    session_id = f"{username}_session_{len(load_sessions(userid)) + 1}"
+    length = len(load_sessions(userid))
+    session_id = f"{username}_session_{length + 1}"
     oid2 = ObjectId(userid)
     # Append the new session to the user's sessions list
     users_collection.update_one(
         {"_id": oid2},  # Filter by username
         {"$push": {"sessions": session_id}}  # Append the new session ID
+    
     )
+    if length == 0:
+            user_info=load_user_info(userid)
+            chat_with_history = MongoDBChatMessageHistory(
+                session_id=session_id,
+                connection_string=connection_string,
+                database_name="flexdb",
+                collection_name="history"
+            )
+            user_prompt = f"{user_info}generate me a wrokout plan for a 180 cm man who wants to lose weight"
+            user_div = f"""
+            <div class="chat-row row-reverse">
+                <img class="chat-icon" src="app/static/person.png" width="32" height="32"/>
+                <div class="chat-bubble human-bubble">
+                &#8203;{user_prompt}
+                </div>
+            </div>
+            """
+            st.markdown(user_div, unsafe_allow_html=True)
+
+            assistant_response = rag_chain.invoke({
+                "input": user_prompt,
+                "chat_history": chat_with_history.messages
+            })['answer']
+
+            chat_with_history.add_user_message(user_prompt)
+            chat_with_history.add_ai_message(assistant_response)
+
+            assistant_div = f"""
+            <div class="chat-row">
+                <img class="chat-icon" src="app/static/bot.png" width="32" height="32"/>
+                <div class="chat-bubble ai-bubble">
+                &#8203;{assistant_response}
+                </div>
+            </div>
+            """
+            st.markdown(assistant_div, unsafe_allow_html=True)
+
     
     return session_id
 
@@ -94,16 +139,15 @@ with open('config.yaml') as file:
 # MongoDB connection
 uri = f"mongodb+srv://{config['mongodb']['user']}:{config['mongodb']['password']}@cluster0.i2o3g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = pymongo.MongoClient(uri)
-db = client['test']
+db = client['flexdb']
 users_collection = db['users']
 connection_string = uri
 # Initialize session state
 if 'current_session' not in st.session_state:
     st.session_state.current_session = None
 st.session_state.sessions_list = load_sessions(st.session_state.userid)
-print(st.session_state.sessions_list)
 if 'sessions_list' not in st.session_state:
-    st.session_state.sessions_list = ["default_user_session_8","default_user_session_9","default_user_session_5"]
+    create_new_session(st.session_state.userid, st.session_state.username)
 # Directly navigate to the Nutrition Buddy page
 st.session_state.page = 'nutrition_buddy'
 
@@ -126,13 +170,7 @@ if st.session_state.page == 'nutrition_buddy':
                 st.rerun()
     if st.session_state.current_session:
         chat_with_history = open_chat(st.session_state.current_session)
-        if chat_with_history is None:
-            chat_with_history = MongoDBChatMessageHistory(
-                session_id="default_user_session_11",
-                connection_string=uri,
-                database_name="flexdb",
-                collection_name="history"
-            )
+        
 
         if user_prompt := st.chat_input("Your message here", key="user_input"):
             user_div = f"""
@@ -163,5 +201,7 @@ if st.session_state.page == 'nutrition_buddy':
             """
             st.markdown(assistant_div, unsafe_allow_html=True)
 
+            
+            
     if "current_response" not in st.session_state:
         st.session_state.current_response = ""
