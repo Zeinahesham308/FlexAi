@@ -39,9 +39,11 @@
 .video-container {
     position: relative;
     width: 100%;
-    height: 500px;
-    /* Adjust as needed */
+    height: 500px; // Adjust as needed
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center; // Centers the h1 vertically and horizontally
 
     .video-background {
         position: absolute;
@@ -50,14 +52,13 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        z-index: 0; // Ensures the video stays behind the text
     }
 
     h1 {
         position: relative;
         z-index: 1;
-        /* Ensures the text appears above the video */
-        text-align: center;
-        margin-top: 20%;
+        margin: 0; // Remove default margin
     }
 }
 
@@ -122,11 +123,15 @@ footer {
 
     }
 }
+
 // Keyframes
 @keyframes bounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -156,7 +161,7 @@ footer {
 
         .chat-bubble {
             text-align: center;
-            background-color: #dbebab;
+            background-color: #babeba;
             color: #2E8B57;
             padding: 10px 15px;
             border-radius: 25px;
