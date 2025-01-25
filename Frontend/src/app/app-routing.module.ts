@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'signup', pathMatch: 'full' }, // Default route redirects to Sign Up/ Sign In
   { path: 'home', component: HomePageComponent },
   { path: 'signup', component: SignUpComponent }, // Sign Up page route
-  { path: 'flexai', component: ChatbotComponent },
+  { path: 'chatbot', component: ChatbotComponent },
   { path: '**', redirectTo: '/signup' } // Wildcard route for invalid paths (redirect to Sign Up/ Sign In)
 
 ];

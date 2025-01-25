@@ -72,7 +72,8 @@ main {
 footer {
     padding: 3em;
     text-align: center;
-    .upper-container{
+
+    .upper-container {
         gap: 1em;
     }
 
@@ -119,6 +120,71 @@ footer {
         }
 
 
+    }
+}
+// Keyframes
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+// Chatbot Container
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+
+    // DaisyUI Chat Component
+    .chat {
+        .chat-image {
+            .rounded-full {
+                display: flex;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: background-color 0.3s ease;
+                animation: bounce 2s infinite;
+
+                &:hover {
+                    background-color: #1f5a3a !important;
+                }
+            }
+        }
+
+        .chat-bubble {
+            text-align: center;
+            background-color: #dbebab;
+            color: #2E8B57;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            animation: bounce 2s infinite;
+            position: relative;
+            bottom: 10px; // Move the label slightly above
+
+            // Hover effect for chat bubble
+            &:hover {
+                background-color: #1f5a3a;
+                color: white;
+            }
+        }
+    }
+
+    // Hover Effect for Container
+    &:hover {
+        .chat-image .rounded-full {
+            background-color: #1f5a3a !important;
+        }
+
+        .chat-bubble {
+            background-color: #1f5a3a;
+            color: white;
+        }
     }
 }
 
@@ -214,11 +280,14 @@ footer {
     }
 
     footer {
-        text-align: center; /* Center text in the footer */
+        text-align: center;
+        /* Center text in the footer */
 
         .upper-container {
-            flex-direction: column; /* Stack items vertically */
-            align-items: center; /* Center items horizontally */
+            flex-direction: column;
+            /* Stack items vertically */
+            align-items: center;
+            /* Center items horizontally */
         }
     }
 }
