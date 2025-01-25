@@ -17,3 +17,4 @@ const chatbot_db = mongoose.createConnection(`mongodb+srv://${config['mongodb'][
 })
 
 module.exports = {db, chatbot_db};
+
