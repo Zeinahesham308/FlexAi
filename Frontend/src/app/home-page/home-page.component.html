@@ -1,9 +1,9 @@
 <div class="homePage-container bg-brand-black font-family-brand">
     <div class="header FLEX justify-space-between align-center">
         <div class="logo">
-            <img class="logo-img" src="assets/images/logo.png" alt="FlexAI logo">
+            <img class="logo-img" src="assets/images/logo.png" alt="">
         </div>
-        <nav class="bg-brand-grey">
+        <nav class="bg-brand-grey" aria-label="Main Navigation">
             <ul class="FLEX justify-space-between align-center">
                 <li><a routerLink="/home" class="brand-dark-green">Home</a></li>
                 <li><a href="/chatbot" class="brand-dark-green">FlexAI</a></li>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="video-container">
-        <video autoplay muted loop class="video-background">
+        <video autoplay muted loop class="video-background"  aria-label="Background video of empty gym">
             <source src="assets/videos/home-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -110,13 +110,13 @@
         <div class="upper-container FLEX justify-space-between align-center">
             <!-- Logo -->
             <div class="logo">
-                <img class="logo-img" src="assets/images/logo.png" alt="FlexAI logo">
+                <img class="logo-img" src="assets/images/logo.png" alt="">
             </div>
             <!-- Links -->
             <div>
                 <ul>
-                    <li>Contact Us</li>
-                    <li>How it works</li>
+                    <li aria-label="Contact Us">Contact Us</li>
+                    <li aria-label="Learn how it works">How it works</li>
                 </ul>
             </div>
             <!-- Partners -->
@@ -137,14 +137,14 @@
                     <li>Terms & Conditions</li>
                     <li>Privacy Policy</li>
                     <li>
-                        <div class="social-media FLEX">
-                            <a href="#" class="social-media-icon FLEX center-content">
+                        <div class="social-media FLEX" aria-label="Social Media">
+                            <a href="#" class="social-media-icon FLEX center-content" aria-label="Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" class="social-media-icon FLEX center-content">
+                            <a href="#" class="social-media-icon FLEX center-content" aria-label="Twitter">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="#" class="social-media-icon FLEX center-content">
+                            <a href="#" class="social-media-icon FLEX center-content" aria-label="LinkedIn">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         </div>
@@ -161,7 +161,7 @@
             <!-- Copyright Notice -->
             <p>© 2025 FLEXAI. All rights reserved.</p>
             <!-- Back to Top Button -->
-            <button id="back-to-top" (click)="scrollToTop()" title="Go to top">
+            <button id="back-to-top" (click)="scrollToTop()"  aria-label="Go to top">
                 ↑ Back to Top
             </button>
         </div>
