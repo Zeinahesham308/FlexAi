@@ -16,8 +16,6 @@ from langchain_core.prompts import MessagesPlaceholder
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.vectorstores import FAISS
-
-
 from langchain_groq import ChatGroq
  
 

@@ -103,7 +103,7 @@ if st.session_state.page == 'nutrition_buddy':
         st.markdown("-----")
         st.write("Session")
         if st.button("New Session", key="new_session_button"):
-            new_session_id = create_new_session(    )
+            new_session_id = create_new_session( user   )
             st.session_state.sessions_list.append(new_session_id)
             st.session_state.current_session = new_session_id
             st.rerun()
