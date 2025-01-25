@@ -26,6 +26,7 @@ def open_chat(session_id: str):
             database_name="RAG",
             collection_name="history"
         )
+        print("test")
 
         for message in chat_with_history.messages:
             div = f"""
@@ -87,8 +88,8 @@ connection_string = uri
 if 'current_session' not in st.session_state:
     st.session_state.current_session = None
 if 'sessions_list' not in st.session_state:
-    st.session_state.sessions_list = []
-
+    st.session_state.sessions_list = ["default_user_session_8","default_user_session_9","default_user_session_5"]
+st.session_state.sessions_list = ["default_user_session_8","default_user_session_9","default_user_session_5","default_user_session_11"] # delete this later
 # Directly navigate to the Nutrition Buddy page
 st.session_state.page = 'nutrition_buddy'
 
@@ -102,21 +103,21 @@ if st.session_state.page == 'nutrition_buddy':
 
         st.markdown("-----")
         st.write("Session")
-        if st.button("New Session", key="new_session_button"):
-            new_session_id = create_new_session( username=user)
-            st.session_state.sessions_list.append(new_session_id)
-            st.session_state.current_session = new_session_id
+        if st.button("New Session", key="new_session_button"):  
+            new_session_id = create_new_session( username="default_user_session_11")
+            # st.session_state.sessions_list.append(new_session_id)
+            # st.session_state.current_session = new_session_id
             st.rerun()
         for session in st.session_state.sessions_list:
             if st.button(session, key=f"session_button_{session}"):
                 st.session_state.current_session = session
                 st.rerun()
-
+    #st.session_state.current_session = "default_user_session_11"# take value here
     if st.session_state.current_session:
         chat_with_history = open_chat(st.session_state.current_session)
         if chat_with_history is None:
             chat_with_history = MongoDBChatMessageHistory(
-                session_id=st.session_state.current_session,
+                session_id="default_user_session_11",
                 connection_string=uri,
                 database_name="RAG",
                 collection_name="history"
