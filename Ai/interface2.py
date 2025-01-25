@@ -60,7 +60,8 @@ load_CSS()
 # Set a default username (since login is removed)
 userid = st.query_params["userid"]
 if userid:
-    st.session_state.username = userid
+    st.session_state.userid = userid
+    print("this is the userid",userid)
 else:
     st.session_state.username = "Guest"
 
@@ -104,7 +105,7 @@ def create_new_session(userid,username):
                 database_name="flexdb",
                 collection_name="history"
             )
-            user_prompt = f"{user_info}generate me a wrokout plan for a 180 cm man who wants to lose weight"
+            user_prompt = f"{user_info}generate me a wrokout plan for the userinfo"
             user_div = f"""
             <div class="chat-row row-reverse">
                 <img class="chat-icon" src="app/static/person.png" width="32" height="32"/>
