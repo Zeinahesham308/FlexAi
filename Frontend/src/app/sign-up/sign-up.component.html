@@ -57,23 +57,6 @@
                 <!-- Submit Button -->
                 <input type="submit" value="Login" class="btn solid" (click)="loginUser(loginForm)"
                     [disabled]="loginForm.invalid" />
-
-                <!-- Social Media -->
-                <p class="social-text brand-light-green">Or Sign in with social platforms</p>
-                <div class="social-media FLEX justify-center">
-                    <a href="#" class="social-icon FLEX center-content">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="social-icon FLEX center-content">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-icon FLEX center-content">
-                        <i class="fab fa-google"></i>
-                    </a>
-                    <a href="#" class="social-icon FLEX center-content">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                </div>
             </form>
             <app-signup-form [SignUpEvent]="SignUpEvent" [attempingSignUp]="attempingSignUp" ></app-signup-form>
         </div>

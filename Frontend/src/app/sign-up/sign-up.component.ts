@@ -1,11 +1,8 @@
 import { Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
-import { QuestionsService } from '../services/questions.service';
-import { Questions } from '../models/questions';
-import { UserAnswers } from '../models/user-answers';
 import { AuthService } from '../services/auth.service';
-import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { UserSignupInterface } from '../models/user.signup.interface';
-import { UserLoginInterface } from '../models/user.login.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -21,15 +18,14 @@ export class SignUpComponent implements OnInit {
   SignUpEvent:EventEmitter<UserSignupInterface> = new EventEmitter<UserSignupInterface>();
 
   // Flag to track if the user has interacted with radio inputs
-  isTouched = false;
   userLogin = {
     name: '',
     password: '',
   };
 
   constructor(
-    private questionsService: QuestionsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
 
@@ -51,9 +47,6 @@ export class SignUpComponent implements OnInit {
       })
   }
 
-  setTouched() {
-    this.isTouched = true;
-  }
 
   // Toggle sign-up mode when sign-up button is clicked
   onSignUpClick() {
@@ -72,6 +65,7 @@ export class SignUpComponent implements OnInit {
         next: (data) => {
           console.log('Login successful:', data);
           // navigate to the home page
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Login failed:', err.message);

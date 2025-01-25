@@ -1,62 +1,124 @@
 <div class="homePage-container bg-brand-black font-family-brand">
     <div class="header FLEX justify-space-between align-center">
-        <div class="logo">FLEXAI</div>
+        <div class="logo">
+            <img class="logo-img" src="assets/images/logo.png" alt="FlexAI logo">
+        </div>
         <nav class="bg-brand-grey">
-            <ul class="FLEX justify-space-between">
+            <ul class="FLEX justify-space-between align-center">
                 <li><a href="#" class="brand-dark-green">Home</a></li>
                 <li><a href="#" class="brand-dark-green">Programs</a></li>
-                <li><a href="#" class="brand-dark-green">FLEXAI</a></li>
                 <li><a href="#" class="brand-dark-green">About</a></li>
             </ul>
         </nav>
     </div>
 
     <div class="video-container">
+        <video autoplay muted loop class="video-background">
+            <source src="assets/videos/home-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
         <h1 class="brand-light-green font-size-50">Personal Trainer, <span class="white">without real trainer</span>
         </h1>
     </div>
     <main class="text-align-center">
         <h2 class="brand-light-green font-size-36">Feel confident everytime you train.</h2>
-        <p class="brand-light-green font-size-16">Your Virtual Trainer tracks and guides each session, so you will know
+        <p class=" brand-light-green font-size-16">Your Virtual Trainer tracks and guides each session, so you will know
             your ideal plan to reach your goals</p>
-        <div class="cards-container FLEX justify-space-between">
-            <div class="card bg-brand-light-green">
-                <img src="/assets/images/strength.png" alt="strength-icon">
-                <h4 class="card-title brand-black font-size-20 font-weight-bold">Strength</h4>
-                <p class="font-size-16">Embrace the essence of strength as we delve into its various dimensions
-                    physical, mental, and
-                    emotional.</p>
+        <div class="carousel rounded-box flex gap-4">
+            <!-- Card 1: Warm-Up Tip -->
+            <div class="carousel-item flex-none w-[320px]">
+                <div
+                    class="card bg-brand-light-green p-6 rounded-lg shadow-md flex flex-col justify-center items-center text-center">
+                    <i class="fas fa-fire text-4xl mb-4 text-brand-black"></i>
+                    <h4 class="text-brand-black text-xl font-bold mb-2">Warm-Up Tip</h4>
+                    <p class="text-brand-black text-base">Always spend 5-10 minutes warming up before your workout to
+                        prevent injuries and improve performance.</p>
+                </div>
             </div>
 
-            <div class="card bg-brand-light-green">
-                <img src="/assets/images/noFat.png" alt="noFat-icon">
-                <h4 class="card-title brand-black font-size-20 font-weight-bold">Fat Lose</h4>
-                <p class="font-size-16">Through a combination of workout routines and expert guidance, we'll empower you
-                    to reach your goals.
-                </p>
+            <!-- Card 2: Hydration Tip -->
+            <div class="carousel-item flex-none w-[320px]">
+                <div
+                    class="card bg-brand-light-green p-6 rounded-lg shadow-md flex flex-col justify-center items-center text-center">
+                    <i class="fas fa-tint text-4xl mb-4 text-brand-black"></i>
+                    <h4 class="text-brand-black text-xl font-bold mb-2">Hydration Tip</h4>
+                    <p class="text-brand-black text-base">Stay hydrated throughout the day to boost energy levels and
+                        improve overall performance.</p>
+                </div>
             </div>
 
-            <div class="card bg-brand-light-green">
-                <img src="/assets/images/gainWeight.png" alt="gainWeight">
-                <h4 class="card-title brand-black font-size-20 font-weight-bold">Gain Weight</h4>
-                <p class="font-size-16">Designed for individuals, our program offers an effective approach to gaining
-                    weight in a sustainable
-                    manner.</p>
+            <!-- Card 3: Sleep Tip -->
+            <div class="carousel-item flex-none w-[320px]">
+                <div
+                    class="card bg-brand-light-green p-6 rounded-lg shadow-md flex flex-col justify-center items-center text-center">
+                    <i class="fas fa-bed text-4xl mb-4 text-brand-black"></i>
+                    <h4 class="text-brand-black text-xl font-bold mb-2">Sleep Tip</h4>
+                    <p class="text-brand-black text-base">Aim for 7-8 hours of quality sleep each night to support
+                        muscle recovery and mental clarity.</p>
+                </div>
+            </div>
+
+            <!-- Card 4: Nutrition Tip -->
+            <div class="carousel-item flex-none w-[320px]">
+                <div
+                    class="card bg-brand-light-green p-6 rounded-lg shadow-md flex flex-col justify-center items-center text-center">
+                    <i class="fas fa-utensils text-4xl mb-4 text-brand-black"></i>
+                    <h4 class="text-brand-black text-xl font-bold mb-2">Nutrition Tip</h4>
+                    <p class="text-brand-black text-base">Include a source of protein in every meal to support muscle
+                        repair and growth.</p>
+                </div>
+            </div>
+
+            <!-- Card 5: Posture Tip -->
+            <div class="carousel-item flex-none w-[320px]">
+                <div
+                    class="card bg-brand-light-green p-6 rounded-lg shadow-md flex flex-col justify-center items-center text-center">
+                    <i class="fas fa-user text-4xl mb-4 text-brand-black"></i>
+                    <h4 class="text-brand-black text-xl font-bold mb-2">Posture Tip</h4>
+                    <p class="text-brand-black text-base">Maintain proper posture during exercises to maximize results
+                        and avoid injuries.</p>
+                </div>
+            </div>
+
+            <!-- Card 6: Consistency Tip -->
+            <div class="carousel-item flex-none w-[320px]">
+                <div
+                    class="card bg-brand-light-green p-6 rounded-lg shadow-md flex flex-col justify-center items-center text-center">
+                    <i class="fas fa-calendar-alt text-4xl mb-4 text-brand-black"></i>
+                    <h4 class="text-brand-black text-xl font-bold mb-2">Consistency Tip</h4>
+                    <p class="text-brand-black text-base">Consistency is key! Even short, regular workouts are more
+                        effective than occasional long sessions.</p>
+                </div>
+            </div>
+
+            <!-- Card 7: Strength Tip -->
+            <div class="carousel-item flex-none w-[320px]">
+                <div
+                    class="card bg-brand-light-green p-6 rounded-lg shadow-md flex flex-col justify-center items-center text-center">
+                    <i class="fas fa-dumbbell text-4xl mb-4 text-brand-black"></i>
+                    <h4 class="text-brand-black text-xl font-bold mb-2">Strength Tip</h4>
+                    <p class="text-brand-black text-base">Incorporate strength training into your routine to build
+                        muscle and boost metabolism.</p>
+                </div>
             </div>
         </div>
     </main>
 
+
     <footer class="bg-brand-dark-green brand-light-green">
         <div class="upper-container FLEX justify-space-between align-center">
-            <div class="logo white">FLEXAI</div>
-            <div class="contactUs">
-                <h3>Contact Us</h3>
+            <!-- Logo -->
+            <div class="logo">
+                <img class="logo-img" src="assets/images/logo.png" alt="FlexAI logo">
+            </div>
+            <!-- Links -->
+            <div>
                 <ul>
+                    <li>Contact Us</li>
                     <li>How it works</li>
-                    <li>Pricing</li>
-                    <li>Docs</li>
                 </ul>
             </div>
+            <!-- Partners -->
             <div class="partners">
                 <h3>Partners</h3>
                 <ul>
@@ -67,25 +129,40 @@
                     <li>Salma Waleed Ismail</li>
                 </ul>
             </div>
-            <div class="about">
+            <!-- Links -->
+            <div>
                 <h3>About</h3>
                 <ul>
                     <li>Terms & Conditions</li>
                     <li>Privacy Policy</li>
                     <li>
-                        <div class="social-media-container FLEX justify-space-between">
-                            <img src="/assets/images/twitter-icon.svg" alt="twitter-icon">
-                            <img src="/assets/images/linkedin-icon.svg" alt="linkedin-icon">
-                            <img src="/assets/images/facebook-icon.svg" alt="facebook-icon">
+                        <div class="social-media FLEX">
+                            <a href="#" class="social-media-icon FLEX center-content">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-media-icon FLEX center-content">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-media-icon FLEX center-content">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
                         </div>
                     </li>
                 </ul>
             </div>
 
         </div>
+        <!-- Horizontal Line -->
         <hr>
+
+        <!-- Lower Container -->
         <div class="lower-container text-align-center">
+            <!-- Copyright Notice -->
             <p>© 2025 FLEXAI. All rights reserved.</p>
+            <!-- Back to Top Button -->
+            <button id="back-to-top" (click)="scrollToTop()" title="Go to top">
+                ↑ Back to Top
+            </button>
         </div>
     </footer>
 
