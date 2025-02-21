@@ -43,8 +43,8 @@ def return_rag_chain( ):
     
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
-    #splits = load_and_process_pdfs("nuitrions")
-    #vectorstore = initialize_vectorstore(splits,embeddings)
+    splits = load_and_process_pdfs("nuitrions")
+    vectorstore = initialize_vectorstore(splits,embeddings)
 #     vectorstore = Milvus.from_documents(
 #     documents=splits,
 #     embedding=embeddings,
@@ -53,14 +53,14 @@ def return_rag_chain( ):
 #     },
 #     collection_name="RAGCollection",    
 #     drop_old=True,  # Drop the old Milvus collection if it exists
+#  )
+#     vectorstore = Milvus(
+#   embeddings,
+#     connection_args={
+#         "uri": f"tcp://{config['milvus']['host']}:19530",  
+#     },
+#     collection_name="RAGCollection",    
 # )
-    vectorstore = Milvus(
-  embeddings,
-    connection_args={
-        "uri": f"tcp://{config['milvus']['host']}:19530",  
-    },
-    collection_name="RAGCollection",    
-)
     
 
     print("Vectorstore created successfully")
