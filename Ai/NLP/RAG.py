@@ -6,6 +6,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 import os
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_community.tools import TavilySearchResults
 
 import yaml
 from yaml.loader import SafeLoader
@@ -32,19 +33,18 @@ def load_and_process_pdfs(pdf_folder_path):
 
 
 from pymilvus import connections , utility ,db
+# add tavily search api retriever
+# filter the context thats is retrieved
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 def initialize_vectorstore(splits,embd):
     return FAISS.from_documents(documents=splits, embedding=embd)
 
-
  
 def return_rag_chain( ):
     
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
-
-    splits = load_and_process_pdfs("nuitrions")
-    vectorstore = initialize_vectorstore(splits,embeddings)
+    vectorstore = FAISS.load_local("nuitrionsDB", embeddings,allow_dangerous_deserialization=True)
 #     vectorstore = Milvus.from_documents(
 #     documents=splits,
 #     embedding=embeddings,
