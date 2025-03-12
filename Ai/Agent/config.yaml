@@ -1,0 +1,12 @@
+mongodb:
+  user: hossam7ht 
+  password: hossam7ht
+groq:
+  apiKey: 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
+milvus:
+  host: 192.168.161.129
+elevnlabs:
+  apiKey: sk_4d2e804371c8cd70e9279067ea04ce43e14ada203880e106
+tavily:
+  apiKey: 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
+  
