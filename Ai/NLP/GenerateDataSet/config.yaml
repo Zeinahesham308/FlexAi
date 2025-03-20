@@ -2,11 +2,10 @@ mongodb:
   user: hossam7ht 
   password: hossam7ht
 groq:
-  apiKey: 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
+  apiKey: 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
 milvus:
   host: 192.168.161.129
 elevnlabs:
-  apiKey: sk_4d2e804371c8cd70e9279067ea04ce43e14ada203880e106
+  apiKey: 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
 tavilysearch:
-  apiKey: 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
-  
+  apiKey: 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  

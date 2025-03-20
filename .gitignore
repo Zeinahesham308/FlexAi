@@ -1,2 +1,3 @@
-Ai/NLP/GenerateDataSet/.xlsx
-Ai/NLP/GenerateDataSet/.csv
+Ai/NLP/GenerateDataSet/*.xlsx
+
+Ai/NLP/GenerateDataSet/*.csv
