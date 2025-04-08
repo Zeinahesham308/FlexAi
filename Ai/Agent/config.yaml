@@ -1,0 +1,18 @@
+mongodb:
+  user: hossam7ht 
+  password: hossam7ht
+groq:
+  # apiKey: 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
+  # # apiKey: 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
+  # apiKey: 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
+  apiKey: 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
+  
+
+
+milvus:
+  host: 192.168.161.129
+elevnlabs:
+  apiKey: sk_4d2e804371c8cd70e9279067ea04ce43e14ada203880e106
+tavily:
+  apiKey: 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
+  

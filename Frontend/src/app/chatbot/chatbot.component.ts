@@ -15,7 +15,7 @@ export class ChatbotComponent implements OnInit {
 
   chatbotUrl!: SafeResourceUrl;
   ngOnInit(): void {
-    const baseUrl = 'https://077f-102-41-110-135.ngrok-free.app';
+    const baseUrl = 'http://localhost:8501/';
     const rawUserData = localStorage.getItem('userData');
     if (rawUserData) {
       const userData = JSON.parse(rawUserData)
