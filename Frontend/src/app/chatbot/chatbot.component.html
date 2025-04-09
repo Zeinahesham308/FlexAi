@@ -1,6 +1,113 @@
-<iframe
-  [src] = "chatbotUrl"
-  width="100%"
-  height="100vh"
-  frameborder="0"
-></iframe>
+<div class="chatbot-page bg-brand-black white font-family-brand">
+
+  <!-- Chatbot Header Tablet and Desktop -->
+  <!-- <header *ngIf="!isSidebarVisible" >
+    <div class="header-toggle" (click)="toggleSidebar()">
+      <i class="fa-solid fa-bars fa-xl" style="color: #f0fff0;"></i>
+    </div>
+    <h1 class="header-title des-tablet">Hello there!</h1>
+  </header> -->
+
+  <!-- Chatbot Header Mobile -->
+
+  <!-- Chatbot Main Content -->
+  <div class="chatbot-content FLEX">
+
+    <!-- Chatbot Sidebar -->
+    <aside class="sidebar" [ngClass]="{ 'sidebar-visible': isSidebarVisible }">
+      <div class="header-toggle" (click)="toggleSidebar()">
+        <!--  <i class="fa-solid fa-bars fa-xl" style="color: #f0fff0;"></i> -->
+        <i class="fa-solid fa-right-to-bracket fa-xl" style="color: #f0fff0;" *ngIf="!isSidebarVisible"></i>
+
+        <i class="fa-solid fa-right-to-bracket fa-flip-horizontal fa-xl" style="color: #f0fff0;"
+          *ngIf="isSidebarVisible"></i>
+      </div>
+
+
+      <div class="sidebar-content FLEX-COL justify-space-between" *ngIf="isSidebarVisible">
+        <button aria-label="Start a new chat" class="FLEX center-content">
+          <i class="fa-solid fa-comment" style="color: #f0fff0;"></i>
+          New Chat</button>
+
+        <div class="account FLEX center-content">
+          <img class="avatar" src="assets/images/user-avatar-test.png" alt="User Avatar">
+          <!-- Replace with user's avatar -->
+          <p class="name">Salma</p> <!-- Replace with user's name -->
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Content and Footer Container -->
+    <div class="main-and-footer FLEX-COL">
+      <!-- Main Section -->
+      <main class="text-align-center">
+        <!-- Welcome screen (only shows when chat is empty) -->
+        <div *ngIf="messages.length === 0" class="welcome-section">
+          <h2>Welcome to FlexAI</h2>
+          <p>Explore the suggestions below, or type your own question.</p>
+
+          <!-- Suggestions -->
+          <section class="suggestions FLEX align-center">
+            <article class="card card1 FLEX-COL bg-brand-light-green center-content" (click)="sendSuggestion('Workout Plan')">
+              <i class="fa-solid fa-dumbbell fa-rotate-by" style="color: #20221f;  --fa-rotate-angle: 135deg;"
+                aria-hidden="true"></i>
+              <div class="card-title">Workout Plan</div>
+            </article>
+
+            <article class="card card2 FLEX-COL bg-brand-light-green center-content" (click)="sendSuggestion('Nutrition Plan')">
+              <i class="fa-solid fa-utensils" style="color: #9fa0a3;" aria-hidden="true"></i>
+              <div class="card-title">Nutrition Plan</div>
+            </article>
+
+            <article class="card card3 FLEX-COL bg-brand-light-green center-content" (click)="sendSuggestion('Injury Prevention')">
+              <i class="fa-solid fa-bandage fa-rotate-by" style="color: #f2bb85; --fa-rotate-angle: 135deg;"
+                aria-hidden="true"></i>
+              <div class="card-title">Injury Prevention</div>
+            </article>
+          </section>
+        </div>
+        <!-- Chatbot Body -->
+        <div class="chat-body FLEX-COL" *ngIf="messages.length > 0">
+          <div *ngFor="let message of messages"
+            class="message {{message.isBot ? 'bot-message' : 'user-message'}} FLEX-COL"
+            [class.sending]="message.status === 'sending'" [class.failed]="message.status === 'failed'">
+            {{ message.text }}
+
+            <!-- Message status indicators -->
+            <div class="message-status" *ngIf="!message.isBot">
+              <span *ngIf="message.status === 'sending'">Sending...</span>
+              <span *ngIf="message.status === 'failed'">Failed to send</span>
+            </div>
+          </div>
+
+          <!-- Typing indicator -->
+           <div class=" bot-message thinking-indicator FLEX" *ngIf="isBotTyping">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+        </div>
+      </main>
+
+      <!-- Chatbot Footer -->
+      <footer class="chatbot-footer">
+        <form (submit)="sendMessage()" class="chatbot-form FLEX align-center bg-white black ">
+          <textarea [(ngModel)]="inputMessage" name="message-input" placeholder="Type your message..."
+            class="message-input" required aria-label="Type your message here"></textarea>
+          <div class="chatbot-controls">
+            <button type="submit" class="send-button" aria-label="Send message">
+              <i class="fa-solid fa-paper-plane fa-lg" style="color: #babeba;"></i>
+            </button>
+          </div>
+        </form>
+      </footer>
+    </div>
+  </div>
+
+
+
+
+
+
+</div>

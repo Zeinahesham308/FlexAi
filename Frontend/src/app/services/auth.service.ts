@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserAnswers } from '../models/user-answers';
-import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { UserSignupInterface } from '../models/user.signup.interface';
 import { UserLoginInterface } from '../models/user.login.interface';
