@@ -1,23 +1,29 @@
+require("dotenv").config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const app = express();
 const userRoutes = require('./routes/userRoutes');
-
+const chatRoutes = require('./routes/chatRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Enable CORS for Angular during development
 const corsOptions = {
-    origin: '*', 
+    origin: process.env.FRONTEND_URL || '*', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 };
 app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes); // Backend API routes for user operations
+app.use('/api', chatRoutes); // Chat routes
+
+// Serve static files
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use((err, req, res, next) => {
     console.error(`[Error] ${err.message}`);
