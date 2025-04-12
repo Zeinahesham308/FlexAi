@@ -61,7 +61,77 @@
             opacity: 1;
             /* Visible when sidebar is expanded */
         }
+
+
+        .chat-sessions {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+
+            .sessions-title {
+                color: #f0fff0;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                margin-bottom: 1rem;
+                letter-spacing: 1px;
+            }
+
+            .sessions-list {
+                list-style: none;
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.8rem;
+                    padding: 0.8rem;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    color: rgba(240, 255, 240, 0.8);
+                    transition: all 0.2s;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+
+                    &.active {
+                        background: rgba(255, 255, 255, 0.15);
+                        color: #f0fff0;
+                    }
+
+                    i {
+                        font-size: 0.9rem;
+                    }
+
+                    .session-preview {
+                        flex-grow: 1;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        font-size: 0.9rem;
+                    }
+
+                    .session-date {
+                        font-size: 0.7rem;
+                        opacity: 0.7;
+                    }
+                }
+            }
+        }
+
+        .new-chat-btn {
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+        }
+
     }
+
+
 
     .main-and-footer {
         width: 100%;
@@ -72,7 +142,7 @@
         flex: 1;
 
         h2 {
-            font-size: 2em;
+            font-size: 2rem;
             margin: 1em 0;
         }
 
@@ -258,6 +328,82 @@
         }
     }
 
+}
+
+@media (min-width: 767px) {
+    .sidebar {
+        width: 4em; // Slightly wider sidebar for tablets
+        font-size: 1.1rem;
+
+        &.sidebar-visible {
+            width: 18%; // More compact expanded width on larger screens
+        }
+
+        .sidebar-content {
+            padding: 2em 0.8em; // Better spacing
+        }
+    }
+
+    .main-and-footer {
+        padding: 1.5em 2em;
+
+        main {
+            h2 {
+                font-size: 3.5rem; // Bigger headings
+            }
+
+            p {
+                font-size: 1.2rem;
+            }
+
+            .welcome-section {
+                position: absolute;
+                top: 40%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+
+                .suggestions {
+                    i {
+                        font-size: 2rem;
+                    }
+                }
+            }
+        }
+
+        .chatbot-footer {
+
+            form {
+                .message-input {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+
+    .chat-body {
+        .message {
+            padding: 0.8rem 1rem; // Better message padding
+            font-size: 1.2rem;
+        }
+    }
+
+
+    // Card suggestions layout improvement
+    .suggestions {
+        flex-direction: row; // Keep cards in row even at 767px+
+        justify-content: center;
+        gap: 1.5em;
+
+        .card {
+            width: 150px;
+            height: 120px;
+            padding: 1em;
+
+            &-title {
+                font-size: 1.2rem; // More readable titles
+            }
+        }
+    }
 }
 
 @keyframes dotPulse {

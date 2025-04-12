@@ -16,26 +16,37 @@
     <!-- Chatbot Sidebar -->
     <aside class="sidebar" [ngClass]="{ 'sidebar-visible': isSidebarVisible }">
       <div class="header-toggle" (click)="toggleSidebar()">
-        <!--  <i class="fa-solid fa-bars fa-xl" style="color: #f0fff0;"></i> -->
         <i class="fa-solid fa-right-to-bracket fa-xl" style="color: #f0fff0;" *ngIf="!isSidebarVisible"></i>
-
-        <i class="fa-solid fa-right-to-bracket fa-flip-horizontal fa-xl" style="color: #f0fff0;"
-          *ngIf="isSidebarVisible"></i>
+        <i class="fa-solid fa-right-to-bracket fa-flip-horizontal fa-xl" style="color: #f0fff0;" *ngIf="isSidebarVisible"></i>
       </div>
-
-
+    
       <div class="sidebar-content FLEX-COL justify-space-between" *ngIf="isSidebarVisible">
-        <button aria-label="Start a new chat" class="FLEX center-content">
+        <!-- New Chat Button -->
+        <button aria-label="Start a new chat" class="FLEX center-content new-chat-btn" (click)="startNewChat()">
           <i class="fa-solid fa-comment" style="color: #f0fff0;"></i>
-          New Chat</button>
-
+          New Chat
+        </button>
+    
+        <!-- Chat Sessions List -->
+        <div class="chat-sessions">
+          <h3 class="sessions-title">Recent Chats</h3>
+          <ul class="sessions-list">
+            <li *ngFor="let session of chatSessions; trackBy: trackBySessionId" 
+                (click)="loadChatSession(session.id)"
+                [class.active]="session.id === currentSessionId">
+              <i class="fa-regular fa-message"></i>
+              <span class="session-preview">{{ session.title }}</span>
+              <span class="session-date">{{ session.createdAt | date:'shortDate' }}</span>
+            </li>
+          </ul>
+        </div>
+    
+        <!-- Account Section -->
         <div class="account FLEX center-content">
           <img class="avatar" src="assets/images/user-avatar-test.png" alt="User Avatar">
-          <!-- Replace with user's avatar -->
-          <p class="name">Salma</p> <!-- Replace with user's name -->
+          <p class="name">Salma</p>
         </div>
       </div>
-
     </aside>
 
     <!-- Main Content and Footer Container -->
