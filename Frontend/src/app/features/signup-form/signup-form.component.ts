@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Questions } from '../../models/questions';
+import { Questions } from '../../models/questions.interface';
 import { QuestionsService } from '../../services/questions.service';
 import { UserSignupInterface } from '../../models/user.signup.interface';
 /**
