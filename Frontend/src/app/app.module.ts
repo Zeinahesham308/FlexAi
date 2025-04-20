@@ -12,7 +12,8 @@ import { StreamlitEmbedComponent } from './streamlit-embed/streamlit-embed.compo
 import { SignupFormComponent } from './features/signup-form/signup-form.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { DashboardModule } from "./dashboard/dashboard.module";
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -32,10 +33,9 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-  
-
-    
-  ],
+    DashboardModule,
+    MatIconModule,
+],
   providers: [
     provideAnimationsAsync(),
   ],
