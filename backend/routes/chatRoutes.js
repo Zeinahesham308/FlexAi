@@ -10,6 +10,6 @@ const uploads = multer({ dest: "uploads/" });
 router.get('/health', chatController.healthCheck);
 
 // Chat endpoint with file upload support
-router.post('/chat', uploads.single("file"), chatController.handleChat);
+router.post('/chat', express.json(), chatController.handleChat);
 
 module.exports = router; 
