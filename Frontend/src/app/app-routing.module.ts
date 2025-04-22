@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'default', component: SignUpComponent }, // Sign Up page route
   { path: 'Streamlit-chatbot', component: StreamlitEmbedComponent },
   { path: 'chatbot', component: ChatbotComponent },
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
   { path: '**', redirectTo: '/signup' } // Wildcard route for invalid paths (redirect to Sign Up/ Sign In)
 
 ];
