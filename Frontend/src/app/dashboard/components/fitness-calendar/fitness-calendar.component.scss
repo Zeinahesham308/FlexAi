@@ -1,0 +1,167 @@
+.calendar-container {
+  width: 100%;
+  margin-top: 2rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #2d3748;
+  }
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 500;
+  color: #718096;
+  margin-bottom: 0.5rem;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &.current-month {
+    background: rgba(0, 0, 0, 0.02);
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &.other-month {
+    opacity: 0.4;
+  }
+
+  &.today {
+    border: 2px solid #667eea;
+  }
+
+  .date-number {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .workout-indicators {
+    display: flex;
+    gap: 0.25rem;
+
+    .indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #e53e3e; // Red for incomplete
+
+      &.completed {
+        background: #38a169; // Green for complete
+      }
+    }
+  }
+}
+
+// Mobile date selector styles
+.mobile-date-selector {
+  display: none; // Hide by default, show only on mobile
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 15px;
+  
+  .date-scroller {
+    display: flex;
+    padding: 10px 0;
+    min-width: 100%;
+    justify-content: center;
+    
+    .day-item {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      margin: 0 4px;
+      text-align: center;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      
+      &.today {
+        background-color: #222;
+        color: white;
+        font-weight: 500;
+        padding: 8px 16px;
+      }
+      
+      &.selected:not(.today) {
+        background-color: #f0f0f0;
+      }
+    }
+  }
+}
+
+// Desktop calendar styles
+.desktop-calendar {
+  display: block;
+}
+/* Exit animations (old month leaving) */
+.slide-out-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.slide-out-right {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Enter animation (new month entering) */
+.slide-in {
+  animation: slide-in 0.4s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Media query for mobile devices
+@media (max-width: 480px) {
+  .desktop-calendar {
+    display: none; // Hide the desktop calendar on mobile
+  }
+  
+  .mobile-date-selector {
+    display: block; // Show the mobile date selector
+  }
+}

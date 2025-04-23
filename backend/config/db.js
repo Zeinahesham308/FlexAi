@@ -3,7 +3,7 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
 
-const fileContents = fs.readFileSync(path.join(__dirname, '../../Ai/config.yaml'), 'utf8');
+const fileContents = fs.readFileSync(path.join(__dirname, '../../Ai/Agent/config.yaml'), 'utf8');
 const config = yaml.load(fileContents);
 
 const db = mongoose.createConnection('mongodb://127.0.0.1:27017/Login-tut', {

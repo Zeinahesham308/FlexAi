@@ -1,0 +1,53 @@
+<div class="calendar-container">
+  <!-- Standard calendar view for larger screens -->
+  <div class="desktop-calendar">
+    <div class="calendar-header">
+      <button mat-icon-button (click)="previousMonth()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <h2>{{ currentDate | date:'MMMM yyyy' }}</h2>
+
+      <button mat-icon-button (click)="nextMonth()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <div class="weekdays">
+      <div *ngFor="let day of weekdays" class="weekday">
+        {{ day }}
+      </div>
+    </div>
+
+    <div [class]="gridClasses">
+      <div *ngFor="let day of days" [class]="getDayClasses(day)" (click)="onDayClick(day)">
+
+        <span class="date-number">{{ day.date | date:'d' }}</span>
+
+
+        <div class="workout-indicators">
+          <span *ngIf="day.workouts?.length" class="indicator"
+            [class.completed]="day.workouts && areAllWorkoutsCompleted(day.workouts)">
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- Mobile calendar view for smaller screens -->
+  <div class="mobile-date-selector">
+    <div class="date-scroller">
+      <div *ngFor="let day of weekDays" 
+      [class]="getMobileDayClass(day)" 
+      (click)="onDayClick(day)">
+        <ng-container *ngIf="day.isToday">
+          Today, {{ day.date| date:'d MMM' }}
+        </ng-container>
+        <ng-container *ngIf="!day.isToday">
+          {{ day.date| date:'d' }}
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
