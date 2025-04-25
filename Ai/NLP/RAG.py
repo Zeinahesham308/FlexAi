@@ -17,7 +17,9 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
- 
+
+from langchain_openai import ChatOpenAI
+os.environ["OPENAI_API_KEY"] = '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'
 
 def load_and_process_pdfs(pdf_folder_path):
     documents = []
@@ -66,14 +68,16 @@ def return_rag_chain( ):
     print("Vectorstore created successfully")
     # %%
     os.environ["GROQ_API_KEY"] = config['groq']['apiKey']
-    llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    temperature=0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2,
+#     llm = ChatGroq(
+#     model="llama-3.3-70b-versatile",
+#     temperature=0,
+#     max_tokens=None,
+#     timeout=None,
+#     max_retries=2,
     
-)
+# )
+    llm=ChatOpenAI(model="meta-llama/llama-4-maverick:free",base_url="https://openrouter.ai/api/v1")
+
     # %%
 
 
