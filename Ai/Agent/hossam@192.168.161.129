@@ -297,7 +297,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 122,
    "metadata": {},
    "outputs": [
     {
@@ -340,6 +340,7 @@
     "                tool_call_id=msg.tool_call_id,\n",
     "                content=json.dumps(msg.content)\n",
     "            )\n",
+    "    messages=messages[-10:]\n",
     "    response = llm.invoke(messages)\n",
     "    return {\"messages\": [response]}\n",
     "\n",

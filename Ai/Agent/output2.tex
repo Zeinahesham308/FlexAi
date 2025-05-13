@@ -1,75 +1,80 @@
-
 \documentclass{article}
-\usepackage{geometry}
-\geometry{a4paper, margin=1in} % Optional: Adjust margins
-\usepackage{amsmath} % Include if you need math environments, otherwise optional
-\usepackage{amssymb} % Optional: for extra symbols
-\usepackage{enumitem} % Optional: for more control over lists
-\usepackage{hyperref} % Optional: for clickable links
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry} % Optional: for better margins
+\geometry{a4paper, margin=1in} % Optional: example geometry settings
 
 \begin{document}
 
-\section*{6-Day Workout Plan Summary}
+\noindent % Prevent first line indent
+\textbf{Day 1: Back}
+\begin{enumerate}
+    \item Chin-Ups - 3 sets of 8-12 reps
+    \item Bent-Over Barbell Rows - 3 sets of 8-12 reps
+    \item Seated Cable Rows - 3 sets of 10-12 reps
+    \item Lat Pulldown - 3 sets of 10-12 reps
+    \item Dumbbell Rows (Single-Arm) - 3 sets of 10-12 reps
+\end{enumerate}
 
-\subsection*{Day 1: Back}
-\begin{itemize}
-    \item \textbf{Pull-Ups}: Sets: 4, Reps: 8-12
-    \item \textbf{Bent-Over Barbell Rows}: Sets: 4, Reps: 8-12
-    \item \textbf{Lat Pulldown}: Sets: 3, Reps: 12-15
-    \item \textbf{Seated Cable Rows}: Sets: 3, Reps: 12-15
-    \item \textbf{Face Pulls}: Sets: 3, Reps: 12-15
-    \item \textbf{Reverse Flyes (Dumbbell or Machine)}: Sets: 3, Reps: 12-15
-\end{itemize}
+\vspace{\baselineskip} % Add vertical space between days
 
-\subsection*{Day 2: Chest}
-\begin{itemize}
-    \item \textbf{Barbell Bench Press}: Sets: 4, Reps: 8-12
-    \item \textbf{Incline Barbell Bench Press}: Sets: 4, Reps: 8-12
-    \item \textbf{Dumbbell Bench Press}: Sets: 3, Reps: 12-15
-    \item \textbf{Cable Chest Flys}: Sets: 3, Reps: 12-15
-    \item \textbf{Incline Cable Flys}: Sets: 3, Reps: 12-15
-    \item \textbf{Push-Ups}: Sets: 3, Reps: 12-15
-\end{itemize}
+\noindent
+\textbf{Day 2: Chest}
+\begin{enumerate}
+    \item Dumbbell Bench Press - 3 sets of 8-12 reps
+    \item Machine Chest Press - 3 sets of 8-12 reps
+    \item Incline Bench Press - 3 sets of 10-12 reps
+    \item Weighted Push-Ups - 3 sets of 10-12 reps
+    \item Cable Crossovers - 3 sets of 12-15 reps
+    \item Incline Dumbbell Flys - 3 sets of 12-15 reps
+\end{enumerate}
 
-\subsection*{Day 3: Legs}
-\begin{itemize}
-    \item \textbf{Back Squat}: Sets: 4, Reps: 8-12
-    \item \textbf{Front Squat}: Sets: 4, Reps: 8-12
-    \item \textbf{Leg Press}: Sets: 3, Reps: 12-15
-    \item \textbf{Lunges (Walking or Stationary)}: Sets: 3, Reps: 12-15 (per leg)
-    \item \textbf{Step-Ups (Weighted or Bodyweight)}: Sets: 3, Reps: 12-15 (per leg)
-    \item \textbf{Calf Raises}: Sets: 4, Reps: 15-20
-\end{itemize}
+\vspace{\baselineskip}
 
-\subsection*{Day 4: Shoulders}
-\begin{itemize}
-    \item \textbf{Barbell Overhead Press}: Sets: 4, Reps: 8-12
-    \item \textbf{Dumbbell Shoulder Press}: Sets: 4, Reps: 8-12
-    \item \textbf{Lateral Raises}: Sets: 3, Reps: 12-15
-    \item \textbf{Face Pulls}: Sets: 3, Reps: 12-15
-    \item \textbf{Reverse Flyes (Dumbbell or Machine)}: Sets: 3, Reps: 12-15
-    \item \textbf{Front Raises}: Sets: 3, Reps: 12-15
-\end{itemize}
+\noindent
+\textbf{Day 3: Shoulders}
+\begin{enumerate}
+    \item Barbell Overhead Press - 3 sets of 8-12 reps
+    \item Dumbbell Shoulder Press - 3 sets of 8-12 reps
+    \item Arnold Press - 3 sets of 10-12 reps
+    \item Lateral Raises - 3 sets of 10-12 reps
+    \item Rear Delt Flys - 3 sets of 12-15 reps
+\end{enumerate}
 
-\subsection*{Day 5: Arms}
-\begin{itemize}
-    \item \textbf{Barbell Bicep Curl}: Sets: 4, Reps: 8-12
-    \item \textbf{Dumbbell Bicep Curl}: Sets: 4, Reps: 8-12
-    \item \textbf{Hammer Curls}: Sets: 3, Reps: 12-15
-    \item \textbf{Triceps Pushdown}: Sets: 4, Reps: 8-12
-    \item \textbf{Overhead Dumbbell Extension}: Sets: 3, Reps: 12-15
-    \item \textbf{Skull Crushers}: Sets: 3, Reps: 8-12
-    \item \textbf{Preacher Curl}: Sets: 3, Reps: 12-15
-    \item \textbf{Tricep Dips}: Sets: 3, Reps: 12-15
-\end{itemize}
+\vspace{\baselineskip}
 
-\subsection*{Day 6: Core}
-\begin{itemize}
-    \item \textbf{Plank}: Sets: 3, Hold for 30-60 seconds
-    \item \textbf{Russian Twists}: Sets: 3, Reps: 12-15
-    \item \textbf{Leg Raises}: Sets: 3, Reps: 12-15
-    \item \textbf{Bicycle Crunches}: Sets: 3, Reps: 12-15
-    \item \textbf{Superman}: Sets: 3, Reps: 12-15
-\end{itemize}
+\noindent
+\textbf{Day 4: Arms}
+\begin{enumerate}
+    \item Barbell Bicep Curl - 3 sets of 10-12 reps
+    \item Dumbbell Bicep Curl - 3 sets of 10-12 reps
+    \item Incline Dumbbell Curl - 3 sets of 10-12 reps
+    \item Tricep Pushdown - 3 sets of 10-12 reps
+    \item Overhead Dumbbell Extension - 3 sets of 12-15 reps
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\noindent
+\textbf{Day 5: Legs}
+\begin{enumerate}
+    \item Back Squat - 3 sets of 8-12 reps
+    \item Lunges - 3 sets of 10-12 reps
+    \item Leg Press - 3 sets of 10-12 reps
+    \item Leg Extensions - 3 sets of 12-15 reps
+    \item Leg Curls - 3 sets of 10-12 reps
+    \item Calf Raises - 3 sets of 12-15 reps
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\noindent
+\textbf{Day 6: Core}
+\begin{enumerate}
+    \item Plank - 3 sets of 30-60 seconds
+    \item Russian Twists - 3 sets of 10-12 reps
+    \item Leg Raises - 3 sets of 10-12 reps
+    \item Superman - 3 sets of 10-12 reps
+\end{enumerate}
 
 \end{document}
