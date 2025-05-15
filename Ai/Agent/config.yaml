@@ -2,11 +2,14 @@ mongodb:
   user: hossam7ht 
   password: hossam7ht
 groq:
-  # apiKey: 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
-  apiKey: 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
-  # apiKey: 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
-  # apiKey: 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
+   #apiKey: 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
   
+  
+   #apiKey: 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
+  # apiKey: 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
+   apiKey: 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
+openai:
+ apiKey: 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
 
 
 milvus:
