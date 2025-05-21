@@ -20,7 +20,7 @@ const chatController = {
 
             // 2. Fetch from your Python backend
             const backendResponse = await fetch(
-                "http://localhost:8080/ai", // Your Python Flask app URL
+                "http://172.16.0.148:8080/ai", // Your Python Flask app URL
                 {
                     method: "POST",
                     headers: {
