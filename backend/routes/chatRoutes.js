@@ -11,7 +11,5 @@ router.get('/health', chatController.healthCheck);
 
 // Chat endpoint with file upload support
 router.post('/chat', express.json(), chatController.handleChat);
-router.get('/chat/history/:userId', chatController.getHistory);
-
 
 module.exports = router; 
