@@ -1,60 +1,55 @@
 const fetch = require("node-fetch"); // Make sure you have node-fetch installed (npm i node-fetch) or use native fetch if available (Node.js v18+)
+const ChatMessage = require("../models/chatHistoryModel"); 
+
+
 
 const chatController = {
     async handleChat(req, res) {
-        // Assuming the frontend sends the user message in req.body.msg
         const userInput = req.body.msg;
-
-        if (!userInput) {
+        const userId = req.body.userId; // TODO: replace this with JWT-based req.user._id in production
+    
+        if (!userInput || !userId) {
             return res.status(400).json({
                 success: false,
-                error: "Message (msg) is required in the request body" // Clarified expected input field name
+                error: "Message (msg) and userId are required in the request body"
             });
         }
-
+    
         try {
-            // 1. Prepare the request body expected by the Python endpoint
-            const requestBody = {
-                query: userInput
-            };
-
-            // 2. Fetch from your Python backend
-            const backendResponse = await fetch(
-                "http://localhost:8080/ai", // Your Python Flask app URL
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        // Removed Authorization header as it doesn't seem required by the provided Python code
-                        // Add it back if your Python app actually implements auth check:
-                        // Authorization: `Bearer YOUR_TOKEN_IF_NEEDED`
-                    },
-                    body: JSON.stringify(requestBody), // Send the correct body format
-                }
-            );
-
-            // 3. Check if the backend request was successful
+            // Save user's message to DB
+            await ChatMessage.create({
+                userId,
+                sender: 'user',
+                message: userInput
+            });
+    
+            // Send message to Python backend
+            const requestBody = { query: userInput };
+            const backendResponse = await fetch("http://192.168.1.37:8080/ai", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestBody),
+            });
+    
             if (!backendResponse.ok) {
-                // Try to get error details from the backend response if possible
                 let errorDetails = `Backend error: ${backendResponse.status}`;
                 try {
-                    const errorBody = await backendResponse.json(); // Or .text()
+                    const errorBody = await backendResponse.json();
                     errorDetails = errorBody.error || errorBody.detail || JSON.stringify(errorBody);
-                } catch (e) {
-                    // Failed to parse error body, stick with status code
-                }
-                 // Throw an error that includes details from the backend if available
+                } catch (e) {}
                 throw new Error(errorDetails);
             }
-
-            // 4. Parse the JSON response from the Python backend
+    
             const backendData = await backendResponse.json();
-            console.log("Python Backend Response:", backendData); // Log the actual response structure
-
-            // 5. Extract the generated text using the key defined in Python ("response")
-            const generatedText = backendData?.response || "No response received from backend."; // Use the correct key
-
-            // 6. Send the structured response back to *your* client (e.g., the frontend)
+            const generatedText = backendData?.response || "No response received from backend.";
+    
+            // Save bot's reply to DB
+            await ChatMessage.create({
+                userId,
+                sender: 'bot',
+                message: generatedText
+            });
+    
             res.json({
                 success: true,
                 data: {
@@ -62,19 +57,25 @@ const chatController = {
                     timestamp: new Date().toISOString()
                 }
             });
-
+    
         } catch (error) {
-            console.error("Error communicating with backend or processing response:", error);
-            // Send an error response back to *your* client
-            res.status(500).json({ // Use 500 for internal/backend communication errors
+            console.error("Error processing chatbot:", error);
+            res.status(500).json({
                 success: false,
                 error: "An error occurred while processing your request",
-                // Provide specific details only in development for security
                 details: process.env.NODE_ENV === 'development' ? error.message : undefined
             });
         }
     },
-
+    async getHistory(req, res) {
+        try {
+            const userId = req.params.userId;
+            const history = await ChatMessage.find({ userId }).sort({ timestamp: 1 });
+            res.status(200).json(history);
+        } catch (err) {
+            res.status(500).json({ error: 'Failed to retrieve chat history.' });
+        }
+    },
     healthCheck(req, res) {
         res.json({ status: 'ok', message: 'Server is running' });
     }
