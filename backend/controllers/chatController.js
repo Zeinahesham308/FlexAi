@@ -1,11 +1,10 @@
 const fetch = require("node-fetch"); 
 const { chatbot_db } = require('../config/db');
 const session = require("express-session");
-
+const { generateSessionId } = require('../utils/sessionidGenerator');
 
 const chatController = {
     async handleChat(req, res) {
-      
         const userInput = req.body.msg;
 
         if (!userInput) {
@@ -16,10 +15,11 @@ const chatController = {
         }
 
         try {
-            
+            const sessionId = generateSessionId();
+            console.log("Generated sessionId:", sessionId);
             const requestBody = {
                 query: userInput,
-                sessionId: "chat-xyz-123", 
+                sessionId: sessionId, 
             };
 
             console.log("Request Body to Python Backend:", requestBody); // Log the request body for debugging
@@ -60,7 +60,8 @@ const chatController = {
                 success: true,
                 data: {
                     message: generatedText,
-                    timestamp: new Date().toISOString()
+                    timestamp: new Date().toISOString(),
+                    sessionId: sessionId
                 }
             });
 
