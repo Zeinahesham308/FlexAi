@@ -1,41 +1,42 @@
-const fetch = require("node-fetch"); // Make sure you have node-fetch installed (npm i node-fetch) or use native fetch if available (Node.js v18+)
+const fetch = require("node-fetch"); 
+const { chatbot_db } = require('../config/db');
+const session = require("express-session");
+
 
 const chatController = {
     async handleChat(req, res) {
-        // Assuming the frontend sends the user message in req.body.msg
+      
         const userInput = req.body.msg;
 
         if (!userInput) {
             return res.status(400).json({
                 success: false,
-                error: "Message (msg) is required in the request body" // Clarified expected input field name
+                error: "Message (msg) is required in the request body" 
             });
         }
 
         try {
-            // 1. Prepare the request body expected by the Python endpoint
+            
             const requestBody = {
-                query: userInput
+                query: userInput,
+                sessionId: "chat-xyz-123", 
             };
 
-            // 2. Fetch from your Python backend
+            console.log("Request Body to Python Backend:", requestBody); // Log the request body for debugging
             const backendResponse = await fetch(
-                "http://172.16.0.148:8080/ai", // Your Python Flask app URL
+                "http://192.168.1.4:8080/ai", 
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        // Removed Authorization header as it doesn't seem required by the provided Python code
-                        // Add it back if your Python app actually implements auth check:
-                        // Authorization: `Bearer YOUR_TOKEN_IF_NEEDED`
                     },
-                    body: JSON.stringify(requestBody), // Send the correct body format
+                    body: JSON.stringify(requestBody), 
                 }
             );
 
-            // 3. Check if the backend request was successful
+        
             if (!backendResponse.ok) {
-                // Try to get error details from the backend response if possible
+            
                 let errorDetails = `Backend error: ${backendResponse.status}`;
                 try {
                     const errorBody = await backendResponse.json(); // Or .text()
@@ -77,7 +78,28 @@ const chatController = {
 
     healthCheck(req, res) {
         res.json({ status: 'ok', message: 'Server is running' });
+    },
+
+    getChatHistory: async (req, res) => {
+        try {
+    const sessionId = req.params.sessionId;
+
+    // Use chatbot_db to get native collection, replace 'history' with your collection name
+    const collection = chatbot_db.collection('history');
+
+    const docs = await collection.find({ SessionId: sessionId }).sort({ createdAt: 1 }).toArray();
+
+    const messages = docs.map(doc => JSON.parse(doc.History));
+
+    res.json({ sessionId, messages });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to load chat history' });
+  }
+
     }
+
+
 };
 
 module.exports = chatController;
