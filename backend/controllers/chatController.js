@@ -82,7 +82,7 @@ const chatController = {
     },
 
     getChatHistory: async (req, res) => {
-        try {
+    try {
     const sessionId = req.params.sessionId;
 
     // Use chatbot_db to get native collection, replace 'history' with your collection name
@@ -93,10 +93,10 @@ const chatController = {
     const messages = docs.map(doc => JSON.parse(doc.History));
 
     res.json({ sessionId, messages });
-  } catch (error) {
+    } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to load chat history' });
-  }
+    }
 
     }
 

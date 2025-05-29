@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const chatController = require('../controllers/chatController');
+const { generateSessionId } = require('../utils/sessionidGenerator');
 
 
 // Configure multer for file uploads
@@ -14,6 +15,11 @@ router.get('/health', chatController.healthCheck);
 router.post('/chat', express.json(), chatController.handleChat);
 
 router.get('/chat/history/:sessionId',chatController.getChatHistory);
+
+router.get('/session/new', (req, res) => {
+  const sessionId = generateSessionId();
+  res.json({ sessionId });
+});
 
 
 module.exports = router; 
