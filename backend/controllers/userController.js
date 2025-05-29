@@ -42,7 +42,7 @@ exports.login = async (req, res, next) => {
     try {
         const { name, password } = req.body;
 
-        const user = await User.findOne({ name: name }); // i guess we must use the email 
+        const user = await User.findOne({ name: name }); // we must use the email!! 
         if (!user) {
             return res.status(401).json({
                 message: "User not found",

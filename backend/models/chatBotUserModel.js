@@ -18,6 +18,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const User = chatbot_db.model('User', userSchema);
+const ChatbotUser = chatbot_db.model('ChatbotUser', userSchema);
 
-module.exports = User;
+module.exports = ChatbotUser;
