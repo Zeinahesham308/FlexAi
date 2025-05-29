@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const UserChatBot = require('../models/chatBotUserModel');
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key"; // Use env in production
+
+
 
 
 exports.signup = async (req, res, next) => {
@@ -33,35 +37,39 @@ exports.signup = async (req, res, next) => {
 
 
 
-exports.login = async (req, res) => {
-    try{
+
+exports.login = async (req, res, next) => {
+    try {
         const { name, password } = req.body;
 
-        const user = await User.findOne({ name: name });
+        const user = await User.findOne({ name: name }); // we must use the email!! 
         if (!user) {
             return res.status(401).json({
                 message: "User not found",
             });
-            
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
-        if (isPasswordMatch) {
-            return res.status(200).json({
-                message: "Login successful",
-                data: {
-                    name: name,
-                    chatbotId: user.chatbotId,
-                    userId: user._id,
-                }
-            });
-        } else {
+        if (!isPasswordMatch) {
             return res.status(401).json({
-                message: "Invalid credentials", 
+                message: "Invalid credentials",
             });
         }
-    }
-    catch(err){
-        next(err)
+
+        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
+
+        return res.status(200).json({
+            message: "Login successful",
+            token,
+            data: {
+                name: user.name,
+                chatbotId: user.chatbotId,
+                userId: user._id,
+            }
+        });
+
+    } catch (err) {
+        next(err);
     }
 };
+
