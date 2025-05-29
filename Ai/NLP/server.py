@@ -24,7 +24,7 @@ def aiPost():
         database_name="flexdb",
         collection_name="history"
     )
-    cached_History.add_user_message(query)
+    cached_History.add_user_message(query) 
     print(f"query: {query}")
 
     response = cached_chain.invoke({"input": query, "chat_history": cached_History.messages})
