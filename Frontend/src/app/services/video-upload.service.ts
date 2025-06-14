@@ -13,10 +13,11 @@ export class VideoUploadService {
 
   constructor(private http: HttpClient) {}
 
-  uploadVideo(file: File): Observable<HttpEvent<any>> {
+  uploadVideo(file: File, workoutType: string): Observable<HttpEvent<any>> {
     console.log(file); // Log the file to check if it's being passed correctly
     const formData = new FormData();
     formData.append('file', file); // Key must match FastAPI's expected field name
+    formData.append('workoutType', workoutType); // Add workout type to the form data
 
     return this.http.post(this.apiUrl, formData, {
       reportProgress: true, // Enable progress tracking

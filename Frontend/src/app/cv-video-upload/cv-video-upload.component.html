@@ -2,16 +2,28 @@
 <div class="upload-container">
     <h2>Upload Your Video</h2>
 
+    <!-- Workout Type Dropdown -->
+    <div class="form-group">
+        <label for="workoutType">Select Workout Type:</label>
+        <select id="workoutType" [(ngModel)]="selectedWorkoutType" (change)="onWorkoutTypeChange()" required>
+            <option value="" disabled selected>Select a workout</option>
+            <option *ngFor="let workout of workoutTypes" [value]="workout.value">
+                {{ workout.name }}
+            </option>
+        </select>
+    </div>
+
     <div class="file-selector">
         <input type="file" accept="video/*" (change)="onFileSelected($event)">
-        <button (click)="uploadVideo()" [disabled]="!selectedFile || uploadProgress > 0">
+        <button (click)="uploadVideo()" [disabled]="!selectedFile || !selectedWorkoutType || uploadProgress > 0">
             {{ uploadProgress > 0 ? 'Uploading...' : 'Upload Video' }}
         </button>
     </div>
 
     <div *ngIf="selectedFile" class="file-info">
         <p>Selected file: {{ selectedFile.name }}</p>
-        <p>Size: {{ selectedFile.size }}</p>
+        <p>Size: {{ selectedFile.size  }}</p>
+        <p *ngIf="selectedWorkoutType">Workout: {{ getWorkoutName(selectedWorkoutType) }}</p>
     </div>
 
     <div *ngIf="uploadProgress > 0 && !uploadComplete" class="progress-bar">
