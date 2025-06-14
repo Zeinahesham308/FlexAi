@@ -1,3 +1,10 @@
 Ai/NLP/GenerateDataSet/*.xlsx
 
 Ai/NLP/GenerateDataSet/*.csv
+Ai/Agent/*.pdf
+Ai/Agent/*.aux
+Ai/Agent/*.log
+Ai/Agent/*.tex
+Ai/Agent/*.out
+Ai/Agent/output2.log
+node_modules/

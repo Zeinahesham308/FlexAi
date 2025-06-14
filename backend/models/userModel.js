@@ -1,4 +1,4 @@
-const { db } = require('../config/db');
+const { chatbot_db } = require('../config/db');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -25,6 +25,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const User = db.model('User', userSchema);
+const User = chatbot_db.model('User', userSchema);
 
 module.exports = User;

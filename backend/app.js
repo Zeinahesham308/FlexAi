@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express();
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const agentRoutes = require('./routes/agentRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,9 +19,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Routes
+
 app.use('/api/users', userRoutes); // Backend API routes for user operations
 app.use('/api', chatRoutes); // Chat routes
+app.use('/api/agent', agentRoutes); // agent routes
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
