@@ -75,12 +75,13 @@ while cap.isOpened():
                     reached_up = False
                     reached_down = True
 
-            if not reached_up and curr_angle > prev_angle and prev_angle < 160:
-                print("Partial rep detected: reversed before reaching full curl (top)!")
-                reached_down = True  # Reset to allow next attempt
-            if not reached_down and curr_angle < prev_angle and prev_angle > 50:
-                print("Partial rep detected: reversed before reaching full extension (bottom)!")
-                reached_up = True  # Reset to allow next attempt
+            else :
+                if not reached_up and curr_angle > prev_angle and prev_angle < 160:
+                    print("Partial rep detected: reversed before reaching full curl (top)!")
+                    reached_down = True  # Reset to allow next attempt
+                if not reached_down and curr_angle < prev_angle and prev_angle > 50:
+                    print("Partial rep detected: reversed before reaching full extension (bottom)!")
+                    reached_up = True  # Reset to allow next attempt
 
         # max_angle = max(max_angle, angle)
         # min_angle = min(min_angle, angle)
