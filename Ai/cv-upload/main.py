@@ -7,10 +7,10 @@ app = FastAPI()
 # Proper CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],  # Your Angular frontend URL
+    allow_origins=["http://localhost:4200"],
     allow_credentials=True,
-    allow_methods=["POST"],  # Must specify methods (can't be empty string)
-    allow_headers=["*"],     # Or specify exact headers needed
+    allow_methods=["POST"],
+    allow_headers=["*"],
 )
 
 #string workout -> (Push up, Pull up, Shoulder Press, Incline bench press, Flat bench press, Squats, Lateral rasies, Triceps overhead extension, Lat pull down)
@@ -20,18 +20,17 @@ async def upload_video(
     workout: str = Form(...)  # Receive the string here
 ):
     try:
-        # Simulate processing the uploaded video
         filename = file.filename
         content_type = file.content_type
         
-        # Optional: Validate file type
+        
         if not content_type.startswith("video/"):
             return JSONResponse(
                 status_code=400,
                 content={"message": "Only video files are allowed", "status": "error"}
             )
 
-        # Dummy processing logic
+        # dummy logic
         return JSONResponse(
             status_code=200,
             content={
