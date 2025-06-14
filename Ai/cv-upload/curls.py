@@ -19,7 +19,9 @@ def calculate_angle(a, b, c):
         angle = 360 - angle
     return angle
 
-cap = cv2.VideoCapture(0)
+#for camera
+# cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("bicep_curls.mp4")
 
 rep_count = 0
 direction = 0  # 0 -> down, 1 -> up
