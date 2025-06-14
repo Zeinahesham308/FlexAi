@@ -13,8 +13,12 @@ app.add_middleware(
     allow_headers=["*"],     # Or specify exact headers needed
 )
 
+#string workout -> (Push up, Pull up, Shoulder Press, Incline bench press, Flat bench press, Squats, Lateral rasies, Triceps overhead extension, Lat pull down)
 @app.post("/upload-video/")
-async def upload_video(file: UploadFile = File(...)):
+async def upload_video(
+    file: UploadFile = File(...),
+    workout: str = Form(...)  # Receive the string here
+):
     try:
         # Simulate processing the uploaded video
         filename = file.filename
