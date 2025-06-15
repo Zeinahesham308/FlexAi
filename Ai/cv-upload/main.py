@@ -1,7 +1,12 @@
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, File, Form, UploadFile
+from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+import curls
+from curls import process
+import os
 
+UPLOAD_DIR = "uploaded_videos"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 app = FastAPI()
 
 # Proper CORS configuration
@@ -17,7 +22,7 @@ app.add_middleware(
 @app.post("/upload-video/")
 async def upload_video(
     file: UploadFile = File(...),
-    workout: str = Form(...)  # Receive the string here
+    workoutType: str = Form(...)  # Receive the string here
 ):
     try:
         filename = file.filename
@@ -30,15 +35,16 @@ async def upload_video(
                 content={"message": "Only video files are allowed", "status": "error"}
             )
 
-        # dummy logic
+
+        # dummy 
+        saved_path = os.path.join(UPLOAD_DIR, filename)
+        with open(saved_path, "wb") as buffer:
+            contents = await file.read()
+            buffer.write(contents)
+        res = process(video_path=saved_path)
         return JSONResponse(
-            status_code=200,
             content={
-                "message": f"Received file '{filename}' with type '{content_type}'",
-                "status": "success",
-                "filename": filename,
-                "content_type": content_type,
-                "size": file.size
+                "message": res,
             }
         )
         
