@@ -8,3 +8,4 @@ Ai/Agent/*.tex
 Ai/Agent/*.out
 Ai/Agent/output2.log
 node_modules/
+venv/
