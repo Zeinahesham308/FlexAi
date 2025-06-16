@@ -55,7 +55,7 @@ def process(video_path):
                 prev_angle, curr_angle = angle_history
 
                 if reached_down and curr_angle < prev_angle:
-                    if curr_angle < 50:
+                    if curr_angle < 60:
                         reached_up = True
                         reached_down = False
 
@@ -70,9 +70,11 @@ def process(video_path):
                     if not reached_up and curr_angle > prev_angle and prev_angle < 160:
                         partial_reps = True
                         reached_down = True
-                    if not reached_down and curr_angle < prev_angle and prev_angle > 50:
+                        print("if1")
+                    if not reached_down and curr_angle < prev_angle and prev_angle > 60:
                         partial_reps = True
                         reached_up = True
+                        print("if2")
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),

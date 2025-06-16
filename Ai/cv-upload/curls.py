@@ -59,7 +59,7 @@ def process(video_path):
                 prev_angle, curr_angle = angle_history
 
                 if reached_down and curr_angle < prev_angle:
-                    if curr_angle < 50:
+                    if curr_angle < 30:
                         reached_up = True
                         reached_down = False
 
@@ -74,7 +74,7 @@ def process(video_path):
                     if not reached_up and curr_angle > prev_angle and prev_angle < 160:
                         partial_reps = True
                         reached_down = True
-                    if not reached_down and curr_angle < prev_angle and prev_angle > 50:
+                    if not reached_down and curr_angle < prev_angle and prev_angle > 30:
                         partial_reps = True
                         reached_up = True
 
