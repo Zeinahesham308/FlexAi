@@ -21,10 +21,6 @@ def process(video_path):
     cap = cv2.VideoCapture(video_path)
 
     rep_count = 0
-    direction = 0  # 0 -> down, 1 -> up
-    min_angle = 180
-    max_angle = 0
-    invalid_reps = 0
     swinging_reps = False
     partial_reps = False
     torso_movements = []
