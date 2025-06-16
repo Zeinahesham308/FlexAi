@@ -88,10 +88,10 @@ def process(video_path):
             if len(torso_movements) > 10:
                 delta = max(torso_movements) - min(torso_movements)
                 if delta > 0.08:
+                    print(f"[Rep {rep_count+1}] Swinging detected! Torso Y movement: {delta:.3f}")
                     swinging_reps = True
                 torso_movements.pop(0)
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-
         
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
@@ -104,9 +104,10 @@ def process(video_path):
 
     
     s = f"Total Reps: {rep_count}. \n"
-    if partial_reps:
-        s += "Do not do partial reps go all the way up and all the way reached_down. \n"
     if swinging_reps:
         s += "Do not swing with your back, This is dangerous and can cuase injuries. \n"
+    else:
+        if partial_reps:
+            s += "Do not do partial reps go all the way up and all the way down. \n"
     print(s)
     return s
