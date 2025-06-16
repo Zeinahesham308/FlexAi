@@ -43,7 +43,7 @@ async def upload_video(
             buffer.write(contents)
         if workoutType == "Curls":
             res = curls.process(video_path=saved_path)
-        else:
+        elif workoutType == "Pull Up":
             res = pullup.process(video_path=saved_path)
         return JSONResponse(
             content={

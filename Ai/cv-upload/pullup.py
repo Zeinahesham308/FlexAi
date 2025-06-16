@@ -55,25 +55,25 @@ def process(video_path):
                 prev_angle, curr_angle = angle_history
 
                 if reached_down and curr_angle < prev_angle:
-                    if curr_angle < 60:
+                    if curr_angle < 70:
                         reached_up = True
                         reached_down = False
 
                 elif reached_up and curr_angle > prev_angle:
-                    if curr_angle > 160:
+                    if curr_angle > 150:
                         rep_count += 1
                         print(f"Rep {rep_count}: Full range of motion")
                         reached_up = False
                         reached_down = True
 
                 else :
-                    if not reached_up and curr_angle > prev_angle and prev_angle < 160:
+                    if not reached_up and curr_angle > prev_angle and prev_angle < 150:
                         partial_reps = True
-                        reached_down = True
+                        # reached_down = True
                         print("if1")
-                    if not reached_down and curr_angle < prev_angle and prev_angle > 60:
+                    if not reached_down and curr_angle < prev_angle and prev_angle > 70:
                         partial_reps = True
-                        reached_up = True
+                        # reached_up = True
                         print("if2")
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         
