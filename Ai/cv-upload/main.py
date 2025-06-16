@@ -2,7 +2,7 @@ from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import curls
-from curls import process
+import pullup
 import os
 
 UPLOAD_DIR = "uploaded_videos"
@@ -41,7 +41,10 @@ async def upload_video(
         with open(saved_path, "wb") as buffer:
             contents = await file.read()
             buffer.write(contents)
-        res = process(video_path=saved_path)
+        if workoutType == "Curls":
+            res = curls.process(video_path=saved_path)
+        else:
+            res = pullup.process(video_path=saved_path)
         return JSONResponse(
             content={
                 "message": res,

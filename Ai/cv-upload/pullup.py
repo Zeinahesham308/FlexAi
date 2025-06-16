@@ -21,7 +21,6 @@ def process(video_path):
     cap = cv2.VideoCapture(video_path)
 
     rep_count = 0
-    swinging_reps = False
     partial_reps = False
     angle_history = []
     reached_up = False
@@ -75,7 +74,6 @@ def process(video_path):
                         partial_reps = True
                         reached_up = True
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-
         
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
@@ -89,6 +87,6 @@ def process(video_path):
     
     s = f"Total Reps: {rep_count}. \n"
     if partial_reps:
-        s += "Do not do partial reps go all the way up and all the way reached_down. \n"
+        s += "Do not do partial reps go all the way up and all the way down. \n"
     print(s)
     return s
