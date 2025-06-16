@@ -12,3 +12,15 @@ venv/
 *.so
 *.pyc
 __pycache__/
+.env/
+
+# Video files
+*.mpd
+
+# Uploaded videos directory
+uploaded_videos/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
