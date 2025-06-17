@@ -1,0 +1,187 @@
+// Exercise Card Container
+.exercise-card {
+  position: relative;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  // Right-aligned action buttons
+  .action-buttons {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .edit-btn {
+      color: #4285f4;
+
+      &:hover {
+        background-color: rgba(66, 133, 244, 0.1);
+      }
+    }
+
+    .delete-btn {
+      color: #f44336;
+
+      &:hover {
+        background-color: rgba(244, 67, 54, 0.1);
+      }
+    }
+  }
+
+  // Content area
+  .content {
+    padding-right: 40px; // Space for action buttons
+
+    h3 {
+      margin: 0 0 4px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #212121;
+    }
+
+    .muscle-group {
+      margin: 0 0 12px;
+      font-size: 0.9rem;
+      color: #757575;
+      text-transform: capitalize;
+    }
+
+    // Stats display
+    .stats {
+      margin-bottom: 12px;
+
+      .sets-reps {
+        font-size: 1rem;
+        color: #424242;
+        font-weight: 500;
+      }
+    }
+
+    // Exercise link
+    .exercise-link {
+      margin-top: 8px;
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        color: #4285f4;
+        text-decoration: none;
+        font-size: 0.9rem;
+        word-break: break-all;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
+        mat-icon {
+          margin-right: 6px;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+
+    // Edit form
+    .edit-form {
+      margin-top: 16px;
+
+      .form-group {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+
+        label {
+          width: 100px;
+          font-size: 0.9rem;
+          color: #616161;
+        }
+
+        .form-input {
+          flex: 1;
+          padding: 8px 12px;
+          border: 1px solid #e0e0e0;
+          border-radius: 4px;
+          font-size: 0.95rem;
+          max-width: 200px;
+          transition: border 0.2s ease;
+
+          &:focus {
+            outline: none;
+            border-color: #4285f4;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+          }
+        }
+      }
+
+      // Form actions
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 16px;
+
+        button {
+          padding: 8px 16px;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .cancel-btn {
+          background: transparent;
+          border: 1px solid #e0e0e0;
+          color: #757575;
+
+          &:hover {
+            background: #f5f5f5;
+          }
+        }
+
+        .save-btn {
+          background: #4285f4;
+          color: white;
+          border: none;
+
+          &:hover {
+            background: #3367d6;
+          }
+        }
+      }
+    }
+  }
+}
