@@ -24,7 +24,7 @@ const chatController = {
 
             console.log("Request Body to Python Backend:", requestBody); // Log the request body for debugging
             const backendResponse = await fetch(
-                "http://10.10.10.82:8080/ai", 
+                "http://192.168.1.5:8080/ai", 
                 {
                     method: "POST",
                     headers: {
@@ -97,10 +97,7 @@ const chatController = {
     console.error(error);
     res.status(500).json({ message: 'Failed to load chat history' });
     }
-
     }
-
-
 };
 
 module.exports = chatController;
