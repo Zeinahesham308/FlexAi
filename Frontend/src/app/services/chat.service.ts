@@ -17,16 +17,17 @@ export class ChatService {
   constructor(private http: HttpClient) { }
 
   /**
-   * Gets a bot response for the given prompt in specified session
+   * Unified message handling - saves user message and gets bot reply in one call
    * @param prompt The user's message text
    * @param sessionId The ID of the chat session
-   * @returns Observable containing the bot's reply
+   * @returns Observable with both saved user message and bot reply
    */
-  getBotResponse(prompt: string, sessionId: string): Observable<{ reply: string }> {
-    return this.http.post<{ reply: string }>(
+  getBotResponse(prompt: string, sessionId: string): Observable<string> {
+    return this.http.post<string>(
       // TODO: UPDATE API
-      `${this.baseUrl}/sessions/${sessionId}/bot-response`,
-      { prompt }
+      /* Save user message to session (using URL's sessionId) */
+      `${this.baseUrl}/sessions/${sessionId}/messages`,
+      {msg: prompt }
     ).pipe(
       timeout(this.defaultTimeout),
       catchError(this.handleError)
@@ -80,43 +81,8 @@ export class ChatService {
   }
 
 
-  /**
-   * Adds a message to a chat session using the ChatMessage interface
-   * @param sessionId The chat session ID
-   * @param message The complete message
-   */
-  sendMessage(sessionId: string, message: ChatMessage): Observable<ChatMessage> {
-    /* TODO: UPDATE API */
-    return this.http.post<ChatMessage>(
-      `${this.baseUrl}/sessions/${sessionId}/messages`,
-      message
-    ).pipe(
-      timeout(this.defaultTimeout),
-      catchError(this.handleError)
-    );
-  }
+ 
 
-  // ==================== MESSAGE MANAGEMENT ====================
-
-  /**
-   * Adds a message to a chat session
-   * @param sessionId The chat session ID
-   * @param message Complete ChatMessage object
-   * @returns Observable with the same message (or enriched if needed)
-   */
-  addMessageToSession(
-    sessionId: string,
-    message: ChatMessage 
-  ): Observable<ChatMessage> {
-    return this.http.post<ChatMessage>(
-      // TODO: UPDATE API
-      `${this.baseUrl}/sessions/${sessionId}/messages`,
-      message
-    ).pipe(
-      timeout(this.defaultTimeout),
-      catchError(this.handleError)
-    );
-  }
 
   // ==================== HELPERS ====================
   /**
@@ -136,5 +102,5 @@ export class ChatService {
   }
 
 
-  
+
 }

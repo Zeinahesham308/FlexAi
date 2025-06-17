@@ -14,6 +14,7 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { MatIconModule } from '@angular/material/icon';
+import { CvVideoUploadComponent } from './cv-video-upload/cv-video-upload.component';
 
 
 
@@ -25,6 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
     StreamlitEmbedComponent,
     ChatbotComponent,
     SignupFormComponent,
+    CvVideoUploadComponent,
 
   ],
   imports: [
