@@ -26,7 +26,7 @@ const agentController = {
       }
 
       console.log('Sending user answers to external API...');
-      const response = await fetch('http://192.168.1.4:8080/ai/agent', { // replace with real API
+      const response = await fetch('http://192.168.1.8:8080/ai/agent', { // replace with real API
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userAnswers: user.userAnswers }),

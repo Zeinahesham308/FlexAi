@@ -5,8 +5,6 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key"; // Use env in production
 
 
-
-
 exports.signup = async (req, res, next) => {
     try{
         const { name, email,password, userAnswers } = req.body;
@@ -72,4 +70,46 @@ exports.login = async (req, res, next) => {
         next(err);
     }
 };
+
+
+
+exports.getDashboard = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).select("name userAnswers");
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const {
+      gender = "",
+      currentWeight = 0,
+      targetWeight = 0,
+      height = 0,
+      goal = ""
+    } = user.userAnswers || {};
+
+    res.status(200).json({
+      success: true,
+      data: {
+        name: user.name,
+        gender,
+        currentWeight,
+        targetWeight,
+        height,
+        goal
+      }
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: err.message
+    });
+  }
+};
+
 
