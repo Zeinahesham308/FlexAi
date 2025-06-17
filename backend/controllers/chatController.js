@@ -24,7 +24,7 @@ const chatController = {
 
             console.log("Request Body to Python Backend:", requestBody); // Log the request body for debugging
             const backendResponse = await fetch(
-                "http://192.168.1.4:8080/ai", 
+                "http://10.10.10.82:8080/ai", 
                 {
                     method: "POST",
                     headers: {

@@ -21,9 +21,7 @@ def process(video_path):
     cap = cv2.VideoCapture(video_path)
 
     rep_count = 0
-    swinging_reps = False
     partial_reps = False
-    torso_movements = []
     angle_history = []
     reached_up = False
     reached_down = True
@@ -45,8 +43,6 @@ def process(video_path):
                     landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
             wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
                     landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
-            hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
-                landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
             angle = calculate_angle(shoulder, elbow, wrist)
             
             angle_history.append(angle)
@@ -59,34 +55,26 @@ def process(video_path):
                 prev_angle, curr_angle = angle_history
 
                 if reached_down and curr_angle < prev_angle:
-                    if curr_angle < 30:
+                    if curr_angle < 70:
                         reached_up = True
                         reached_down = False
 
                 elif reached_up and curr_angle > prev_angle:
-                    if curr_angle > 160:
+                    if curr_angle > 150:
                         rep_count += 1
                         print(f"Rep {rep_count}: Full range of motion")
                         reached_up = False
                         reached_down = True
 
                 else :
-                    if not reached_up and curr_angle > prev_angle and prev_angle < 160:
+                    if not reached_up and curr_angle > prev_angle and prev_angle < 150:
                         partial_reps = True
-                        reached_down = True
-                    if not reached_down and curr_angle < prev_angle and prev_angle > 30:
+                        # reached_down = True
+                        print("if1")
+                    if not reached_down and curr_angle < prev_angle and prev_angle > 70:
                         partial_reps = True
-                        reached_up = True
-
-            # swing detection
-            torso_y = landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y
-            torso_movements.append(torso_y)
-            if len(torso_movements) > 10:
-                delta = max(torso_movements) - min(torso_movements)
-                if delta > 0.08:
-                    print(f"[Rep {rep_count+1}] Swinging detected! Torso Y movement: {delta:.3f}")
-                    swinging_reps = True
-                torso_movements.pop(0)
+                        # reached_up = True
+                        print("if2")
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
@@ -100,10 +88,7 @@ def process(video_path):
 
     
     s = f"Total Reps: {rep_count}. \n"
-    if swinging_reps:
-        s += "Do not swing with your back, This is dangerous and can cuase injuries. \n"
-    else:
-        if partial_reps:
-            s += "Do not do partial reps go all the way up and all the way down. \n"
+    if partial_reps:
+        s += "Do not do partial reps go all the way up and all the way down. \n"
     print(s)
     return s

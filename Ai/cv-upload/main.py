@@ -1,45 +1,53 @@
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, File, Form, UploadFile
+from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+import curls
+import pullup
+import os
 
+UPLOAD_DIR = "uploaded_videos"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 app = FastAPI()
 
 # Proper CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],  # Your Angular frontend URL
+    allow_origins=["http://localhost:4200"],
     allow_credentials=True,
-    allow_methods=["POST"],  # Must specify methods (can't be empty string)
-    allow_headers=["*"],     # Or specify exact headers needed
+    allow_methods=["POST"],
+    allow_headers=["*"],
 )
 
 #string workout -> (Push up, Pull up, Shoulder Press, Incline bench press, Flat bench press, Squats, Lateral rasies, Triceps overhead extension, Lat pull down)
 @app.post("/upload-video/")
 async def upload_video(
     file: UploadFile = File(...),
-    workout: str = Form(...)  # Receive the string here
+    workoutType: str = Form(...)  # Receive the string here
 ):
     try:
-        # Simulate processing the uploaded video
         filename = file.filename
         content_type = file.content_type
         
-        # Optional: Validate file type
+        
         if not content_type.startswith("video/"):
             return JSONResponse(
                 status_code=400,
                 content={"message": "Only video files are allowed", "status": "error"}
             )
 
-        # Dummy processing logic
+
+        # dummy 
+        saved_path = os.path.join(UPLOAD_DIR, filename)
+        with open(saved_path, "wb") as buffer:
+            contents = await file.read()
+            buffer.write(contents)
+        if workoutType == "Curls":
+            res = curls.process(video_path=saved_path)
+        elif workoutType == "Pull Up":
+            res = pullup.process(video_path=saved_path)
         return JSONResponse(
-            status_code=200,
             content={
-                "message": f"Received file '{filename}' with type '{content_type}'",
-                "status": "success",
-                "filename": filename,
-                "content_type": content_type,
-                "size": file.size
+                "message": res,
             }
         )
         
