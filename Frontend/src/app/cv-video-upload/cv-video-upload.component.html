@@ -7,7 +7,7 @@
         <label for="workoutType">Select Workout Type:</label>
         <select id="workoutType" [(ngModel)]="selectedWorkoutType" (change)="onWorkoutTypeChange()" required>
             <option value="" disabled selected>Select a workout</option>
-            <option *ngFor="let workout of workoutTypes" [value]="workout.value">
+            <option *ngFor="let workout of workoutTypes" [value]="workout.name">
                 {{ workout.name }}
             </option>
         </select>

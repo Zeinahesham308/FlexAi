@@ -12,6 +12,7 @@ import { QuickActionsMenuComponent } from './components/quick-actions-menu/quick
 import { SettingsModalComponent } from './components/settings-modal/settings-modal.component';
 
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     DashboardRoutingModule,
     MatIconModule,
+    FormsModule,
   ],
   exports: [
     UserProfileHeaderComponent,

@@ -1,1 +1,37 @@
-<p>exercise-card works!</p>
+<div class="exercise-card">
+    <div class="action-buttons">
+        <button class="delete-btn" (click)="deleteExercise()" matTooltip="Delete exercise">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content">
+        <!-- Exercise Title -->
+        <h3>{{ exercise.name }}</h3>
+
+        <!-- Muscle Group -->
+        <p class="muscle-group">{{ exercise.muscleGroup }}</p>
+
+        <!-- Stats Display (Non-Editable Mode) -->
+        <div class="stats">
+            <span class="sets-reps">
+                {{ exercise.sets || 0 }} sets × {{ exercise.reps || 0 }} reps
+            </span>
+
+        </div>
+
+        <!-- Exercise Link (Separate Line) -->
+        <div class="exercise-link" *ngIf="exercise.link">
+            <a [href]="exercise.link" target="_blank" rel="noopener noreferrer">
+                <mat-icon>link</mat-icon> Exercise Reference
+            </a>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>

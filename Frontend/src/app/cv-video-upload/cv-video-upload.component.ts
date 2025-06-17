@@ -16,16 +16,16 @@ export class CvVideoUploadComponent {
   selectedWorkoutType: string = '';
 
   workoutTypes = [
-    { value: 'Squat', name: 'Squat' },
-    { value: 'Lat Pull Down', name: 'Lat Pull Down' },
-    { value: 'Lateral Raises', name: 'Lateral Raises' },
-    { value: 'Bench Press', name: 'Bench Press' },
-    { value: 'Pull Up', name: 'Pull Up' },
-    { value: 'Push Up', name: 'Push Up' },
-    { value: 'Shoulder Press', name: 'Shoulder Press' },
-    { value: 'Incline Bench Press', name: 'Incline Bench Press' },
-    { value: 'Curls', name: 'Curls' },
-    { value: 'Over Head Extension', name: 'Over Head Extension' }
+    { name: 'Squat' },
+    { name: 'Lat Pull Down' },
+    { name: 'Lateral Raises' },
+    { name: 'Bench Press' },
+    { name: 'Pull Up' },
+    { name: 'Push Up' },
+    { name: 'Shoulder Press' },
+    { name: 'Incline Bench Press' },
+    { name: 'Curls' },
+    { name: 'Over Head Extension' }
   ];
 
   apiResponse: any = null;  // Add this to store backend response
@@ -41,8 +41,8 @@ export class CvVideoUploadComponent {
     this.resetUploadState();
   }
 
-  getWorkoutName(value: string): string {
-    const workout = this.workoutTypes.find(w => w.value === value);
+  getWorkoutName(name: string): string {
+    const workout = this.workoutTypes.find(w => w.name === name);
     return workout ? workout.name : 'Unknown';
   }
 
