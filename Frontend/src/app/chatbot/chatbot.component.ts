@@ -101,11 +101,15 @@ export class ChatbotComponent implements OnInit {
     this.messages = [...this.messages, message];
     return message;
   }
-  private async getBotResponse(prompt: string): Promise<string> {
+  private async getBotResponse(prompt: string): Promise<ChatMessage> {
     this.isBotTyping = true;
     try {
-      const response = await lastValueFrom(this.chatService.getBotResponse(prompt, this.currentSessionId!));
-      return response.reply;
+      const replyText = await lastValueFrom(this.chatService.getBotResponse(prompt, this.currentSessionId!));
+
+      return {
+        text: replyText,
+        isBot: true,
+      };
     } finally {
       this.isBotTyping = false;
     }
@@ -118,21 +122,19 @@ export class ChatbotComponent implements OnInit {
     if (!this.inputMessage.trim()) return;
 
     const userMessage = this.addMessage(this.inputMessage, false, 'sending');
+
+    // Clear the input field
     this.inputMessage = '';
 
     try {
 
-      const saveMsg = await lastValueFrom(
-        this.chatService.addMessageToSession(
-          this.currentSessionId!,
-          userMessage
+      const botReply: ChatMessage = await
+        this.getBotResponse(userMessage.text);
 
-        )
-      )
-      const botReply = await this.getBotResponse(userMessage.text);
-      // Update to 'sent' on success
-      userMessage.status = 'sent';
-      this.addMessage(botReply, true);
+      userMessage.status = 'sent'; // Update to 'sent' on success
+      this.addMessage(botReply.text, true); // Add the bot reply to the messages array
+
+
     }
     catch (error) {
       userMessage.status = 'failed';
@@ -146,7 +148,7 @@ export class ChatbotComponent implements OnInit {
     try {
       const botReply = await this.getBotResponse(topic);
       userMessage.status = 'sent';   // Update to 'sent' on success
-      this.addMessage(botReply, true);
+      this.addMessage(botReply.text, true);
     } catch (error) {
       userMessage.status = 'failed';
       this.addMessage(this.handleError(error), true);
@@ -179,5 +181,4 @@ export class ChatbotComponent implements OnInit {
   }
 
 }
-
 

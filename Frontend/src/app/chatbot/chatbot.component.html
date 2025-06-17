@@ -1,15 +1,5 @@
 <div class="chatbot-page bg-brand-black white font-family-brand">
 
-  <!-- Chatbot Header Tablet and Desktop -->
-  <!-- <header *ngIf="!isSidebarVisible" >
-    <div class="header-toggle" (click)="toggleSidebar()">
-      <i class="fa-solid fa-bars fa-xl" style="color: #f0fff0;"></i>
-    </div>
-    <h1 class="header-title des-tablet">Hello there!</h1>
-  </header> -->
-
-  <!-- Chatbot Header Mobile -->
-
   <!-- Chatbot Main Content -->
   <div class="chatbot-content FLEX">
 
@@ -105,7 +95,7 @@
       <footer class="chatbot-footer">
         <form (submit)="sendMessage()" class="chatbot-form FLEX align-center bg-white black ">
           <textarea [(ngModel)]="inputMessage" name="message-input" placeholder="Type your message..."
-            class="message-input" required aria-label="Type your message here"></textarea>
+            class="message-input" required aria-label="Type your message here" rows="4"></textarea>
           <div class="chatbot-controls">
             <button type="submit" class="send-button" aria-label="Send message">
               <i class="fa-solid fa-paper-plane fa-lg" style="color: #babeba;"></i>

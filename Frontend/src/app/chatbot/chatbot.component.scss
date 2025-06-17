@@ -135,11 +135,14 @@
 
     .main-and-footer {
         width: 100%;
-        padding: 1.5em 1em;
+        padding: 1.5em 6em;
+        position: relative;
     }
 
     main {
         flex: 1;
+
+        overflow: hidden;
 
         h2 {
             font-size: 2rem;
@@ -196,7 +199,7 @@
         }
 
         .bot-message {
-            background: #f0f0f0;
+            color: #f0f0f0;
             align-self: flex-start;
             border-radius: 15px 15px 15px 3px;
         }
@@ -246,9 +249,10 @@
     }
 
     .chatbot-footer {
-        /* position: relative;
-        top: 2em; */
-        margin-bottom: 1em;
+
+        position: sticky;
+        bottom: 0.3em;
+        background: linear-gradient(to top, rgba(45,45,45,0.9) 0%, rgba(45,45,45,0) 100%);
 
         form {
             border-radius: 32px;
@@ -257,7 +261,7 @@
 
             .message-input {
                 width: 100%;
-                height: 47px;
+                height: auto;
                 resize: none;
                 border: none;
                 outline: none;
@@ -310,6 +314,7 @@
         }
 
         .main-and-footer {
+            padding: 1.5em 1em;
 
             main {
                 flex: 1;

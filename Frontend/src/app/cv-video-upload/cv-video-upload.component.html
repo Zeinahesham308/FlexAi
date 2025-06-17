@@ -1,0 +1,49 @@
+<!-- video-upload.component.html -->
+<div class="upload-container">
+    <h2>Upload Your Video</h2>
+
+    <!-- Workout Type Dropdown -->
+    <div class="form-group">
+        <label for="workoutType">Select Workout Type:</label>
+        <select id="workoutType" [(ngModel)]="selectedWorkoutType" (change)="onWorkoutTypeChange()" required>
+            <option value="" disabled selected>Select a workout</option>
+            <option *ngFor="let workout of workoutTypes" [value]="workout.value">
+                {{ workout.name }}
+            </option>
+        </select>
+    </div>
+
+    <div class="file-selector">
+        <input type="file" accept="video/*" (change)="onFileSelected($event)">
+        <button (click)="uploadVideo()" [disabled]="!selectedFile || !selectedWorkoutType || uploadProgress > 0">
+            {{ uploadProgress > 0 ? 'Uploading...' : 'Upload Video' }}
+        </button>
+    </div>
+
+    <div *ngIf="selectedFile" class="file-info">
+        <p>Selected file: {{ selectedFile.name }}</p>
+        <p>Size: {{ selectedFile.size  }}</p>
+        <p *ngIf="selectedWorkoutType">Workout: {{ getWorkoutName(selectedWorkoutType) }}</p>
+    </div>
+
+    <div *ngIf="uploadProgress > 0 && !uploadComplete" class="progress-bar">
+        <progress [value]="uploadProgress" max="100"></progress>
+        <span>{{ uploadProgress }}%</span>
+    </div>
+
+    <div *ngIf="uploadComplete" class="success-message">
+        <p>Upload complete!</p>
+        <button (click)="toggleResponse()" class="toggle-btn">
+            {{ showResponse ? 'Hide Response' : 'Show Backend Response' }}
+        </button>
+    </div>
+
+    <div *ngIf="showResponse && apiResponse" class="api-response">
+        <h3>Backend Response:</h3>
+        <pre>{{ apiResponse | json }}</pre>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+</div>
