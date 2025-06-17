@@ -15,8 +15,30 @@ const chatController = {
         }
 
         try {
-            const sessionId = generateSessionId();
-            console.log("Generated sessionId:", sessionId);
+            // const sessionId = generateSessionId();
+            // console.log("Generated sessionId:", sessionId);
+            // const requestBody = {
+            //     query: userInput,
+            //     sessionId: sessionId, 
+            // };
+            const userId = req.body.userId; 
+            const sessionsCollection= chatbot_db.collection('sessions'); // Use the correct collection name for sessions
+
+            let activeSession = await sessionsCollection.findOne({ userId: userId, isActive: true });
+            let sessionId;
+            if (activeSession) {
+                sessionId = activeSession.sessionId; // Use existing session ID
+            } else {
+                sessionId = generateSessionId(); // Generate a new session ID
+                await sessionsCollection.insertOne({
+                    userId,
+                    sessionId,
+                    isActive: true,
+                    startedAt: new Date(),
+                    lastUpdated: new Date()
+                });
+            }
+
             const requestBody = {
                 query: userInput,
                 sessionId: sessionId, 

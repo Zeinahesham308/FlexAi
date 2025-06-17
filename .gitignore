@@ -1,5 +1,5 @@
 Ai/NLP/GenerateDataSet/*.xlsx
-
+Ai/NLP/__pycache__/RAG.cpython-312.pyc
 Ai/NLP/GenerateDataSet/*.csv
 Ai/Agent/*.pdf
 Ai/Agent/*.aux
