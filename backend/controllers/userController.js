@@ -113,3 +113,36 @@ exports.getDashboard = async (req, res) => {
 };
 
 
+exports.updateCurrentWeight = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { newWeight } = req.body;
+
+    if (!newWeight) {
+      return res.status(400).json({ success: false, message: "newWeight is required" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Update only the currentWeight inside userAnswers
+    user.userAnswers.currentWeight = newWeight;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Current weight updated successfully",
+      data: {
+        currentWeight: user.userAnswers.currentWeight
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+};
+
+
+
