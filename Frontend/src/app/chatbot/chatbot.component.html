@@ -22,8 +22,8 @@
           <h3 class="sessions-title">Recent Chats</h3>
           <ul class="sessions-list">
             <li *ngFor="let session of chatSessions; trackBy: trackBySessionId" 
-                (click)="loadChatSession(session.id)"
-                [class.active]="session.id === currentSessionId">
+                (click)="loadChatSession(session.sessionId)"
+                [class.active]="session.sessionId === currentSessionId">
               <i class="fa-regular fa-message"></i>
               <span class="session-preview">{{ session.title }}</span>
               <span class="session-date">{{ session.createdAt | date:'shortDate' }}</span>
