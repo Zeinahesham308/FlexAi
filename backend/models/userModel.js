@@ -22,7 +22,8 @@ const userSchema = new mongoose.Schema({
         type: Object,
         required: true,
         default: {}
-    }
+    },
+    sessions: [{ type: String, default: [] }]
 });
 
 const User = chatbot_db.model('User', userSchema);
