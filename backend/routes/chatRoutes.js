@@ -23,6 +23,8 @@ router.get('/sessions/:userId', chatController.getUserSessions);
 // End chat session
 router.post('/session/end/:sessionId', chatController.endSession);
 
+// Start new chat session
+router.post('/session/new/:userId', chatController.startNewSession);
 
 router.get('/session/new', (req, res) => {
   const sessionId = generateSessionId();

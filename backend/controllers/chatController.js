@@ -384,7 +384,49 @@ endSession: async (req, res) => {
     console.error(error);
     res.status(500).json({ success: false, message: "Could not end session." });
   }
+},
+startNewSession: async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const sessionsCollection = chatbot_db.collection('sessions');
+    const sessionId = generateSessionId();
+
+    // Step 1: End any active session
+    await sessionsCollection.updateMany(
+      { userId, isActive: true },
+      { $set: { isActive: false, endedAt: new Date() } }
+    );
+
+    // Step 2: Create new session
+    await sessionsCollection.insertOne({
+      userId,
+      sessionId,
+      isActive: true,
+      startedAt: new Date(),
+      lastUpdated: new Date()
+    });
+
+    // Step 3: Add sessionId to user's session array
+    await User.updateOne(
+      { _id: userId },
+      { $addToSet: { sessions: sessionId } }
+    );
+
+    res.json({
+      success: true,
+      message: "New session started.",
+      sessionId
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to start new session."
+    });
+  }
 }
+
 
 
 };
