@@ -17,18 +17,20 @@ export class ChatService {
 
   constructor(private http: HttpClient) { }
 
+ 
+
   /**
    * Unified message handling - saves user message and gets bot reply in one call
    * @param prompt The user's message text
    * @param sessionId The ID of the chat session
    * @returns Observable with both saved user message and bot reply
    */
-  getBotResponse(prompt: string, sessionId: string): Observable<string> {
+  getBotResponse(prompt: string, sessionId: string,userId: string): Observable<string> {
     return this.http.post<string>(
       // TODO: UPDATE API
       /* Save user message to session (using URL's sessionId) */
       `${this.apiUrl}/sessions/${sessionId}/messages`,
-      { msg: prompt }
+      { msg: prompt,userId: userId }
     ).pipe(
       timeout(this.defaultTimeout),
       catchError(this.handleError)
@@ -43,18 +45,16 @@ export class ChatService {
    */
   startNewChat(): Observable<ChatSession> {
 
-    /* TODO: UPDATE API */
-    /* need function to return session ID when chat is created */
     return this.http.post<ChatSession>(`${this.apiUrl}/sessions`,
       { title: 'New Chat' }
     ).pipe(
       timeout(this.defaultTimeout),
       tap((session) => {
         /* Store the session ID for future use */
-        if (!session || !session.id) {
+        if (!session || !session.sessionId) {
           throw new Error('Failed to create chat session');
         }
-        this.currentSessionId = session.id; // Store the session ID
+        this.currentSessionId = session.sessionId; // Store the session ID
       }),
       catchError(this.handleError)
     );
@@ -64,10 +64,12 @@ export class ChatService {
    * Retrieves all chat sessions for the current user
    * @returns Observable containing array of chat sessions
    */
-  loadSessions(): Observable<ChatSession[]> {
+
+ 
+  loadSessions(userId: string): Observable<ChatSession[]> {
     /* TODO: UPDATE API */
     return this.http.get<ChatSession[]>(
-      `${this.apiUrl}/sessions`
+      `${this.apiUrl}/sessions/${userId}` //  API requires userId to fetch sessions
     ).pipe(
       timeout(this.defaultTimeout),
       catchError(this.handleError)
@@ -94,6 +96,7 @@ export class ChatService {
     return this.currentSessionId;
   }
 
+  /* TODO: add delete session option */
 
 
 

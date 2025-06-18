@@ -1,5 +1,5 @@
 export interface ChatSession {
-    id: string;
+    sessionId: string;
     title: string;
     createdAt: Date;
 }
