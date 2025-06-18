@@ -12,7 +12,7 @@ def calculate_angle(a, b, c):
         angle = 360 - angle
     return angle
 
-def process_pushup(video_path):
+def process(video_path):
     mp_pose = mp.solutions.pose
     pose = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.5, model_complexity=1)
     mp_drawing = mp.solutions.drawing_utils
