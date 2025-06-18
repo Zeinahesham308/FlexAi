@@ -127,14 +127,19 @@ Output:
 A complete weekly training schedule summarizing the user’s personalized workout plan.
 """
 ## make different aggregation prompt for every day count
+config = load(open("config.yaml"), Loader=SafeLoader)
 
+os.environ["GROQ_API_KEY"] = config["groq"]["apiKey"]
+os.environ["OPENAI_API_KEY"] = config["openai"]["apiKey"]
+
+llm_openai=ChatOpenAI(temperature=0, model_name="gpt-4.1")
 
 # %%
 exercises_dict={"back":6,"chest":5,"legs":7,"shoulders":5,"arms":6}
 class Feedback(BaseModel):
     grade:Literal["good","bad"]
     feedback: str=Field("if the workout is not good provide feedback on how to improve it")
-evaluator=llm_judge.with_structured_output(Feedback)
+evaluator=llm_openai.with_structured_output(Feedback)
 
 class State(TypedDict):
     messages: Annotated[list,add_messages]
@@ -151,10 +156,6 @@ def print_stream(stream):
         message.pretty_print()
 
 # %%
-config = load(open("config.yaml"), Loader=SafeLoader)
-os.environ["GROQ_API_KEY"] = config["groq"]["apiKey"]
-os.environ["OPENAI_API_KEY"] = config["openai"]["apiKey"]
-llm_openai=ChatOpenAI(temperature=0, model_name="gpt-4.1")
 
 # %%
 connection = sqlite3.connect("work_out.db")
@@ -319,7 +320,7 @@ class WorkoutDay(BaseModel):
 
 class FitnessPlan(BaseModel):
     workout_days: List[WorkoutDay] = Field(description="List of workout days")
-   
+
 
 # %%
 
@@ -496,18 +497,14 @@ def call_model_g(state: State_general):
 def caller_f (state: State_general):
     return 
 def call_arm(state: State_general):
-    print("ARM started at:", time.time())
     
     arm_input={"messages": [("user", INITIAL_PROMPT.format(weight=state["weight"],tall=state["height"],goal=state["goal"],sex=state["gender"],age=state["age"],body_part="arm",num_exercises=6))],"judge_prompt": JUDGE_PROMPT.format(body_part_name="arm",expected_exercise_count=6)}
     arm_state=arm_agent.invoke(arm_input)
-    print("ARM finished at:", time.time())
     return {"arm_plan": arm_state["plan"]}
 
 def call_back(state: State_general):
-    print("BACK started at:", time.time())
     back_input={"messages": [("user", INITIAL_PROMPT.format(weight=state["weight"],tall=state["height"],goal=state["goal"],sex=state["gender"],age=state["age"],body_part="back",num_exercises=5))],"judge_prompt": JUDGE_PROMPT.format(body_part_name="back",expected_exercise_count=5)}
     back_state=back_agent.invoke(back_input)
-    print("BACK finished at:", time.time())
     return {"back_plan": back_state["plan"]}
     
     
@@ -551,6 +548,7 @@ def jsonize(state: State_general):
     print("you are in jsonizer")
     llm_j=llm_openai.with_structured_output(WeeklyPlan)
     fitness_plan=llm_j.invoke(state["plan"])
+    print("you are about to return")
     return {"plan_model": fitness_plan}
 
 def AGENT(sql_controller):
@@ -587,7 +585,6 @@ def AGENT(sql_controller):
     return graph
 
 # %%
-graph=AGENT(sql_memory)
 
 
 
