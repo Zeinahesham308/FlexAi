@@ -15,6 +15,7 @@ __pycache__/
 **/config.yaml
 
 Ai/Agent/config.yaml
+Ai/Agent/state/
 Ai/NLP/config.yaml
 Ai/NLP/Agent/config.yaml
 Ai/NLP/GenerateDataSet/config.yaml
