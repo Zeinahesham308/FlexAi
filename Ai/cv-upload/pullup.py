@@ -79,7 +79,7 @@ def process(video_path):
         
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        cv2.imshow("Bicep Curl Tracker", image)
+        cv2.imshow("Pullup Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
 
