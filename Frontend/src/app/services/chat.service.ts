@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { catchError, Observable, throwError, timeout } from 'rxjs';
+import { catchError, Observable, tap, throwError, timeout } from 'rxjs';
 import { ChatSession } from '../models/chat.session.interface';
 import { ChatMessage } from '../models/chatbot.messages.interface';
 
@@ -9,8 +9,9 @@ import { ChatMessage } from '../models/chatbot.messages.interface';
   providedIn: 'root'
 })
 export class ChatService {
-  private baseUrl = `${environment.baseUrl}/api/chat`;
+  private apiUrl = `${environment.baseUrl}/api/chat`;
   private readonly defaultTimeout = 15000; // 15 seconds
+  private currentSessionId: string | null = null; // Store current session ID
 
 
 
@@ -26,8 +27,8 @@ export class ChatService {
     return this.http.post<string>(
       // TODO: UPDATE API
       /* Save user message to session (using URL's sessionId) */
-      `${this.baseUrl}/sessions/${sessionId}/messages`,
-      {msg: prompt }
+      `${this.apiUrl}/sessions/${sessionId}/messages`,
+      { msg: prompt }
     ).pipe(
       timeout(this.defaultTimeout),
       catchError(this.handleError)
@@ -43,10 +44,18 @@ export class ChatService {
   startNewChat(): Observable<ChatSession> {
 
     /* TODO: UPDATE API */
-    return this.http.post<ChatSession>(`${this.baseUrl}/sessions`,
+    /* need function to return session ID when chat is created */
+    return this.http.post<ChatSession>(`${this.apiUrl}/sessions`,
       { title: 'New Chat' }
     ).pipe(
       timeout(this.defaultTimeout),
+      tap((session) => {
+        /* Store the session ID for future use */
+        if (!session || !session.id) {
+          throw new Error('Failed to create chat session');
+        }
+        this.currentSessionId = session.id; // Store the session ID
+      }),
       catchError(this.handleError)
     );
   }
@@ -58,7 +67,7 @@ export class ChatService {
   loadSessions(): Observable<ChatSession[]> {
     /* TODO: UPDATE API */
     return this.http.get<ChatSession[]>(
-      `${this.baseUrl}/sessions`
+      `${this.apiUrl}/sessions`
     ).pipe(
       timeout(this.defaultTimeout),
       catchError(this.handleError)
@@ -73,15 +82,20 @@ export class ChatService {
   getSessionMessages(sessionId: string): Observable<ChatMessage[]> {
     /* TODO: UPDATE API */
     return this.http.get<ChatMessage[]>(
-      `${this.baseUrl}/sessions/${sessionId}/messages`
+      `${this.apiUrl}/sessions/${sessionId}/messages`
     ).pipe(
       timeout(this.defaultTimeout),
       catchError(this.handleError)
     );
   }
 
+  // A getter to retrieve the stored session ID
+  getCurrentSessionId(): string | null {
+    return this.currentSessionId;
+  }
 
- 
+
+
 
 
   // ==================== HELPERS ====================
