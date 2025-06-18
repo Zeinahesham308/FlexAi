@@ -385,6 +385,8 @@ endSession: async (req, res) => {
     res.status(500).json({ success: false, message: "Could not end session." });
   }
 }
+
+
 };
 
 module.exports = chatController;
