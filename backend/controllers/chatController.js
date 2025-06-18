@@ -230,7 +230,7 @@
 const fetch = require("node-fetch");
 const { chatbot_db } = require('../config/db');
 const { generateSessionId } = require('../utils/sessionidGenerator');
-const User = require('../models/userModel'); // ✅ Make sure this is correct
+const User = require('../models/userModel'); 
 
 const chatController = {
   async handleChat(req, res) {
@@ -285,7 +285,7 @@ const chatController = {
         sessionId
       };
 
-      const backendResponse = await fetch("http://10.10.10.60:8080/ai", {
+      const backendResponse = await fetch("http://172.20.10.2:8080/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody)
