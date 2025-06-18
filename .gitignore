@@ -12,6 +12,10 @@ venv/
 *.so
 *.pyc
 __pycache__/
+Ai\Agent\config.yaml
+Ai\NLP\config.yaml
+Ai\NLP\Agent\config.yaml
+Ai\NLP\GenerateDataSet\config.yaml
 Ai/cv-upload/uploaded_videos/WhatsApp Video 2025-06-15 at 8.05.44 PM.mp4
 Ai/cv-upload/uploaded_videos/WhatsApp Video 2025-06-16 at 4.26.56 PM.mp4
 Ai/cv-upload/uploaded_videos/WhatsApp Video 2025-06-16 at 4.32.52 PM.mp4
