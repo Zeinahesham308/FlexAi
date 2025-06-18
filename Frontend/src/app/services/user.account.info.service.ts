@@ -9,12 +9,13 @@ import { Observable } from 'rxjs';
 })
 export class UserAccountInfoService {
 
-  private apiUrl = `${environment.baseUrl}/dashboard`;
+  private apiUrl = `${environment.baseUrl}/api/users/dashboard`;
 
   constructor(private http: HttpClient) { }
 
     // Get single user by ID
   getUserAccount(userId: string): Observable<UserProfile> {
+    userId = "6851dbacec913c13f60890de"; // Example user ID, replace with actual logic to get user ID
     return this.http.get<UserProfile>(`${this.apiUrl}/${userId}`);
   }
 

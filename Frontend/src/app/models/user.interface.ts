@@ -7,7 +7,7 @@ export interface UserProfile {
     targetWeight: number;
     height: number;
     goal: "lose weight" | "gain weight" | "maintain weight";
-    stats:{
+    stats?:{
         streak: number;
         workoutsCompleted: number;
     };
