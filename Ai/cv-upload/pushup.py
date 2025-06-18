@@ -67,6 +67,12 @@ def process(video_path):
                         partial_reps = True
                     if not reached_up and curr_angle > prev_angle and prev_angle < 160:
                         partial_reps = True
+            
+            hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+            knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+            back_angle = calculate_angle(shoulder, hip, knee)
+            if back_angle < 160:
+                back_not_flat = True
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
@@ -81,5 +87,7 @@ def process(video_path):
     s = f"Total Push-ups: {rep_count}. \n"
     if partial_reps:
         s += "Do full push-ups Go all the way down and all the way up. \n"
+    if back_not_flat:
+        s += "Your back is not flat, try to keep your back straight. \n"
     print(s)
     return s
