@@ -227,8 +227,6 @@
 
 // module.exports = chatController;
 
-
-
 const fetch = require("node-fetch");
 const { chatbot_db } = require('../config/db');
 const { generateSessionId } = require('../utils/sessionidGenerator');
@@ -362,7 +360,31 @@ const chatController = {
       console.error(error);
       res.status(500).json({ message: 'Failed to load chat history' });
     }
+  },
+  getUserSessions: async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const sessionsCollection = chatbot_db.collection('sessions');
+    const sessions = await sessionsCollection.find({ userId }).sort({ startedAt: -1 }).toArray();
+    res.json({ success: true, sessions });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch sessions' });
   }
+},
+endSession: async (req, res) => {
+  try {
+    const sessionId = req.params.sessionId;
+    const sessionsCollection = chatbot_db.collection('sessions');
+    await sessionsCollection.updateOne(
+      { sessionId },
+      { $set: { isActive: false, endedAt: new Date() } }
+    );
+    res.json({ success: true, message: "Session ended." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Could not end session." });
+  }
+}
 };
 
 module.exports = chatController;
