@@ -8,6 +8,7 @@ const config = yaml.load(fileContents);
 
 
 // mongodb+srv://{config['mongodb']['user']}:{config['mongodb']['password']}@cluster0.7z7wzhz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
 const chatbot_db = mongoose.createConnection(`mongodb+srv://${config['mongodb']['user']}:${config['mongodb']['password']}@cluster0.7z7wzhz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
