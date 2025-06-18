@@ -20,7 +20,9 @@ def aiPost():
     print(f"session_id: {sessionid}")
     cached_History=MongoDBChatMessageHistory(
         session_id=sessionid,
-        connection_string=f"mongodb+srv://{config['mongodb']['user']}:{config['mongodb']['password']}@cluster0.i2o3g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        
+        connection_string=f"mongodb+srv://{config['mongodb']['user']}:{config['mongodb']['password']}@cluster0.7z7wzhz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        
         database_name="flexdb",
         collection_name="history"
     )
