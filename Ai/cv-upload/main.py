@@ -3,6 +3,7 @@ from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import curls
 import pullup
+import pushup
 import os
 
 UPLOAD_DIR = "uploaded_videos"
@@ -45,6 +46,8 @@ async def upload_video(
             res = curls.process(video_path=saved_path)
         elif workoutType == "Pull Up":
             res = pullup.process(video_path=saved_path)
+        elif workoutType == "Push Up":
+            res = pushup.process(video_path=saved_path)
         return JSONResponse(
             content={
                 "message": res,
