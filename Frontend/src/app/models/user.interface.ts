@@ -6,9 +6,9 @@ export interface UserProfile {
     currentWeight: number;
     targetWeight: number;
     height: number;
-    goal: "lose weight" | "gain weight" | "maintain weight";
-    stats:{
-        streak: number;
-        workoutsCompleted: number;
+    goal: "lose weight" | "gain weight" | "maintain weight" ;
+    stats?:{
+        streak: number ;
+        workoutsCompleted: number ;
     };
 }

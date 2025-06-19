@@ -1,12 +1,11 @@
 export interface Workouts {
     id: string;
-    date:Date;
-    title: string;
+    name: string;
+    muscleGroup: string;
+    sets?: number;
+    reps?: number;
+    link?: string;
     completed: boolean;
     exerciseCount: number;
-    duration: number; // in minutes
-    /*
-    3ayza 27ot instruction
-    common mistakes
-    url link ywdy ezay y3ml workout da */
+    date: Date;
 }

@@ -3,6 +3,7 @@ import { ChatMessage, MessageStatus } from '../models/chatbot.messages.interface
 import { ChatService } from '../services/chat.service';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { ChatSession } from '../models/chat.session.interface';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -25,14 +26,17 @@ export class ChatbotComponent implements OnInit {
   currentSessionId: string | null = null;
   errorMessage: string | null = null;
 
+  userId!: string; // Store user ID
 
   private subscriptions: Subscription = new Subscription();
 
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.loadSessions();;
+    this.loadSessions();
+    // Get user id
+    this.userId=this.authService.getStoredUserId();
   }
 
   ngOnDestroy(): void {
@@ -43,7 +47,7 @@ export class ChatbotComponent implements OnInit {
   // ==================== SESSION MANAGEMENT ====================
 
   loadSessions(): void {
-    const sub = this.chatService.loadSessions().subscribe({
+    const sub = this.chatService.loadSessions(this.userId).subscribe({
       next: (sessions: ChatSession[]) => {
         this.chatSessions = sessions;
         this.errorMessage = null;
@@ -78,7 +82,7 @@ export class ChatbotComponent implements OnInit {
   startNewChat(): void {
     const sub = this.chatService.startNewChat().subscribe({
       next: (newSession: ChatSession) => {
-        this.currentSessionId = newSession.id;
+        this.currentSessionId = newSession.sessionId;
         this.chatSessions = [newSession, ...this.chatSessions];
         this.messages = [];
         this.errorMessage = null;
@@ -104,7 +108,7 @@ export class ChatbotComponent implements OnInit {
   private async getBotResponse(prompt: string): Promise<ChatMessage> {
     this.isBotTyping = true;
     try {
-      const replyText = await lastValueFrom(this.chatService.getBotResponse(prompt, this.currentSessionId!));
+      const replyText = await lastValueFrom(this.chatService.getBotResponse(prompt, this.currentSessionId!, this.userId));
 
       return {
         text: replyText,
@@ -177,7 +181,7 @@ export class ChatbotComponent implements OnInit {
  * @returns  The unique ID of the session to be used as the tracking identifier.
  */
   trackBySessionId(index: number, session: ChatSession): string {
-    return session.id;
+    return session.sessionId;
   }
 
 }

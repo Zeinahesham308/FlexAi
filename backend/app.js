@@ -21,7 +21,7 @@ app.use(cors(corsOptions));
 
 
 app.use('/api/users', userRoutes); // Backend API routes for user operations
-app.use('/api', chatRoutes); // Chat routes
+app.use('/api/chat', chatRoutes); // Chat routes
 app.use('/api/agent', agentRoutes); // agent routes
 
 // Serve static files
