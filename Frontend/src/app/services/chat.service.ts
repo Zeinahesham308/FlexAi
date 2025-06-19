@@ -15,6 +15,7 @@ export class ChatService {
 
 
 
+
   constructor(private http: HttpClient) { }
 
 
@@ -25,7 +26,7 @@ export class ChatService {
    * @param sessionId The ID of the chat session
    * @returns Observable with both saved user message and bot reply
    */
-  getBotResponse(prompt: string, sessionId: string, userId: string): Observable<string> {
+  getBotResponse(prompt: string, sessionId: string, userId: string): Observable<any> {
     return this.http.post<string>(
       // TODO: UPDATE API
       /* Save user message to session (using URL's sessionId) */

@@ -37,6 +37,7 @@ export class ChatbotComponent implements OnInit {
     this.loadSessions();
     // Get user id
     this.userId=this.authService.getStoredUserId();
+    this.userId = "6851e180fcc1b73d7a23876f";
     this.startNewChat(); // Start a new chat session on component initialization
 
   }
@@ -112,8 +113,9 @@ export class ChatbotComponent implements OnInit {
     try {
       const replyText = await lastValueFrom(this.chatService.getBotResponse(prompt, this.currentSessionId!, this.userId));
 
+      const textToSend= replyText.data.message; // Extract the message text from the response
       return {
-        text: replyText,
+        text: textToSend,
         isBot: true,
       };
     } finally {
