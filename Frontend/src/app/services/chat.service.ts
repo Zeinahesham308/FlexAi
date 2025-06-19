@@ -17,7 +17,7 @@ export class ChatService {
 
   constructor(private http: HttpClient) { }
 
- 
+
 
   /**
    * Unified message handling - saves user message and gets bot reply in one call
@@ -25,12 +25,12 @@ export class ChatService {
    * @param sessionId The ID of the chat session
    * @returns Observable with both saved user message and bot reply
    */
-  getBotResponse(prompt: string, sessionId: string,userId: string): Observable<string> {
+  getBotResponse(prompt: string, sessionId: string, userId: string): Observable<string> {
     return this.http.post<string>(
       // TODO: UPDATE API
       /* Save user message to session (using URL's sessionId) */
       `${this.apiUrl}/sessions/${sessionId}/messages`,
-      { msg: prompt,userId: userId }
+      { msg: prompt, userId: userId }
     ).pipe(
       timeout(this.defaultTimeout),
       catchError(this.handleError)
@@ -43,10 +43,10 @@ export class ChatService {
    * Creates a new chat session
    * @returns Observable containing the created session data
    */
-  startNewChat(): Observable<ChatSession> {
+  startNewChat(userId: string): Observable<ChatSession> {
 
     return this.http.post<ChatSession>(`${this.apiUrl}/sessions`,
-      { title: 'New Chat' }
+      { title: 'New Chat', userId: userId } // Pass userId to create session
     ).pipe(
       timeout(this.defaultTimeout),
       tap((session) => {
@@ -65,7 +65,7 @@ export class ChatService {
    * @returns Observable containing array of chat sessions
    */
 
- 
+
   loadSessions(userId: string): Observable<ChatSession[]> {
     /* TODO: UPDATE API */
     return this.http.get<ChatSession[]>(
@@ -96,6 +96,8 @@ export class ChatService {
     return this.currentSessionId;
   }
 
+ 
+
   /* TODO: add delete session option */
 
 
@@ -109,14 +111,14 @@ export class ChatService {
    * @private
    */
   private handleError(error: any) {
-    console.error('API Error:', error);
-    return throwError(() => new Error(
-      error.status === 429
-        ? "Too many requests. Please wait..."
-        : "Request failed. Please try again."
-    ));
+      console.error('API Error:', error);
+      return throwError(() => new Error(
+        error.status === 429
+          ? "Too many requests. Please wait..."
+          : "Request failed. Please try again."
+      ));
 
-  }
+    }
 
 
 

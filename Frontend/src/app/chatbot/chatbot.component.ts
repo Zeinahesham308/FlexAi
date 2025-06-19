@@ -37,6 +37,8 @@ export class ChatbotComponent implements OnInit {
     this.loadSessions();
     // Get user id
     this.userId=this.authService.getStoredUserId();
+    this.startNewChat(); // Start a new chat session on component initialization
+
   }
 
   ngOnDestroy(): void {
@@ -80,7 +82,7 @@ export class ChatbotComponent implements OnInit {
 
 
   startNewChat(): void {
-    const sub = this.chatService.startNewChat().subscribe({
+    const sub = this.chatService.startNewChat(this.userId).subscribe({
       next: (newSession: ChatSession) => {
         this.currentSessionId = newSession.sessionId;
         this.chatSessions = [newSession, ...this.chatSessions];
