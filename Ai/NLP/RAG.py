@@ -18,7 +18,7 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 
-
+#update for bello
 def load_and_process_pdfs(pdf_folder_path):
     documents = []
     for file in os.listdir(pdf_folder_path):
