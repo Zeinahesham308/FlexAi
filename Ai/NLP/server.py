@@ -35,8 +35,28 @@ def aiPost():
 
     return Response(json.dumps(json_response))
     
-
-
+@app.route("/ai/GetChatHistory",methods=["POST"])
+def GetChatHistory():
+    json_content=request.json
+    sessionid=json_content.get("sessionId")
+    print(f"session_id: {sessionid}")
+    cached_History=MongoDBChatMessageHistory(
+        session_id=sessionid,
+        
+        connection_string=f"mongodb+srv://{config['mongodb']['user']}:{config['mongodb']['password']}@cluster0.7z7wzhz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        
+        database_name="flexdb",
+        collection_name="history"
+    )
+    messages=cached_History.messages
+    serialized = [
+    {"isBot": msg.type=="ai", "text": msg.content}
+    for msg in messages
+]
+    json_response={"messages":serialized}
+    return Response(json.dumps(json_response))
+def index():
+    return "Server is running!"
 def start_app():
     app.run(host="0.0.0.0",port=8080,debug=True)
 

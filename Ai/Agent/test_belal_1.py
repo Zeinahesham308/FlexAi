@@ -10,7 +10,7 @@ import sqlite3
 from langchain.tools import tool
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
-
+from operator import add
 from yaml import load
 from yaml import SafeLoader
 from langgraph.prebuilt import ToolNode
@@ -25,8 +25,6 @@ from openai import OpenAI
 from typing_extensions import TypedDict
 import openai
 import time
-
-
 
 
 
@@ -47,10 +45,33 @@ TOTAL REQUIRED EXERCISES: {num_exercises}
 Task:
 1. Generate exactly {num_exercises} exercises for {body_part} based on user data.
 2. CRITICAL: Ensure no two selected exercises target the exact same PRIMARY + SECONDARY muscle combination. Prioritize variety.
-3. Output: List exercises: Name, Primary Muscle, Secondary Muscle(s), Sets, Reps (tailored to goal/intensity) only.
+3. Output: List exercises: Name, Primary Muscle targeted , Secondary Muscle(s), Sets, Reps (tailored to goal/intensity) only.
 4. Ensure the exercises are not redundant.
 5. Be concise but informative. Output should be clean and skimmable.
 
+"""
+MODIFY_PROMPT = """
+You are a professional fitness expert.
+
+Your task is to update a workout plan **by replacing a single exercise** as requested by the user.
+
+Instructions:
+1. ONLY replace the exercise the user mentions.
+2. Choose a **biomechanically different** exercise that targets **similar primary and secondary muscles** — avoid redundant motion patterns.
+3. Do **not** change any other exercises or structure of the plan.
+4. The updated exercise should:
+   - Have a clear **primary** and **secondary** muscle
+   - Fit the same **equipment context** (local gym)
+   - Provide **variation** in movement or angle
+
+===
+**Major muscle Targeted**: {muscle_name}  
+**Original Exercise to Replace**: {old_exercise_name}  
+**Workout Plan**:  
+{full_plan}
+
+Return the workout plan with ONLY the exercise "{old_exercise_name}" replaced.
+===
 """
 
 
@@ -124,7 +145,7 @@ Instructions:
 7. Be concise but informative. Output should be clean 
 
 Output:
-A complete weekly training schedule summarizing the user’s personalized workout plan.
+A complete weekly training schedule summarizing the user’s personalized workout plan with each exercise have sets and reps and major muscles and body part.
 """
 ## make different aggregation prompt for every day count
 config = load(open("config.yaml"), Loader=SafeLoader)
@@ -236,6 +257,8 @@ class Exercise(BaseModel):
     name: str =Field(description="Name of the exercise")
     sets: int
     reps: str  # Use str if reps like "8-12"
+    main_: str = Field(description="The main muscle worked")
+    body_part: str = Field(description="Body part category (e.g. chest, back)")
 
 class DayPlan(BaseModel):
     day: str
@@ -243,58 +266,6 @@ class DayPlan(BaseModel):
 
 class WeeklyPlan(BaseModel):
     plan: List[DayPlan]
-
-
-
-# %%
-
-# back_formatted_prompt = INITIAL_PROMPT.format(
-#     weight=90,
-#     tall=181, 
-#     goal="get lean muscle",
-#     sex="male",
-#     age=25,
-#     intensity="high",
-#     body_part="back",
-#     num_exercises=5
-# )
-# back_formatted_judge=JUDGE_PROMPT.format(body_part_name="BACK",expected_exercise_count=5)
-
-# arm_formatted_judge=JUDGE_PROMPT.format(body_part_name="arm",expected_exercise_count=6)
-# leg_formatted_judge=JUDGE_PROMPT.format(body_part_name="leg",expected_exercise_count=7)
-# leg_formatted_prompt = INITIAL_PROMPT.format(
-#     weight=90,
-#     tall=181,
-#     goal="get lean muscle",
-#     sex="male",
-#     age=25,
-#     intensity="high",
-#     body_part="leg",
-#     num_exercises=7
-# )
-# shoulder_formatted_prompt = INITIAL_PROMPT.format(
-#     weight=90,
-#     tall=181,
-#     goal="get lean muscle",
-#     sex="male",
-#     age=25,
-#     intensity="high",
-#     body_part="shoulder",
-#     num_exercises=5
-# )
-# shoulder_formatted_judge=JUDGE_PROMPT.format(body_part_name="shoulder",expected_exercise_count=5)
-# chest_formatted_prompt = INITIAL_PROMPT.format(
-#     weight=90,
-#     tall=181,
-#     goal="get lean muscle",
-#     sex="male",
-#     age=25,
-#     intensity="high",
-#     body_part="chest",
-#     num_exercises=6
-# )
-# chest_formatted_judge=JUDGE_PROMPT.format(body_part_name="chest",expected_exercise_count=6)
-
 
 
 # %%
@@ -307,19 +278,6 @@ config = {
 from pydantic import BaseModel, Field
 from typing import List, Optional, Union
 
-# Pydantic Models for Fitness Plan Structure
-class Exercise(BaseModel):
-    name: str = Field(description="Name of the exercise")
-    sets: int = Field(default=None, description="Number of sets")
-    reps:str = Field(default=None, description="Number of reps or rep range")
-    
-class WorkoutDay(BaseModel):
-    day: str = Field(description="Day of the week or day number")
-    focus: Optional[str] = Field(default=None, description=" workout focus wether push or pull etc") 
-    exercises: List[Exercise] = Field(description="List of exercises for this day")
-
-class FitnessPlan(BaseModel):
-    workout_days: List[WorkoutDay] = Field(description="List of workout days")
 
 
 # %%
@@ -462,9 +420,9 @@ class State_general(TypedDict):
     shoulder_plan:str
     chest_plan:str
     plan: str
-    plan_model:str
+    plan_model:list[WeeklyPlan,add]
     
-def should_continue_g(state: State_general) -> Literal["tools", "caller",END]: 
+def should_continue_g(state: State_general) -> Literal["tools", "caller","jsonizer_modified",END]: 
     
     messages = state["messages"]
     if messages:
@@ -476,7 +434,7 @@ def should_continue_g(state: State_general) -> Literal["tools", "caller",END]:
     if len(state["messages"])==0:
         return "caller"
     else:
-        return END
+        return "jsonizer_modified"
 
     
 def call_model_g(state: State_general):
@@ -549,7 +507,13 @@ def jsonize(state: State_general):
     llm_j=llm_openai.with_structured_output(WeeklyPlan)
     fitness_plan=llm_j.invoke(state["plan"])
     print("you are about to return")
-    return {"plan_model": fitness_plan}
+    return {"plan_model": [fitness_plan]}
+def jsonize_modified(state: State_general):
+    print("you are in jsonizer_modified")
+    llm_j=llm_openai.with_structured_output(WeeklyPlan)
+    fitness_plan=llm_j.invoke(state["messages"][-1].content)
+    print("you are about to return")
+    return {"plan_model": [fitness_plan]}
 
 def AGENT(sql_controller):
 
@@ -565,6 +529,7 @@ def AGENT(sql_controller):
     workflow.add_node("agent", call_model_g)
     workflow.add_node("tools", tool_node)
     workflow.add_node("jsonizer", jsonize)
+    workflow.add_node("jsonizer_modified", jsonize_modified)
     workflow.add_edge(START, "agent")  
     workflow.add_conditional_edges("agent", should_continue_g)
     workflow.add_edge("caller", "back")
@@ -581,6 +546,7 @@ def AGENT(sql_controller):
     workflow.add_edge("tools", "agent")
     workflow.add_edge("aggreagator", "jsonizer")
     workflow.add_edge("jsonizer", END)
+    workflow.add_edge("jsonizer_modified", END)
     graph = workflow.compile(checkpointer=sql_controller)
     return graph
 
