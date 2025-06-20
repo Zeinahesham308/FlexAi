@@ -152,7 +152,7 @@ const chatController = {
       sessionId
     };
 
-    const backendResponse = await fetch("http://192.168.137.196:8080/ai", {
+    const backendResponse = await fetch("http://192.168.0.178:8080/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody)
