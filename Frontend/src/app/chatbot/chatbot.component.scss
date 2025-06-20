@@ -176,6 +176,7 @@
         padding: 1rem;
         height: 85vh;
 
+
         .message {
             max-width: 75%;
             padding: 0.5rem;
@@ -199,10 +200,14 @@
         }
 
         .bot-message {
+            text-align: left;
             color: #f0f0f0;
             align-self: flex-start;
             border-radius: 15px 15px 15px 3px;
+
+
         }
+
 
         /* Message status styling */
         .message-status {
@@ -252,7 +257,7 @@
 
         position: sticky;
         bottom: 0.3em;
-        background: linear-gradient(to top, rgba(45,45,45,0.9) 0%, rgba(45,45,45,0) 100%);
+        background: linear-gradient(to top, rgba(45, 45, 45, 0.9) 0%, rgba(45, 45, 45, 0) 100%);
 
         form {
             border-radius: 32px;

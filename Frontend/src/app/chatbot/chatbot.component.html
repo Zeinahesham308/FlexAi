@@ -7,30 +7,30 @@
     <aside class="sidebar" [ngClass]="{ 'sidebar-visible': isSidebarVisible }">
       <div class="header-toggle" (click)="toggleSidebar()">
         <i class="fa-solid fa-right-to-bracket fa-xl" style="color: #f0fff0;" *ngIf="!isSidebarVisible"></i>
-        <i class="fa-solid fa-right-to-bracket fa-flip-horizontal fa-xl" style="color: #f0fff0;" *ngIf="isSidebarVisible"></i>
+        <i class="fa-solid fa-right-to-bracket fa-flip-horizontal fa-xl" style="color: #f0fff0;"
+          *ngIf="isSidebarVisible"></i>
       </div>
-    
+
       <div class="sidebar-content FLEX-COL justify-space-between" *ngIf="isSidebarVisible">
         <!-- New Chat Button -->
         <button aria-label="Start a new chat" class="FLEX center-content new-chat-btn" (click)="startNewChat()">
           <i class="fa-solid fa-comment" style="color: #f0fff0;"></i>
           New Chat
         </button>
-    
+
         <!-- Chat Sessions List -->
         <div class="chat-sessions">
           <h3 class="sessions-title">Recent Chats</h3>
           <ul class="sessions-list">
-            <li *ngFor="let session of chatSessions; trackBy: trackBySessionId" 
-                (click)="loadChatSession(session.sessionId)"
-                [class.active]="session.sessionId === currentSessionId">
+            <li *ngFor="let session of chatSessions; trackBy: trackBySessionId"
+              (click)="loadChatSession(session.sessionId)" [class.active]="session.sessionId === currentSessionId">
               <i class="fa-regular fa-message"></i>
               <span class="session-preview">{{ session.title }}</span>
               <span class="session-date">{{ session.createdAt | date:'shortDate' }}</span>
             </li>
           </ul>
         </div>
-    
+
         <!-- Account Section -->
         <div class="account FLEX center-content">
           <img class="avatar" src="assets/images/user-avatar-test.png" alt="User Avatar">
@@ -50,18 +50,21 @@
 
           <!-- Suggestions -->
           <section class="suggestions FLEX align-center">
-            <article class="card card1 FLEX-COL bg-brand-light-green center-content" (click)="sendSuggestion('Workout Plan')">
+            <article class="card card1 FLEX-COL bg-brand-light-green center-content"
+              (click)="sendSuggestion('Workout Plan')">
               <i class="fa-solid fa-dumbbell fa-rotate-by" style="color: #20221f;  --fa-rotate-angle: 135deg;"
                 aria-hidden="true"></i>
               <div class="card-title">Workout Plan</div>
             </article>
 
-            <article class="card card2 FLEX-COL bg-brand-light-green center-content" (click)="sendSuggestion('Nutrition Plan')">
+            <article class="card card2 FLEX-COL bg-brand-light-green center-content"
+              (click)="sendSuggestion('Nutrition Plan')">
               <i class="fa-solid fa-utensils" style="color: #9fa0a3;" aria-hidden="true"></i>
               <div class="card-title">Nutrition Plan</div>
             </article>
 
-            <article class="card card3 FLEX-COL bg-brand-light-green center-content" (click)="sendSuggestion('Injury Prevention')">
+            <article class="card card3 FLEX-COL bg-brand-light-green center-content"
+              (click)="sendSuggestion('Injury Prevention')">
               <i class="fa-solid fa-bandage fa-rotate-by" style="color: #f2bb85; --fa-rotate-angle: 135deg;"
                 aria-hidden="true"></i>
               <div class="card-title">Injury Prevention</div>
@@ -73,21 +76,28 @@
           <div *ngFor="let message of messages"
             class="message {{message.isBot ? 'bot-message' : 'user-message'}} FLEX-COL"
             [class.sending]="message.status === 'sending'" [class.failed]="message.status === 'failed'">
-            {{ message.text }}
+
+            <!-- Bot message (rendered as Markdown) -->
+            <div *ngIf="message.isBot" class="message-content">
+              <markdown [data]="message.text"></markdown>
+            </div>
+
+            <!-- User message (plain text) -->
+            <div *ngIf="!message.isBot" class="message-content">{{ message.text }}</div>
 
             <!-- Message status indicators -->
-            <div class="message-status" *ngIf="!message.isBot">
-              <span *ngIf="message.status === 'sending'">Sending...</span>
+            <div class="message-status" *ngIf="message.isBot">
+              <span *ngIf="message.status === 'sending'">sending...</span>
               <span *ngIf="message.status === 'failed'">Failed to send</span>
             </div>
           </div>
 
           <!-- Typing indicator -->
-           <div class=" bot-message thinking-indicator FLEX" *ngIf="isBotTyping">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
+          <div class=" bot-message thinking-indicator FLEX" *ngIf="isBotTyping">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
         </div>
       </main>
 
