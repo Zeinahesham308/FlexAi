@@ -67,11 +67,12 @@ def aiPost():
 @app.route("/ai/agent/change_exercise",methods=["POST"])
 def agent_change():
     print("AGENT/ ai is called")
+
     json_content=request.json
-    Old_exercise=json_content.get("Old_exercise")
-    target_muscle=json_content.get("target_muscle")
+    Old_exercise=json_content.get("exerciseToReplace")
+    target_muscle=json_content.get("targetMusc")
     cached = AGENT(sql_memory)
-    userid=json_content.get("userid")
+    userid=json_content.get("agentId")
     config={"recursion_limit": 99,"configurable": {"thread_id": userid}}
     if len(cached.get_state(config).values)<1:
         return Response(json.dumps({"status":"error this user has no plan"}))
@@ -94,7 +95,7 @@ def agent_change():
 def index():
     return "Server is running!"
 def start_app():
-    app.run(host="0.0.0.0",port=8080,debug=True)
+    app.run(host="0.0.0.0",port=8080)
 if __name__=="__main__":
     start_app()
     
