@@ -110,11 +110,11 @@ def process(video_path):
            
             print(f"Torso angle : {torso_angle} .. hip angle: {lhip_angle}.... knee angle :{knee_angle}")
             print("-----------------------------------------------------------------------------")
-            if lhip_angle <100 and stage==" Standing":
+            if lhip_angle <115 and stage==" Standing":
                 stage = " down"
                 counter += 1
                 print(stage)
-            if lhip_angle >=100 and stage != 'good':
+            if lhip_angle >=150 and stage != 'good':
                 stage = " Standing"
             
 
