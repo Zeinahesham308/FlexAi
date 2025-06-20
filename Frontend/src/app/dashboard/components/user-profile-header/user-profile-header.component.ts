@@ -30,17 +30,22 @@ export class UserProfileHeaderComponent implements OnInit {
     }
   };
 
-  constructor(private userAccountInfoService: UserAccountInfoService, private authService: AuthService) { }
+
+  constructor(private userAccountInfoService: UserAccountInfoService,
+    private authService: AuthService
+  ) { }
+
   ngOnInit(): void {
-    const userId = this.authService.getStoredUserId(); //TODO: Replace with actual user ID logic
+    const userId = this.authService.getStoredUserId();
     this.userAccountInfoService.getUserAccount(userId).subscribe({
-      next: (user: UserProfile) => {
-        this.userData = user;
+      next: (response: any) => {
+        this.userData = response.data;
+        console.log('User data fetched successfully:', response);
+        console.log('Fetched user data:', this.userData);
       },
       error: (err) => {
         console.error('Error fetching user data:', err);
       }
     });
   }
-
 }

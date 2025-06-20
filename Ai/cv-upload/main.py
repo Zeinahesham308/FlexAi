@@ -4,9 +4,16 @@ from fastapi.middleware.cors import CORSMiddleware
 import curls
 import pullup
 import pushup
+<<<<<<< HEAD
 import squats
 import lateralraises
 import overheadextension
+=======
+import overheadextension
+import lateralraises
+import squats
+import press
+>>>>>>> 4115750746eb33430afd1076ca57c2a55d2145c2
 import os
 
 UPLOAD_DIR = "uploaded_videos"
@@ -47,7 +54,7 @@ async def upload_video(
             buffer.write(contents)
         if workoutType == "Curls":
             res = curls.process(video_path=saved_path)
-        elif workoutType == "Pull Up":
+        elif workoutType == "Pull Up" or workoutType == "Lat Pull Down":
             res = pullup.process(video_path=saved_path)
         elif workoutType == "Push Up":
             res = pushup.process(video_path=saved_path)

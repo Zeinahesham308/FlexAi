@@ -1,12 +1,14 @@
 <!-- user-profile-header.component.html -->
-<header class="profile-header">
+<header class="profile-header" *ngIf="userData">
+
     <!-- Avatar & Basic Info -->
     <div class="identity-section">
         <img [src]="userData.avatarUrl || defaultAvatar" alt="{{ userData.name }}'s profile" class="avatar">
 
         <div class="basic-info">
-            <h2 class="userData-name">{{ userData.name }}</h2>
+            <h2 class="userData-name">{{ userData.name | titlecase }}</h2>
             <div class="metrics-grid">
+  
                 <div class="metric">
                     <mat-icon>person</mat-icon>
                     <span>{{ userData.gender | titlecase }}</span>

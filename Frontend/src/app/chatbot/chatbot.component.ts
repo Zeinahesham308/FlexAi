@@ -4,6 +4,8 @@ import { ChatService } from '../services/chat.service';
 import { lastValueFrom, Subscription } from 'rxjs';
 import { ChatSession } from '../models/chat.session.interface';
 import { AuthService } from '../services/auth.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 @Component({
@@ -18,7 +20,99 @@ export class ChatbotComponent implements OnInit {
   isSidebarVisible: boolean = false;    // Property to control sidebar visibility
   isBotTyping: boolean = false;         // Property to control typing indicator visibility
 
-  messages: ChatMessage[] = [];
+  /* messages: ChatMessage[] = []; */
+ messages: ChatMessage[] = [
+  // Basic user message (plain text)
+  {
+    text: 'Hello, I need some help with my account.',
+    isBot: false,
+    status: 'sent'
+  },
+
+  // Simple bot response with basic Markdown
+  {
+    text: '**Sure!** How can I assist you with your account today?',
+    isBot: true,
+    status: 'sent'
+  },
+
+  // User message with special characters
+  {
+    text: 'I can\'t log in - it says "invalid credentials"',
+    isBot: false,
+    status: 'sent'
+  },
+
+  // Bot message with Markdown list
+  {
+    text: 'Try these steps:\n\n1. Check your **caps lock**\n2. Reset your password\n3. Clear browser cookies\n\n`Or contact support`',
+    isBot: true,
+    status: 'sent'
+  },
+
+  // Message with sending status
+  {
+    text: 'Checking our knowledge base...',
+    isBot: true,
+    status: 'sending'
+  },
+
+  // Failed message
+  {
+    text: 'Failed to connect to server',
+    isBot: true,
+    status: 'failed'
+  },
+
+  // Complex Markdown with multiple elements
+  {
+    text: '## Account Recovery\n\n**Options:**\n\n- Email reset\n- Security questions\n- [Help center](https://help.example.com)\n\n```\nfunction resetAccount(email) {\n  // Account recovery logic\n}\n```\n\n> Note: Process may take 5-10 minutes',
+    isBot: true,
+    status: 'sent'
+  },
+
+  // Edge case - empty message
+  {
+    text: '',
+    isBot: false,
+    status: 'sent'
+  },
+
+  // Edge case - only Markdown symbols
+  {
+    text: '**_** ` `',
+    isBot: true,
+    status: 'sent'
+  },
+
+  // Very long message
+  {
+    text: 'This is an extremely long message designed to test text wrapping and overflow handling. It contains many sentences to ensure the layout remains consistent. **Markdown elements** like *italics* and `code snippets` should work properly even in lengthy content. ```\nLong code examples should scroll\nif they exceed container width\n``` List items:\n- Item 1\n- Item 2\n- Item 3',
+    isBot: true,
+    status: 'sent'
+  },
+
+  // Mixed content message
+  {
+    text: 'Normal text **bold text** normal *italic* text\n- List item\n- Another item\n\n`code()` and [link](https://example.com)',
+    isBot: true,
+    status: 'sent'
+  },
+
+  // Message that looks like Markdown but isn't (user message)
+  {
+    text: 'Should display *literally* not in italics',
+    isBot: false,
+    status: 'sent'
+  },
+
+  // Bot message with table-like Markdown
+  {
+    text: '| Feature | Status |\n|---------|--------|\n| Login   | ✅     |\n| Signup  | ⚠️     |',
+    isBot: true,
+    status: 'sent'
+  }
+];
   inputMessage = ''; // Bind this to your textarea
 
   chatSessions: ChatSession[] = [];
@@ -31,12 +125,15 @@ export class ChatbotComponent implements OnInit {
   private subscriptions: Subscription = new Subscription();
 
 
-  constructor(private chatService: ChatService, private authService: AuthService) { }
+  constructor(private chatService: ChatService, private authService: AuthService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.loadSessions();
     // Get user id
     this.userId=this.authService.getStoredUserId();
+    this.userId = "6851e180fcc1b73d7a23876f";
+    this.startNewChat(); // Start a new chat session on component initialization
+
   }
 
   ngOnDestroy(): void {
@@ -80,7 +177,7 @@ export class ChatbotComponent implements OnInit {
 
 
   startNewChat(): void {
-    const sub = this.chatService.startNewChat().subscribe({
+    const sub = this.chatService.startNewChat(this.userId).subscribe({
       next: (newSession: ChatSession) => {
         this.currentSessionId = newSession.sessionId;
         this.chatSessions = [newSession, ...this.chatSessions];
@@ -110,8 +207,9 @@ export class ChatbotComponent implements OnInit {
     try {
       const replyText = await lastValueFrom(this.chatService.getBotResponse(prompt, this.currentSessionId!, this.userId));
 
+      const textToSend= replyText.data.message; // Extract the message text from the response
       return {
-        text: replyText,
+        text: textToSend,
         isBot: true,
       };
     } finally {
@@ -182,6 +280,11 @@ export class ChatbotComponent implements OnInit {
  */
   trackBySessionId(index: number, session: ChatSession): string {
     return session.sessionId;
+  }
+
+   // Method to safely render HTML
+  getSafeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
 }
