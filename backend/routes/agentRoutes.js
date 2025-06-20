@@ -7,5 +7,7 @@ router.post('/send-user-answers', agentController.sendUserAnswersHandler);
 
 router.post('/plan/update-exercise', agentController.modfiyExerciseHandler);
 
+router.get('/workout-plan/user/:userId', agentController.getWorkoutPlanByUserId);
+
 
 module.exports = router;

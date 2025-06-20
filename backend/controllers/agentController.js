@@ -1,5 +1,7 @@
 const fetch = require("node-fetch");
 const User = require("../models/userModel");
+const mongoose = require("mongoose"); // Optional if not already imported
+
 
 const agentController = {
   async sendUserAnswersHandler(req, res) {
@@ -130,6 +132,30 @@ const agentController = {
       });
     }
   },
+  async getWorkoutPlanByUserId(req, res) {
+  try {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ success: false, error: 'Invalid userId' });
+    }
+
+    const user = await User.findById(userId).select('workoutPlan');
+
+    if (!user || !user.workoutPlan) {
+      return res.status(404).json({ success: false, error: 'Workout plan not found' });
+    }
+
+    return res.status(200).json({ success: true, data: user.workoutPlan });
+  } catch (error) {
+    console.error('Error fetching workout plan:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve workout plan',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+}
 };
 
 module.exports = agentController;
