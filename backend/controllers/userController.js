@@ -4,6 +4,7 @@ const UserChatBot = require("../models/chatBotUserModel");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key"; // Use env in production
 const getNextSequence = require("../utils/counter");
+const  agentController = require("./agentController");
 
 exports.signup = async (req, res, next) => {
   try {
@@ -45,6 +46,14 @@ exports.signup = async (req, res, next) => {
     });
 
     await newUser.save();
+
+    agentController.sendUserAnswersHandler(
+  { body: { agentId } },
+  {
+    json: () => console.log("Agent creation started"),
+    status: () => ({ json: () => {} }) // prevent crash on error
+  }
+);
     console.log("New user created:", newUser);
     return res.status(201).json({
       message: "User created successful",
