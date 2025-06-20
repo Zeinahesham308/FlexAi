@@ -4,4 +4,8 @@ const agentController = require('../controllers/agentController');
 
 router.post('/send-user-answers', agentController.sendUserAnswersHandler);
 
+
+router.post('/plan/update-exercise', agentController.modfiyExerciseHandler);
+
+
 module.exports = router;
