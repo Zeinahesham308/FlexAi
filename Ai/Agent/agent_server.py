@@ -15,7 +15,7 @@ def aiPost():
     print("AGENT/ ai is called")
     json_content=request.json
     query=json_content.get("query")
-    userid=json_content.get("userid")
+    userid=json_content.get("agentId")
     cached = AGENT(sql_memory)
     goal=json_content.get("userAnswers").get("goal")
     weight=json_content.get("userAnswers").get("currentWeight")
@@ -23,6 +23,7 @@ def aiPost():
     gender=json_content.get("userAnswers").get("gender")
     
     print("json_content received")
+    print(json_content)
     config_id=json_content.get("config_id")
     
     initial_state = {
@@ -48,18 +49,20 @@ def aiPost():
     "recursion_limit": 99,
     "configurable": {
         "thread_id": userid,}}
-    print(cached.get_state(config))
     if len(cached.get_state(config).values)>3:
         
         state=cached.get_state(config).values
         
-        print("state is fetched")
-        json_response={"plan":state["plan_model"][-1].model_dump_json().replace('\\', "" ) }
+        final_plan=state["plan_model"][-1]
+    
         
     else:
+        print("no state found")
         state=cached.invoke(initial_state,config)
         json_response={"plan":state["plan_model"][-1].model_dump_json().replace("\\", "")}
-    return Response(json.dumps(json_response))
+        print("**********************************")
+        
+    return Response(final_plan.json())
 
 @app.route("/ai/agent/change_exercise",methods=["POST"])
 def agent_change():
@@ -75,8 +78,6 @@ def agent_change():
     print("traget muscle is ",target_muscle)
     print("old exercise is ",Old_exercise)
     saved_state=cached.get_state(config).values
-    for s in saved_state["messages"]:
-        s.pretty_print()
     saved_plan=saved_state["plan_model"][-1].model_dump_json()
     print(saved_plan)
     formated_prompt=MODIFY_PROMPT.format(muscle_name=target_muscle,old_exercise_name=Old_exercise,full_plan=saved_plan)
@@ -86,17 +87,14 @@ def agent_change():
     
     }
     new_state=cached.invoke(initial_state,config)
-    print(new_state["plan_model"][-1])
-    print(new_state["arm_plan"])
+    final_plan=new_state["plan_model"][-1].json()
     #reuren ok opreation is done
-    json_response={"status":"ok"}
-    return Response(json.dumps(json_response))
+    return Response(final_plan)
 @app.route("/", methods=["GET"])
 def index():
     return "Server is running!"
 def start_app():
     app.run(host="0.0.0.0",port=8080,debug=True)
-    print(app.url_map)
 if __name__=="__main__":
     start_app()
     

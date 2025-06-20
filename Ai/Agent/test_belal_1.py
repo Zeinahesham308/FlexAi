@@ -46,8 +46,9 @@ Task:
 1. Generate exactly {num_exercises} exercises for {body_part} based on user data.
 2. CRITICAL: Ensure no two selected exercises target the exact same PRIMARY + SECONDARY muscle combination. Prioritize variety.
 3. Output: List exercises: Name, Primary Muscle targeted , Secondary Muscle(s), Sets, Reps (tailored to goal/intensity) only.
-4. Ensure the exercises are not redundant.
-5. Be concise but informative. Output should be clean and skimmable.
+4. Ensure the primary and secondary muscles are clear.
+5. Ensure the exercises are not redundant.
+6. Be concise but informative. Output should be clean and skimmable.
 
 """
 MODIFY_PROMPT = """
@@ -257,8 +258,8 @@ class Exercise(BaseModel):
     name: str =Field(description="Name of the exercise")
     sets: int
     reps: str  # Use str if reps like "8-12"
-    main_: str = Field(description="The main muscle worked")
-    body_part: str = Field(description="Body part category (e.g. chest, back)")
+    main_muscle: str = Field(description="The main muscle targeted")
+    body_part: str = Field(description="Body part of the exercise (e.g. chest, back)")
 
 class DayPlan(BaseModel):
     day: str
