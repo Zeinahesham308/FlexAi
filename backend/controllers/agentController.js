@@ -65,6 +65,71 @@ const agentController = {
       });
     }
   },
+
+
+
+  async modfiyExerciseHandler(req, res) {
+    try {
+      const { userId, exerciseToReplace, targetMusc } = req.body;
+
+      if (!userId || !exerciseToReplace) {
+        return res.status(400).json({
+          success: false,
+          error: "Both 'userId' and 'exerciseToReplace' are required.",
+        });
+      }
+
+      // Step 1: Get user and agentId
+      const user = await User.findById(userId).select("agentId");
+      if (!user || !user.agentId) {
+        return res
+          .status(404)
+          .json({ success: false, error: "User or agentId not found" });
+      }
+
+      const agentId = user.agentId;
+
+      // Step 2: Send to AI backend
+      const response = await fetch(
+        "http://192.168.137.196:8080/ai/agent/change_exercise",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            agentId,
+            exerciseToReplace,
+            targetMusc,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("AI API error:", errorText);
+        return res
+          .status(500)
+          .json({ success: false, error: "AI backend failed" });
+      }
+
+      const updatedPlan = await response.json();
+
+      // Step 3: Update user’s workout plan
+      await User.updateOne(
+        { _id: userId },
+        { $set: { workoutPlan: updatedPlan } }
+      );
+
+      res.json({ success: true, data: updatedPlan });
+    } catch (error) {
+      console.error("Error in modifyExerciseHandler:", error);
+      res.status(500).json({
+        success: false,
+        error: "Internal server error",
+        details:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
+    }
+  },
 };
 
 module.exports = agentController;
