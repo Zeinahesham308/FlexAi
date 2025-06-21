@@ -98,7 +98,7 @@ def return_rag_chain( ):
 
     prompt = ChatPromptTemplate.from_messages(
         [
-            ("system", system_prompt),
+            ("system", syst em_prompt),
             ("human", "{input}"),
         ]
     )
