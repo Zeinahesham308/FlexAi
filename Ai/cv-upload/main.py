@@ -8,6 +8,7 @@ import overheadextension
 import lateralraises
 import squats
 import press
+import latpulldown
 import os
 
 UPLOAD_DIR = "uploaded_videos"
@@ -48,8 +49,10 @@ async def upload_video(
             buffer.write(contents)
         if workoutType == "Curls":
             res = curls.process(video_path=saved_path)
-        elif workoutType == "Pull Up" or workoutType == "Lat Pull Down":
+        elif workoutType == "Pull Up":
             res = pullup.process(video_path=saved_path)
+        elif workoutType == "Lat Pull Down":
+            res = latpulldown.process(video_path=saved_path)
         elif workoutType == "Push Up":
             res = pushup.process(video_path=saved_path)
         elif workoutType == "Squat":
