@@ -23,6 +23,7 @@ def process(video_path):
     angle_history = []
     reached_down = False
     reached_up = True
+    back_not_flat = False
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -71,7 +72,7 @@ def process(video_path):
             hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
             knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
             back_angle = calculate_angle(shoulder, hip, knee)
-            if back_angle < 160:
+            if back_angle < 130:
                 back_not_flat = True
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
