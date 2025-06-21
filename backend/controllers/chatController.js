@@ -152,7 +152,7 @@ const chatController = {
       sessionId
     };
 
-    const backendResponse = await fetch("http://192.168.0.178:8080/ai", {
+    const backendResponse = await fetch("http://192.168.1.14:8080/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody)
@@ -214,8 +214,15 @@ const chatController = {
       const sessionId = req.params.sessionId;
       const collection = chatbot_db.collection('history');
       const docs = await collection.find({ SessionId: sessionId }).sort({ createdAt: 1 }).toArray();
-      const messages = docs.map(doc => JSON.parse(doc.History));
-      res.json({ sessionId, messages });
+      // const messages = docs.map(doc => JSON.parse(doc.History));
+      const messages = docs.map(doc =>{
+        const history = JSON.parse(doc.History);
+        return{
+          isBot: history.type === "ai",
+          text: history.data.content
+        }
+      });
+      res.json({  messages });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Failed to load chat history' });
@@ -226,7 +233,10 @@ const chatController = {
     const { userId } = req.params;
     const sessionsCollection = chatbot_db.collection('sessions');
     const sessions = await sessionsCollection.find({ userId }).sort({ startedAt: -1 }).toArray();
+    // console.log(sessions);
+    // res.json(sessions);
     res.json({ success: true, sessions });
+
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to fetch sessions' });
   }
