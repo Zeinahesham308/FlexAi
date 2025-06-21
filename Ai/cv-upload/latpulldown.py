@@ -37,8 +37,6 @@ def process_lat_pulldown(video_path):
 
         if results.pose_landmarks:
             lm = results.pose_landmarks.landmark
-
-            # Right arm keypoints
             shoulder = [lm[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
                         lm[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
             elbow = [lm[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
@@ -46,23 +44,21 @@ def process_lat_pulldown(video_path):
             wrist = [lm[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
                      lm[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
 
-            # Back posture: check if right shoulder moves significantly behind right hip
+            # back posture check
             hip = [lm[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
                    lm[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
 
-            # Calculate elbow angle for rep counting
+        
             angle = calculate_angle(shoulder, elbow, wrist)
             angle_history.append(angle)
             if len(angle_history) > 2:
                 angle_history.pop(0)
 
-            # Check posture (bad if shoulder moves 10% screen width behind hip)
+            
             if (shoulder[0] - hip[0]) > 0.1:
                 bad_posture_detected = True
-                cv2.putText(image, "Don't lean back!", (10, 100),
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
 
-            # Rep logic
+            
             if len(angle_history) == 2:
                 prev_angle, curr_angle = angle_history
 
@@ -86,7 +82,7 @@ def process_lat_pulldown(video_path):
 
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
-        # UI display
+    
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
@@ -97,11 +93,11 @@ def process_lat_pulldown(video_path):
     cap.release()
     cv2.destroyAllWindows()
 
-    # Final result summary
-    summary = f"Total Reps: {rep_count}\n"
+    
+    s = f"Total Reps: {rep_count}\n"
     if partial_reps:
-        summary += "Warning: You performed partial reps.\n"
+        s += "Warning: You performed partial reps.\n"
     if bad_posture_detected:
-        summary += "Warning: Detected excessive leaning backward.\n"
-    print(summary)
-    return summary
+        s += "Warning: Detected excessive leaning backward.\n"
+    print(s)
+    return s
