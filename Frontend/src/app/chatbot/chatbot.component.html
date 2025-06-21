@@ -25,8 +25,8 @@
             <li *ngFor="let session of chatSessions; trackBy: trackBySessionId"
               (click)="loadChatSession(session.sessionId)" [class.active]="session.sessionId === currentSessionId">
               <i class="fa-regular fa-message"></i>
-              <span class="session-preview">{{ session.title }}</span>
-              <span class="session-date">{{ session.createdAt | date:'shortDate' }}</span>
+              <span class="session-preview">{{ session.sessionId }}</span>
+              <span class="session-date">{{ session.startedAt | date:'shortDate' }}</span>
             </li>
           </ul>
         </div>
@@ -103,7 +103,7 @@
 
       <!-- Chatbot Footer -->
       <footer class="chatbot-footer">
-        <form (submit)="sendMessage()" class="chatbot-form FLEX align-center bg-white black ">
+        <form (submit)="sendMessage()" class="chatbot-form FLEX align-center bg-white  ">
           <textarea [(ngModel)]="inputMessage" name="message-input" placeholder="Type your message..."
             class="message-input" required aria-label="Type your message here" rows="4"></textarea>
           <div class="chatbot-controls">

@@ -47,7 +47,7 @@ export class ChatService {
   startNewChat(userId: string): Observable<ChatSession> {
 
     return this.http.post<ChatSession>(`${this.apiUrl}/sessions`,
-      { title: 'New Chat', userId: userId } // Pass userId to create session
+      { userId: userId } // Pass userId to create session
     ).pipe(
       timeout(this.defaultTimeout),
       tap((session) => {
@@ -69,7 +69,7 @@ export class ChatService {
 
   loadSessions(userId: string): Observable<ChatSession[]> {
     /* TODO: UPDATE API */
-    return this.http.get<ChatSession[]>(
+    return this.http.get<any>(
       `${this.apiUrl}/sessions/${userId}` //  API requires userId to fetch sessions
     ).pipe(
       timeout(this.defaultTimeout),
@@ -83,8 +83,7 @@ export class ChatService {
    * @returns Observable containing array of chat messages
    */
   getSessionMessages(sessionId: string): Observable<ChatMessage[]> {
-    /* TODO: UPDATE API */
-    return this.http.get<ChatMessage[]>(
+    return this.http.get<any>(
       `${this.apiUrl}/sessions/${sessionId}/messages`
     ).pipe(
       timeout(this.defaultTimeout),
