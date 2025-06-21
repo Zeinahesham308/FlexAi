@@ -7,6 +7,8 @@ from langchain_community.document_loaders import PyPDFLoader
 import os
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.tools import TavilySearchResults
+from langchain.retrievers import EnsembleRetriever
+from langchain_community.retrievers import TavilySearchAPIRetriever
 
 import yaml
 from yaml.loader import SafeLoader
@@ -102,8 +104,12 @@ def return_rag_chain( ):
     )
      
     question_answer_chain = create_stuff_documents_chain(llm, prompt)
-    retriever = vectorstore.as_retriever(search_kwargs={"top_k": 17})  # Set top_k=5 here
+    Faissretriever = vectorstore.as_retriever(search_kwargs={"top_k": 5})  # Set top_k=5 here
+    os.environ["TAVILY_API_KEY"] = config['tavily']['apiKey']
+    tavilyretriever = TavilySearchAPIRetriever(k=3)
 
+
+    ensemble_retriever = EnsembleRetriever(retrievers=[Faissretriever,tavilyretriever])
 
     
     contextualize_q_system_prompt = (
@@ -122,7 +128,7 @@ def return_rag_chain( ):
         ]
     )
     history_aware_retriever = create_history_aware_retriever(
-        llm, retriever, contextualize_q_prompt
+        llm, ensemble_retriever, contextualize_q_prompt
     )
     
     
