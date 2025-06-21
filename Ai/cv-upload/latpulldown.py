@@ -44,7 +44,8 @@ def process(video_path):
             wrist = [lm[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
                      lm[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
 
-            # back posture check
+            knee = [lm[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,
+                   lm[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
             hip = [lm[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
                    lm[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
 
@@ -55,7 +56,9 @@ def process(video_path):
                 angle_history.pop(0)
 
             
-            if (shoulder[0] - hip[0]) > 0.1:
+            
+            torso_angle = calculate_angle(shoulder, hip, knee)
+            if torso_angle > 120:
                 bad_posture_detected = True
 
             
@@ -95,9 +98,10 @@ def process(video_path):
 
     
     s = f"Total Reps: {rep_count}\n"
-    if partial_reps:
-        s += "Warning: You performed partial reps.\n"
     if bad_posture_detected:
         s += "Warning: Detected excessive leaning backward.\n"
+    else:
+        if partial_reps:
+            s += "Warning: You performed partial reps.\n"
     print(s)
     return s
