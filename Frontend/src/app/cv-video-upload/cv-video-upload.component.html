@@ -16,7 +16,7 @@
     <div class="file-selector">
         <input type="file" accept="video/*" (change)="onFileSelected($event)">
         <button (click)="uploadVideo()" [disabled]="!selectedFile || !selectedWorkoutType || uploadProgress > 0">
-            {{ uploadProgress > 0 ? 'Uploading...' : 'Upload Video' }}
+            {{ uploadProgress > 0? 'Uploading...' : 'Upload Video' }}
         </button>
     </div>
 
@@ -35,14 +35,17 @@
     </div>
 
     <!-- Loading indicator while waiting for response -->
-    <div *ngIf="uploadComplete && !apiResponse" class="loading-indicator">
-        <h3>Processing your video<span class="loading-dots">...</span></h3>
+    <div *ngIf="uploadProgress > 0 && !apiResponse" class="loading-indicator">
+        <div class="loading-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
     </div>
-
     <!-- Automatically show response when available -->
     <div *ngIf="apiResponse" class="api-response">
         <h3>Analysis Results:</h3>
-        <pre>{{ apiResponse | json }}</pre>
+        <pre>{{ apiResponse}}</pre>
     </div>
 
     <div *ngIf="errorMessage" class="error-message">
