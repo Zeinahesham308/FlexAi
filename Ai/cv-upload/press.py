@@ -1,6 +1,8 @@
 import cv2
 import mediapipe as mp
 import numpy as np
+import pandas as pd
+import openpyxl
 
 def calculate_angle(a, b, c):
     a = np.array(a)
@@ -24,6 +26,8 @@ def process(video_path):
     reached_down = True
     reached_up = False
     arm_not_right = False
+    angle_rows=[]
+
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -52,8 +56,10 @@ def process(video_path):
             else:
                 if elbow[0] <= lshoulder[0]:
                     arm_not_right = True
-            print(elbow[1])
-            print(lshoulder[1])
+            if rep_count<=2:
+                angle_rows.append({
+                    'Torso Angle': angle
+                })
             if len(angle_history) == 2:
                 prev_angle, curr_angle = angle_history
                 if reached_up and curr_angle < prev_angle:
@@ -69,9 +75,9 @@ def process(video_path):
                         reached_up = True
                 
                 else:
-                    if not reached_down and curr_angle < prev_angle and prev_angle > 70:
+                    if not reached_down and curr_angle > prev_angle and prev_angle > 60:
                         partial_reps = True
-                    if not reached_up and curr_angle > prev_angle and prev_angle < 150:
+                    if not reached_up and curr_angle < prev_angle and prev_angle < 150:
                         partial_reps = True
             
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
@@ -81,6 +87,8 @@ def process(video_path):
         cv2.imshow("Push-up Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
+    df_angles = pd.DataFrame(angle_rows)
+    df_angles.to_excel(r"/home/amgad/Downloads/press_angles_right.xlsx", index=False)
     cap.release()
     cv2.destroyAllWindows()
 
