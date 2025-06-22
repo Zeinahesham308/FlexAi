@@ -43,7 +43,7 @@ def initialize_vectorstore(splits,embd):
     return FAISS.from_documents(documents=splits, embedding=embd)
 
  
-def return_rag_chain( ):
+def return_rag_chain():
     
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
     vectorstore = FAISS.load_local("nuitrionsDB", embeddings,allow_dangerous_deserialization=True)
@@ -69,48 +69,40 @@ def return_rag_chain( ):
     # %%
     os.environ["GROQ_API_KEY"] = config['groq']['apiKey']
     llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    temperature=0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2,
-    
-)
+        model="llama-3.3-70b-versatile",
+        temperature=0,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2
+    )
 
     # %%
 
-
     system_prompt = (
-    "You are an assistant for question-answering tasks. "
-    "Use the following pieces of retrieved context to answer the question. "
-    "If the context provides a clear answer, prioritize it. "
-    "If the context is incomplete or ambiguous, supplement it with your own knowledge, "
-    "as long as your knowledge does not contradict the context. "
-    "If you don't know the answer based on both the context and your knowledge, explicitly state that you don't know. "
-    "Do not summarize unless explicitly requested or the question explicitly mentions summarization. "
-    "Do not reference or mention the context explicitly in your answer. "
-    "If the context is irrelevant to the question, answer based solely on your knowledge."
-    "\n\n"
-    "{context}"
-)
-
-
-
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", syst em_prompt),
-            ("human", "{input}"),
-        ]
+        "You are an assistant for question-answering tasks. "
+        "Use the following pieces of retrieved context to answer the question. "
+        "If the context provides a clear answer, prioritize it. "
+        "If the context is incomplete or ambiguous, supplement it with your own knowledge, "
+        "as long as your knowledge does not contradict the context. "
+        "If you don't know the answer based on both the context and your knowledge, explicitly state that you don't know. "
+        "Do not summarize unless explicitly requested or the question explicitly mentions summarization. "
+        "Do not reference or mention the context explicitly in your answer. "
+        "If the context is irrelevant to the question, answer based solely on your knowledge."
+        "\n\n"
+        "{context}"
     )
+
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", system_prompt),
+        ("human", "{input}")
+    ])
      
     question_answer_chain = create_stuff_documents_chain(llm, prompt)
     Faissretriever = vectorstore.as_retriever(search_kwargs={"top_k": 5})  # Set top_k=5 here
     os.environ["TAVILY_API_KEY"] = config['tavily']['apiKey']
     tavilyretriever = TavilySearchAPIRetriever(k=3)
 
-
     ensemble_retriever = EnsembleRetriever(retrievers=[Faissretriever,tavilyretriever])
-
     
     contextualize_q_system_prompt = (
         "Given a chat history and the latest user question "
@@ -120,27 +112,21 @@ def return_rag_chain( ):
         "just reformulate it if needed and otherwise return it as is."
     )
     
-    contextualize_q_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", contextualize_q_system_prompt),
-            MessagesPlaceholder("chat_history"),
-            ("human", "{input}"),
-        ]
-    )
+    contextualize_q_prompt = ChatPromptTemplate.from_messages([
+        ("system", contextualize_q_system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ])
+    
     history_aware_retriever = create_history_aware_retriever(
         llm, ensemble_retriever, contextualize_q_prompt
     )
     
-    
-    qa_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", system_prompt),
-            MessagesPlaceholder("chat_history"),
-            ("human", "{input}"),
-        ]
-    )
-    
-    
+    qa_prompt = ChatPromptTemplate.from_messages([
+        ("system", system_prompt),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ])
     
     # %%
     question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
