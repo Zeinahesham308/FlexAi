@@ -19,11 +19,9 @@ export class CvVideoUploadComponent {
     { name: 'Squat' },
     { name: 'Lat Pull Down' },
     { name: 'Lateral Raises' },
-    { name: 'Bench Press' },
     { name: 'Pull Up' },
     { name: 'Push Up' },
     { name: 'Shoulder Press' },
-    { name: 'Incline Bench Press' },
     { name: 'Curls' },
     { name: 'Over Head Extension' }
   ];
@@ -58,7 +56,7 @@ export class CvVideoUploadComponent {
         if (event.type === HttpEventType.UploadProgress && event.total) {
           this.uploadProgress = Math.round(100 * event.loaded / event.total);
         } else if (event.type === HttpEventType.Response) {
-          this.handleUploadSuccess(event.body);
+          this.handleUploadSuccess(event.body.message );
         }
       },
       error: (err) => {
