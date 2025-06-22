@@ -64,16 +64,16 @@ def process(video_path):
                         reached_up = False
                 
                 elif reached_down and curr_angle > prev_angle:
-                    if curr_angle > 130:
+                    if curr_angle > 160:
                         rep_count += 1
                         print(f"Rep {rep_count}")
                         reached_down = False
                         reached_up = True
                 
                 else:
-                    if not reached_down and curr_angle > prev_angle and curr_angle > 40 and curr_angle < 130:
+                    if not reached_down and curr_angle > prev_angle and curr_angle > 40 and curr_angle < 160:
                         partial_reps = True
-                    if not reached_up and curr_angle < prev_angle and curr_angle > 40 and curr_angle < 130:
+                    if not reached_up and curr_angle < prev_angle and curr_angle > 40 and curr_angle < 160:
                         partial_reps = True
             
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
