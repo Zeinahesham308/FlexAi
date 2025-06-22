@@ -40,22 +40,17 @@ def process(video_path):
 
         if results.pose_landmarks:
             landmarks = results.pose_landmarks.landmark
-            lshoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+            shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
                         landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
             elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
                      landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
-            rshoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
-                        landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
             wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
                      landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
 
-            angle = calculate_angle(lshoulder, elbow, wrist)
+            angle = calculate_angle(shoulder, elbow, wrist)
             angle_history.append(angle)
             if len(angle_history) > 2:
                 angle_history.pop(0)
-            else:
-                if elbow[0] <= lshoulder[0]:
-                    arm_not_right = True
             if rep_count<=2:
                 angle_rows.append({
                     'Torso Angle': angle
@@ -75,16 +70,16 @@ def process(video_path):
                         reached_up = True
                 
                 else:
-                    if not reached_down and curr_angle > prev_angle and prev_angle > 60:
+                    if not reached_down and curr_angle > prev_angle and prev_angle > 50:
                         partial_reps = True
-                    if not reached_up and curr_angle < prev_angle and prev_angle < 150:
+                    if not reached_up and curr_angle < prev_angle and prev_angle < 130:
                         partial_reps = True
             
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        cv2.imshow("Push-up Tracker", image)
+        cv2.imshow("shoulder press Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
     df_angles = pd.DataFrame(angle_rows)
@@ -94,7 +89,7 @@ def process(video_path):
 
     s = f"Total Presses: {rep_count}. \n"
     if partial_reps:
-        s += "Do full push-ups Go all the way down and all the way up. \n"
+        s += "Do full rep go all the way down and all the way up. \n"
     if arm_not_right:
         s += "Make your arm 45 angle with your shoulder. \n"
     print(s)
