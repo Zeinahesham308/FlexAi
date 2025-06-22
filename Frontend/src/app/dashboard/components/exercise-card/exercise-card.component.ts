@@ -66,6 +66,8 @@ export class ExerciseCardComponent {
     this.isSwapping = true; // Set the flag to indicate swapping is in progress
 
     try {
+      this.userId="6856aebe32a5e2286d5d2fe5";
+
       // Call exercise service to get a replacement exercise
       const newExercise = await lastValueFrom(
         this.exerciseService.getAlternativeExercise(
