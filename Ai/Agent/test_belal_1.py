@@ -52,8 +52,6 @@ Task:
 
 """
 MODIFY_PROMPT = """
-You are a professional fitness expert.
-
 Your task is to update a workout plan **by replacing a single exercise** as requested by the user.
 
 Instructions:
@@ -61,18 +59,17 @@ Instructions:
 2. Choose a **biomechanically different** exercise that targets **similar primary and secondary muscles** — avoid redundant motion patterns.
 3. Do **not** change any other exercises or structure of the plan.
 4. The updated exercise should:
-   - Have a clear **primary** and **secondary** muscle
-   - Fit the same **equipment context** (local gym)
-   - Provide **variation** in movement or angle
-
+   - Fit the same **equipment context**
+   - Provide **variation** in movement or angles
+5. RETURN THE WHOLE WORKOUT PLAN IN THE SAME FORMAT ONLY WITH THE CHANGED EXERCISE.
 ===
 **Major muscle Targeted**: {muscle_name}  
 **Original Exercise to Replace**: {old_exercise_name}  
 **Workout Plan**:  
 {full_plan}
-
-Return the workout plan with ONLY the exercise "{old_exercise_name}" replaced.
 ===
+OUTPUT:
+FULL Updated workout plan with the replaced exercise WITH REST DAYS AND EVERYTHING.
 """
 
 
@@ -161,7 +158,7 @@ exercises_dict={"back":6,"chest":5,"legs":7,"shoulders":5,"arms":6}
 class Feedback(BaseModel):
     grade:Literal["good","bad"]
     feedback: str=Field("if the workout is not good provide feedback on how to improve it")
-evaluator=llm_openai.with_structured_output(Feedback)
+evaluator=llm_openai
 
 class State(TypedDict):
     messages: Annotated[list,add_messages]
@@ -268,7 +265,6 @@ class DayPlan(BaseModel):
 class WeeklyPlan(BaseModel):
     plan: List[DayPlan]
 
-llm_openai_structured_for_change=llm_openai.with_structured_output(Exercise)
 # %%
 config = {
     "recursion_limit": 70,
@@ -463,16 +459,38 @@ def should_continue_g(state: State_general) -> Literal["tools", "caller","jsoniz
     
 def call_model_g(state: State_general):
     messages = state["messages"]
-    if len(messages) ==0:
+
+    if not messages:
         return
+
+    # Keep only the last 5 messages for context
+    if len(messages) >= 5:
+        messages = messages[-5:]
+
+    # Fix invalid tool messages with no tool_calls context
+    valid_messages = []
     for i, msg in enumerate(messages):
+        # Ensure ToolMessage has a valid preceding tool-calling message
+        if isinstance(msg, ToolMessage):
+            if i == 0:
+                # Tool message can't be first
+                continue
+            prev_msg = messages[i - 1]
+            if not (hasattr(prev_msg, "tool_calls") and prev_msg.tool_calls):
+                # Skip tool message if there's no tool_calls in the previous message
+                continue
+
+        # Ensure tool message content is stringified
         if isinstance(msg, ToolMessage) and not isinstance(msg.content, str):
-            messages[i] = ToolMessage(
-                tool_call_id=msg.tool_call_id,
-                content=json.dumps(msg.content)
-            )
-    response = llm.invoke(messages)
+            msg = ToolMessage(tool_call_id=msg.tool_call_id, content=json.dumps(msg.content))
+
+        valid_messages.append(msg)
+
+    # Now invoke the model
+    response = llm.invoke(valid_messages)
+    print("success")
     return {"messages": [response]}
+
     
 
 
@@ -522,10 +540,17 @@ def aggregate(state: State_general):
 
     final_plan=llm_agg.invoke(agg_formatted_prompt).content
     temp_1=AIMessage(final_plan)
-    return {
-        "messages":[temp_1],
-        "plan": final_plan
-    }
+    if len (state["messages"])>=3:
+        #clear messages
+        return {
+            "messages":[],
+            "plan": final_plan
+        }
+    else:
+        return {
+            "messages":[temp_1],
+            "plan": final_plan
+        }
 def jsonize(state: State_general):
     print("you are in jsonizer")
     llm_j=llm_openai.with_structured_output(WeeklyPlan)
@@ -536,13 +561,13 @@ def jsonize_modified(state: State_general):
     print("you are in jsonizer_modified")
     llm_j=llm_openai.with_structured_output(WeeklyPlan)
     fitness_plan=llm_j.invoke(state["messages"][-1].content)
-    print("you are about to return")
+    print("you are about to return FORM MODIFIED")
+    print(fitness_plan)
     return {"plan_model": [fitness_plan]}
-
+evaluator=llm_openai.with_structured_output(Feedback)
 def AGENT(sql_controller):
 
     workflow = StateGraph(State_general)
-
     workflow.add_node("aggreagator", aggregate)
     workflow.add_node("back", call_back)
     workflow.add_node("arm", call_arm)

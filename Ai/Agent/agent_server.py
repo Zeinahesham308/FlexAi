@@ -3,7 +3,7 @@ import json
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 import sqlite3
 from langgraph.checkpoint.sqlite import SqliteSaver
-from test_belal_1 import AGENT,MODIFY_PROMPT,llm_openai_structured_for_change,llm_openai,find_differing_exercise
+from test_belal_1 import AGENT,MODIFY_PROMPT,find_differing_exercise
 conn_m=sqlite3.connect("state/agent_memory_server.sqlite",check_same_thread=False)
 sql_memory=SqliteSaver(conn_m)
 app = Flask(__name__)
@@ -54,13 +54,14 @@ def aiPost():
         state=cached.get_state(config).values
         
         final_plan=state["plan_model"][-1]
-    
-        
+        print("final plan is fetched")
     else:
-        print("no state found")
         state=cached.invoke(initial_state,config)
-        json_response={"plan":state["plan_model"][-1].model_dump_json().replace("\\", "")}
-        print("**********************************")
+        final_plan=state["plan_model"][-1]
+        print("final plan is created")
+
+
+
         
     return Response(final_plan.json())
 
@@ -93,10 +94,12 @@ def agent_change():
     }
     new_state=cached.invoke(initial_state,config)
     final_plan=new_state["plan_model"][-1]
-
+    print("saved plan is")
+    print(saved_plan)
     result=find_differing_exercise(saved_plan_json,final_plan)
     print("the two exercises are")
     print(result)
+    
     # print("new diff")
     # difference=llm_openai.invoke("this is the plan before change "+saved_plan.replace("\\", "")+" and this is the plan after changing one exercise "+final_plan.model_dump_json().replace("\\", "")+"i want you to tell me the new exercise name with sets and reps and body part and main muscle").content
     # print(difference)
@@ -108,8 +111,9 @@ def agent_change():
         
 
     # # #reuren ok opreation is done
-    json_response={"updatedPlan":final_plan.json(),"newExercise":result[1].model_dump_json()}
-    return Response(json.dumps(json_response))
+    json_response={"updatedPlan":final_plan.json(),"newExercise":result[1].json()}
+    print("json_response is ",json_response)
+    return Response(json.dumps(json_response), mimetype="application/json")
 @app.route("/", methods=["GET"])
 def index():
     return "Server is running!"

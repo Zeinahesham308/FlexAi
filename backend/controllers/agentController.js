@@ -34,7 +34,7 @@ const agentController = {
       }
 
       console.log("Sending user answers to external API...");
-      const response = await fetch("http://192.168.137.196:8080/ai/agent", {
+      const response = await fetch("http://localhost:8080/ai/agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -93,7 +93,7 @@ const agentController = {
 
       // Step 2: Send to AI backend
       const response = await fetch(
-        "https://335d-197-45-85-24.ngrok-free.app/ai/agent/change_exercise",
+        "http://localhost:8080/ai/agent/change_exercise",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -114,18 +114,20 @@ const agentController = {
       }
 
       //edited part wait to test
-      const updatedPlan = await response.updatedPlan;
-      console.log("Updated workout plan from AI backend:", updatedPlan);
-
-      const newExercise = await response.newExercise;
+      console.log("Response from AI backend:", response);
+      const response_data = await response.json();
+      console.log("Response from AI backend:",response_data );
+      const newPlan = JSON.parse(response_data.updatedPlan);
+      console.log("new plan", newPlan);
+      const newExercise =  response_data.newExercise;
       console.log("New exercise from AI backend:", newExercise);
       // Step 3: Update user’s workout plan
       await User.updateOne(
         { _id: userId },
-        { $set: { workoutPlan: updatedPlan } }
+        { $set: { workoutPlan: newPlan } }
       );
-
-      res.json({ data: newExercise });
+      const jsonObject = JSON.parse(newExercise);
+      res.json({ data: jsonObject });
     } catch (error) {
       console.error("Error in modifyExerciseHandler:", error);
       res.status(500).json({
