@@ -57,7 +57,7 @@ export class WorkoutDayCardComponent {
       ex.name === event.originalExerciseName ? event.newExercise : ex
     );
 
-    // Notify parent component (dashboard)
+    // Notify parent component (dashboard)      
     this.exerciseSwapped.emit(event);
   }
 
