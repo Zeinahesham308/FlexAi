@@ -56,7 +56,7 @@ export class CvVideoUploadComponent {
         if (event.type === HttpEventType.UploadProgress && event.total) {
           this.uploadProgress = Math.round(100 * event.loaded / event.total);
         } else if (event.type === HttpEventType.Response) {
-          this.handleUploadSuccess(event.body.message );
+          this.handleUploadSuccess(event.body.message);
         }
       },
       error: (err) => {
@@ -69,6 +69,7 @@ export class CvVideoUploadComponent {
     this.uploadComplete = true;
     this.isLoading = false;
     this.apiResponse = response;  // Store the entire response object
+    this.resetFileSelection();
     console.log('Upload successful:', response);
   }
 
@@ -86,5 +87,14 @@ export class CvVideoUploadComponent {
     this.errorMessage = '';
     this.apiResponse = null;
     this.isLoading = false;
+  }
+
+  private resetFileSelection(): void {
+    // Reset file input to allow selecting the same file again if needed
+    this.selectedFile = null;
+   /*  const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    } */
   }
 }
