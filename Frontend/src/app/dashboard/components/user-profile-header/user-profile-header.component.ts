@@ -13,7 +13,7 @@ import { AuthService } from '../../../services/auth.service';
 export class UserProfileHeaderComponent implements OnInit {
 
   // Default profile image if avatarUrl is missing
-  defaultAvatar = 'assets/images/user-avatar-test.png';
+  defaultAvatar = 'assets/images/user-avatar-test.png'; 
 
 
   // This will be populated with user data from the backend (Default values for initialization)

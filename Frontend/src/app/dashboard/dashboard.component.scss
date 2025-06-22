@@ -1,0 +1,12 @@
+.dashboard-container {
+  background-color: #20221f;
+  padding: 1.5rem;
+
+  app-workout-plan-navigator {
+    &:hover {
+      background-color:  #dbebab;
+      color: #1a4331;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+  }
+}

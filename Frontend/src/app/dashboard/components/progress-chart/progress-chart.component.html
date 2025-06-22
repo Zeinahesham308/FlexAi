@@ -1,1 +1,18 @@
-<p>progress-chart works!</p>
+<div class="ring-progress">
+  <svg class="ring-chart" viewBox="0 0 40 40">
+    <!-- Background circle -->
+    <circle class="ring-bg" cx="20" cy="20" r="15.915" />
+    
+    <!-- Progress circle -->
+    <circle class="ring-fill" 
+            cx="20" cy="20" r="15.915"
+            [attr.stroke-dasharray]="circumference"
+            [attr.stroke-dashoffset]="offset" />
+    
+    <!-- Center text -->
+    <text class="ring-text" x="20" y="22" text-anchor="middle">
+      {{ completed }}/{{ total }}
+    </text>
+  </svg>
+  <div class="percentage">{{ percentage }}%</div>
+</div>

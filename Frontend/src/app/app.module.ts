@@ -16,6 +16,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { MatIconModule } from '@angular/material/icon';
 import { CvVideoUploadComponent } from './cv-video-upload/cv-video-upload.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 

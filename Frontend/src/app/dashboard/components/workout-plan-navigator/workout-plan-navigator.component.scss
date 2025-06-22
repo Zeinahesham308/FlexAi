@@ -1,0 +1,54 @@
+.workout-plan-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: #F8F8F8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.day-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 0;
+  
+  button {
+    padding: 8px 16px;
+    background: #1a4331;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &:hover:not([disabled]) {
+      background: #0e2a1f;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    }
+    
+    &:active:not([disabled]) {
+      transform: translateY(0);
+    }
+    
+    &[disabled] {
+      background: #babeba;
+      color: #949494;
+      cursor: not-all-allowed;
+      box-shadow: none;
+    }
+  }
+}
+
+.day-progress {
+  text-align: center;
+  color: #949494;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  font-weight: 500;
+}
