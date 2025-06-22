@@ -259,7 +259,7 @@ class Exercise(BaseModel):
     sets: int
     reps: str  # Use str if reps like "8-12"
     main_muscle: str = Field(description="The main muscle targeted")
-    body_part: str = Field(description="Body part of the exercise (e.g. chest, back)")
+    body_part: str = Field(description="Body part of the exercise (chest, back, legs, arms, shoulders)")
 
 class DayPlan(BaseModel):
     day: str
@@ -268,7 +268,7 @@ class DayPlan(BaseModel):
 class WeeklyPlan(BaseModel):
     plan: List[DayPlan]
 
-
+llm_openai_structured_for_change=llm_openai.with_structured_output(Exercise)
 # %%
 config = {
     "recursion_limit": 70,
@@ -404,7 +404,30 @@ chest_agent.add_edge("tools", "agent")
 
 chest_agent = chest_agent.compile(checkpointer=MemorySaver())
 
+def find_differing_exercise(plan1, plan2):
+    """
+    Compares two weekly plans and finds the first pair of exercises that do not match.
 
+    Args:
+        plan1: The first WeeklyPlan object.
+        plan2: The second WeeklyPlan object.
+
+    Returns:
+        A tuple containing the two differing Exercise objects (exercise_from_plan1, exercise_from_plan2).
+        Returns None if no difference is found.
+    """
+    # Use zip to iterate through corresponding days in both plans simultaneously
+    for day1, day2 in zip(plan1.plan, plan2.plan):
+        # Use zip again to iterate through corresponding exercises for that day
+        for exercise1, exercise2 in zip(day1.exercises, day2.exercises):
+            # Pydantic allows direct comparison of model instances.
+            # This checks if all fields (name, sets, reps, etc.) are identical.
+            if exercise1 != exercise2:
+                # If they are not equal, we've found the difference.
+                return (exercise1, exercise2)
+    
+    # If the loops complete, the plans are identical.
+    return None
 # %%
 
 class State_general(TypedDict):
