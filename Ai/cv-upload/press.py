@@ -23,6 +23,7 @@ def process(video_path):
     angle_history = []
     reached_down = True
     reached_up = False
+    arm_not_straight = False
 
 
     while cap.isOpened():
@@ -42,11 +43,19 @@ def process(video_path):
                      landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
             wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
                      landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+            hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
+                   landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
 
             angle = calculate_angle(shoulder, elbow, wrist)
             angle_history.append(angle)
             if len(angle_history) > 2:
                 angle_history.pop(0)
+            else:
+                angle2 = calculate_angle(shoulder, elbow, hip)
+                if angle2 > 100:
+                    arm_not_straight=True
+                    
+
             if len(angle_history) == 2:
                 prev_angle, curr_angle = angle_history
                 if reached_up and curr_angle < prev_angle:
@@ -80,7 +89,7 @@ def process(video_path):
     cv2.destroyAllWindows()
 
     s = f"Total Presses: {rep_count}. \n"
-    if partial_reps:
-        s += "Do full rep go all the way down and all the way up. \n"
+    if arm_not_straight:
+        s += "Do not flare out your arms too much. \n"
     print(s)
     return s
