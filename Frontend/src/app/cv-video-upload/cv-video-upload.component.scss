@@ -6,10 +6,11 @@
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Montserrat', sans-serif;
 
   h2 {
-    color: #2c3e50;
+    color: #1f5a3a;
+    /* Dark green from your palette */
     margin-bottom: 1.5rem;
     text-align: center;
     font-weight: 600;
@@ -23,14 +24,17 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    color: #1f5a3a;
   }
 
   select {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #dbebab;
+    /* Light green border */
     border-radius: 4px;
     font-size: 16px;
+    background-color: #f8f9fa;
   }
 }
 
@@ -43,15 +47,17 @@
   input[type="file"] {
     flex: 1;
     padding: 0.75rem;
-    border: 2px dashed #bdc3c7;
+    border: 2px dashed #dbebab;
+    /* Light green */
     border-radius: 6px;
     background: #f8f9fa;
     transition: all 0.3s ease;
     cursor: pointer;
 
     &:hover {
-      border-color: #3498db;
-      background: #e8f4fc;
+      border-color: #2E8B57;
+      /* Brand green */
+      background: #d0dbb2;
     }
 
     &::-webkit-file-upload-button {
@@ -62,7 +68,8 @@
       content: 'Choose video file';
       display: inline-block;
       padding: 0.5rem 1rem;
-      background: #3498db;
+      background: #2E8B57;
+      /* Brand green */
       color: white;
       border-radius: 4px;
       margin-right: 1rem;
@@ -71,7 +78,8 @@
 
   button {
     padding: 0.75rem 1.5rem;
-    background: #2ecc71;
+    background: #2E8B57;
+    /* Brand green */
     color: white;
     border: none;
     border-radius: 6px;
@@ -81,7 +89,8 @@
     white-space: nowrap;
 
     &:hover:not([disabled]) {
-      background: #27ae60;
+      background: #1f5a3a;
+      /* Darker green */
       transform: translateY(-1px);
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
@@ -99,11 +108,13 @@
   padding: 1rem;
   border-radius: 6px;
   margin-bottom: 1.5rem;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid #2E8B57;
+  /* Brand green */
 
   p {
     margin: 0.25rem 0;
-    color: #34495e;
+    color: #1f5a3a;
+    /* Dark green text */
     font-size: 0.95rem;
 
     &:first-child {
@@ -122,11 +133,13 @@
     overflow: hidden;
 
     &::-webkit-progress-bar {
-      background: #ecf0f1;
+      background: #dbebab;
+      /* Light green */
     }
 
     &::-webkit-progress-value {
-      background: linear-gradient(to right, #3498db, #2ecc71);
+      background: linear-gradient(to right, #2E8B57, #1f5a3a);
+      /* Brand to dark green */
       transition: width 0.3s ease;
     }
   }
@@ -135,19 +148,23 @@
     display: block;
     text-align: center;
     margin-top: 0.5rem;
-    color: #7f8c8d;
+    color: #1f5a3a;
+    /* Dark green */
     font-size: 0.9rem;
   }
 }
 
 .success-message {
-  background: #e8f8f0;
+  background: #dbebab;
+  /* Light green */
   padding: 1rem;
   border-radius: 6px;
   margin: 1.5rem 0;
   text-align: center;
-  color: #27ae60;
+  color: #1f5a3a;
+  /* Dark green */
   animation: fadeIn 0.5s ease;
+  border: 1px solid #2E8B57;
 
   p {
     margin: 0 0 0.5rem 0;
@@ -155,31 +172,52 @@
   }
 }
 
-.toggle-btn {
-  background: none;
-  border: none;
-  color: #3498db;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+.loading-indicator {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  border: 1px solid #dbebab;
+  text-align: center;
+  color: #1f5a3a;
+  animation: fadeIn 0.5s ease;
 
-  &:hover {
-    color: #2980b9;
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .loading-dots {
+    display: inline-block;
+    width: 1.5em;
+    text-align: left;
+    overflow: hidden;
+    vertical-align: bottom;
+
+    &::after {
+      content: '...';
+      display: inline-block;
+      animation: dotPulse 1.5s infinite step-start;
+    }
   }
 }
 
 .api-response {
-  background: #f5f5f5;
+  background: #f8f9fa;
   padding: 1.5rem;
   border-radius: 6px;
   margin-top: 1rem;
   animation: fadeIn 0.5s ease;
+  border: 1px solid #dbebab;
 
   h3 {
     margin-top: 0;
-    color: #2c3e50;
+    color: #1f5a3a;
+    /* Dark green */
     font-size: 1.1rem;
   }
 
@@ -190,17 +228,18 @@
     font-size: 0.85rem;
     line-height: 1.5;
     margin-bottom: 0;
-    color: #34495e;
+    color: #1f5a3a;
+    /* Dark green */
   }
 }
 
 .error-message {
   background: #fdecea;
-  color: #e74c3c;
+  color: #c0392b;
   padding: 1rem;
   border-radius: 6px;
   margin-top: 1.5rem;
-  border-left: 4px solid #e74c3c;
+  border-left: 4px solid #c0392b;
   animation: shake 0.5s ease;
 
   &::before {
@@ -236,5 +275,19 @@
   40%,
   80% {
     transform: translateX(5px);
+  }
+}
+
+@keyframes dotPulse {
+  0% {
+    content: '.';
+  }
+
+  33% {
+    content: '..';
+  }
+
+  66% {
+    content: '...';
   }
 }

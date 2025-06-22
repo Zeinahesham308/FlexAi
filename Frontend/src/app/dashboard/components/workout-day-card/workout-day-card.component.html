@@ -1,1 +1,16 @@
-<p>workout-day-card works!</p>
+<!-- workout-day-card.component.html -->
+<div class="workout-day-card" [class.active]="isActive">
+    <div class="day-header">
+         <h3>{{ dayTitle }}</h3>
+        <app-progress-chart [completed]="completedExercises" [total]="exercises.length">
+        </app-progress-chart>
+    </div>
+
+    <div class="exercises-container">
+        <app-exercise-card
+         *ngFor="let exercise of exercises"
+          [exercise]="exercise"
+          >
+        </app-exercise-card>
+    </div>
+</div>

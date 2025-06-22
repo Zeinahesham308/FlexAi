@@ -1,0 +1,27 @@
+<div class="workout-plan-container">
+  <!-- Day Navigation -->
+  <div class="day-navigation">
+    <button mat-icon-button (click)="prevDay()" [disabled]="currentDayIndex === 0">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    
+    <h2>{{ currentWorkoutDay?.day || 'Loading...' }}</h2>
+    
+    <button mat-icon-button (click)="nextDay()" [disabled]="currentDayIndex === workoutDays.length - 1">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <!-- Workout Day Card -->
+  <app-workout-day-card 
+    *ngIf="currentWorkoutDay"
+    [dayTitle]="currentWorkoutDay.day"
+    [exercises]="currentWorkoutDay.exercises"
+    [isActive]="true">
+  </app-workout-day-card>
+
+  <!-- Day Progress -->
+  <div class="day-progress">
+    Day {{ currentDayIndex + 1 }} of {{ workoutDays.length }}
+  </div>
+</div>

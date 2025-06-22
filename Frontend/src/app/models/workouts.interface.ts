@@ -1,11 +1,8 @@
 export interface Workouts {
-    id: string;
     name: string;
-    muscleGroup: string;
+    main_muscle: string; /* mn backend esmha main_muscle h3mlha / body_part */
+    body_part: string; // Optional, used for frontend display
     sets?: number;
-    reps?: number;
-    link?: string;
-    completed: boolean;
-    exerciseCount: number;
-    date: Date;
+    reps?: string;
+    completed?: boolean;
 }

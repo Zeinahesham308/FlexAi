@@ -1,0 +1,48 @@
+.workout-day-card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #babeba;
+  transition: all 0.3s ease;
+  
+  &.active {
+    border-left: 4px solid #1a4331;
+    background-color: #F8F8F8;
+  }
+  
+  .day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #121221;
+      font-weight: 600;
+    }
+    
+    .total-exercises {
+      background: #dbebab;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: #1a4331;
+      font-weight: 500;
+    }
+  }
+  
+  .exercises-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+}

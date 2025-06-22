@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { VideoUploadService } from '../services/video-upload.service';
+
 @Component({
   selector: 'app-cv-video-upload',
   standalone: false,
-
   templateUrl: './cv-video-upload.component.html',
   styleUrl: './cv-video-upload.component.scss'
 })
@@ -19,24 +19,19 @@ export class CvVideoUploadComponent {
     { name: 'Squat' },
     { name: 'Lat Pull Down' },
     { name: 'Lateral Raises' },
-    { name: 'Bench Press' },
     { name: 'Pull Up' },
     { name: 'Push Up' },
     { name: 'Shoulder Press' },
-    { name: 'Incline Bench Press' },
     { name: 'Curls' },
     { name: 'Over Head Extension' }
   ];
 
-  apiResponse: any = null;  // Add this to store backend response
-  showResponse = false;     // Add this to toggle response visibility
-
+  apiResponse: any = null;  // Stores backend response
+  isLoading = false;       // To track loading state
 
   constructor(private uploadService: VideoUploadService) { }
 
   onFileSelected(event: any) {
-    // TODO: Remove console log in production
-    console.log('File selected:');
     this.selectedFile = event.target.files[0];
     this.resetUploadState();
   }
@@ -47,42 +42,49 @@ export class CvVideoUploadComponent {
   }
 
   onWorkoutTypeChange() {
-    // TODO: Remove console log in production
     console.log('Selected workout:', this.selectedWorkoutType);
   }
 
   uploadVideo() {
-    // TODO: Remove console log in production
-    console.log('Uploading video...');
-    if (!this.selectedFile) return;
+    if (!this.selectedFile || !this.selectedWorkoutType) return;
+
+    this.resetUploadState();
+    this.isLoading = true;
 
     this.uploadService.uploadVideo(this.selectedFile, this.selectedWorkoutType).subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress && event.total) {
           this.uploadProgress = Math.round(100 * event.loaded / event.total);
         } else if (event.type === HttpEventType.Response) {
-          this.uploadComplete = true;
-          this.apiResponse = event.body;  // Store the response
-          console.log('Backend response:', this.apiResponse);
+          this.handleUploadSuccess(event.body.message );
         }
       },
       error: (err) => {
-        console.error('Upload failed:', err);
-        this.uploadProgress = 0;
+        this.handleUploadError(err);
       }
     });
+  }
+
+  private handleUploadSuccess(response: any) {
+    this.uploadComplete = true;
+    this.isLoading = false;
+    this.apiResponse = response;  // Store the entire response object
+    console.log('Upload successful:', response);
+  }
+
+  private handleUploadError(err: any) {
+    console.error('Upload failed:', err);
+    this.uploadProgress = 0;
+    this.isLoading = false;
+    this.errorMessage = err.error?.message || 'An error occurred during upload';
+    this.apiResponse = null;
   }
 
   resetUploadState() {
     this.uploadProgress = 0;
     this.uploadComplete = false;
     this.errorMessage = '';
-
+    this.apiResponse = null;
+    this.isLoading = false;
   }
-
-  // Toggle response visibility
-  toggleResponse() {
-    this.showResponse = !this.showResponse;
-  }
-
 }
