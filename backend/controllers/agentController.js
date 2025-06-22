@@ -125,7 +125,7 @@ const agentController = {
         { $set: { workoutPlan: updatedPlan } }
       );
 
-      res.json({ data: updatedPlan });
+      res.json({ data: newExercise });
     } catch (error) {
       console.error("Error in modifyExerciseHandler:", error);
       res.status(500).json({
