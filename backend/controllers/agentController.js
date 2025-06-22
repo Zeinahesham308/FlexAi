@@ -93,7 +93,7 @@ const agentController = {
 
       // Step 2: Send to AI backend
       const response = await fetch(
-        "http://192.168.137.196:8080/ai/agent/change_exercise",
+        "https://335d-197-45-85-24.ngrok-free.app/ai/agent/change_exercise",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -113,15 +113,19 @@ const agentController = {
           .json({ success: false, error: "AI backend failed" });
       }
 
-      const updatedPlan = await response.json();
+      //edited part wait to test
+      const updatedPlan = await response.updatedPlan;
+      console.log("Updated workout plan from AI backend:", updatedPlan);
 
+      const newExercise = await response.newExercise;
+      console.log("New exercise from AI backend:", newExercise);
       // Step 3: Update user’s workout plan
       await User.updateOne(
         { _id: userId },
         { $set: { workoutPlan: updatedPlan } }
       );
 
-      res.json({ success: true, data: updatedPlan });
+      res.json({ data: updatedPlan });
     } catch (error) {
       console.error("Error in modifyExerciseHandler:", error);
       res.status(500).json({
