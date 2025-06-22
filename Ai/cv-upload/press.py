@@ -1,8 +1,6 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import pandas as pd
-import openpyxl
 
 def calculate_angle(a, b, c):
     a = np.array(a)
@@ -25,8 +23,6 @@ def process(video_path):
     angle_history = []
     reached_down = True
     reached_up = False
-    arm_not_right = False
-    angle_rows=[]
 
 
     while cap.isOpened():
@@ -51,46 +47,40 @@ def process(video_path):
             angle_history.append(angle)
             if len(angle_history) > 2:
                 angle_history.pop(0)
-            if rep_count<=2:
-                angle_rows.append({
-                    'Torso Angle': angle
-                })
             if len(angle_history) == 2:
                 prev_angle, curr_angle = angle_history
                 if reached_up and curr_angle < prev_angle:
-                    if curr_angle < 70:
+                    if curr_angle < 40:
                         reached_down = True
                         reached_up = False
                 
                 elif reached_down and curr_angle > prev_angle:
-                    if curr_angle > 150:
+                    if curr_angle > 130:
                         rep_count += 1
                         print(f"Rep {rep_count}")
                         reached_down = False
                         reached_up = True
                 
                 else:
-                    if not reached_down and curr_angle > prev_angle and prev_angle > 50:
+                    if not reached_down and curr_angle > prev_angle and curr_angle > 40 and curr_angle < 130:
                         partial_reps = True
-                    if not reached_up and curr_angle < prev_angle and prev_angle < 130:
+                    if not reached_up and curr_angle < prev_angle and curr_angle > 40 and curr_angle < 130:
                         partial_reps = True
             
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(image, f'Angle: {angle:.2f}', (10, 100),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         cv2.imshow("shoulder press Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
-    df_angles = pd.DataFrame(angle_rows)
-    df_angles.to_excel(r"/home/amgad/Downloads/press_angles_right.xlsx", index=False)
     cap.release()
     cv2.destroyAllWindows()
 
     s = f"Total Presses: {rep_count}. \n"
     if partial_reps:
         s += "Do full rep go all the way down and all the way up. \n"
-    if arm_not_right:
-        s += "Make your arm 45 angle with your shoulder. \n"
     print(s)
     return s
