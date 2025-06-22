@@ -69,13 +69,15 @@ export class ExerciseCardComponent {
       this.userId="6856aebe32a5e2286d5d2fe5";
 
       // Call exercise service to get a replacement exercise
-      const newExercise = await lastValueFrom(
+      const response = await lastValueFrom(
         this.exerciseService.getAlternativeExercise(
           this.userId,
           this.exercise.name,
           this.exercise.main_muscle
         )
       );
+
+      const newExercise=response.data;
 
 
       if (!newExercise) {

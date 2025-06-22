@@ -17,7 +17,7 @@ export class ExerciseService {
     userId: string,
     exceriseToReplace: string,
     targetMusc: string
-  ): Observable<Workouts> {
+  ): Observable<any> {
     const body = {
       userId,
       exceriseToReplace: exceriseToReplace,
