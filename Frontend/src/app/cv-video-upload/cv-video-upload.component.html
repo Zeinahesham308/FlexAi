@@ -32,13 +32,16 @@
 
     <div *ngIf="uploadComplete" class="success-message">
         <p>Upload complete!</p>
-        <button (click)="toggleResponse()" class="toggle-btn">
-            {{ showResponse ? 'Hide Response' : 'Show Backend Response' }}
-        </button>
     </div>
 
-    <div *ngIf="showResponse && apiResponse" class="api-response">
-        <h3>Backend Response:</h3>
+    <!-- Loading indicator while waiting for response -->
+    <div *ngIf="uploadComplete && !apiResponse" class="loading-indicator">
+        <h3>Processing your video<span class="loading-dots">...</span></h3>
+    </div>
+
+    <!-- Automatically show response when available -->
+    <div *ngIf="apiResponse" class="api-response">
+        <h3>Analysis Results:</h3>
         <pre>{{ apiResponse | json }}</pre>
     </div>
 

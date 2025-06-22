@@ -9,7 +9,8 @@
   font-family: 'Montserrat', sans-serif;
 
   h2 {
-    color: #1f5a3a; /* Dark green from your palette */
+    color: #1f5a3a;
+    /* Dark green from your palette */
     margin-bottom: 1.5rem;
     text-align: center;
     font-weight: 600;
@@ -29,7 +30,8 @@
   select {
     width: 100%;
     padding: 8px;
-    border: 1px solid #dbebab; /* Light green border */
+    border: 1px solid #dbebab;
+    /* Light green border */
     border-radius: 4px;
     font-size: 16px;
     background-color: #f8f9fa;
@@ -45,14 +47,16 @@
   input[type="file"] {
     flex: 1;
     padding: 0.75rem;
-    border: 2px dashed #dbebab; /* Light green */
+    border: 2px dashed #dbebab;
+    /* Light green */
     border-radius: 6px;
     background: #f8f9fa;
     transition: all 0.3s ease;
     cursor: pointer;
 
     &:hover {
-      border-color: #2E8B57; /* Brand green */
+      border-color: #2E8B57;
+      /* Brand green */
       background: #d0dbb2;
     }
 
@@ -64,7 +68,8 @@
       content: 'Choose video file';
       display: inline-block;
       padding: 0.5rem 1rem;
-      background: #2E8B57; /* Brand green */
+      background: #2E8B57;
+      /* Brand green */
       color: white;
       border-radius: 4px;
       margin-right: 1rem;
@@ -73,7 +78,8 @@
 
   button {
     padding: 0.75rem 1.5rem;
-    background: #2E8B57; /* Brand green */
+    background: #2E8B57;
+    /* Brand green */
     color: white;
     border: none;
     border-radius: 6px;
@@ -83,7 +89,8 @@
     white-space: nowrap;
 
     &:hover:not([disabled]) {
-      background: #1f5a3a; /* Darker green */
+      background: #1f5a3a;
+      /* Darker green */
       transform: translateY(-1px);
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
@@ -101,11 +108,13 @@
   padding: 1rem;
   border-radius: 6px;
   margin-bottom: 1.5rem;
-  border-left: 4px solid #2E8B57; /* Brand green */
+  border-left: 4px solid #2E8B57;
+  /* Brand green */
 
   p {
     margin: 0.25rem 0;
-    color: #1f5a3a; /* Dark green text */
+    color: #1f5a3a;
+    /* Dark green text */
     font-size: 0.95rem;
 
     &:first-child {
@@ -124,11 +133,13 @@
     overflow: hidden;
 
     &::-webkit-progress-bar {
-      background: #dbebab; /* Light green */
+      background: #dbebab;
+      /* Light green */
     }
 
     &::-webkit-progress-value {
-      background: linear-gradient(to right, #2E8B57, #1f5a3a); /* Brand to dark green */
+      background: linear-gradient(to right, #2E8B57, #1f5a3a);
+      /* Brand to dark green */
       transition: width 0.3s ease;
     }
   }
@@ -137,18 +148,21 @@
     display: block;
     text-align: center;
     margin-top: 0.5rem;
-    color: #1f5a3a; /* Dark green */
+    color: #1f5a3a;
+    /* Dark green */
     font-size: 0.9rem;
   }
 }
 
 .success-message {
-  background: #dbebab; /* Light green */
+  background: #dbebab;
+  /* Light green */
   padding: 1rem;
   border-radius: 6px;
   margin: 1.5rem 0;
   text-align: center;
-  color: #1f5a3a; /* Dark green */
+  color: #1f5a3a;
+  /* Dark green */
   animation: fadeIn 0.5s ease;
   border: 1px solid #2E8B57;
 
@@ -158,18 +172,37 @@
   }
 }
 
-.toggle-btn {
-  background: none;
-  border: none;
-  color: #2E8B57; /* Brand green */
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+.loading-indicator {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  border: 1px solid #dbebab;
+  text-align: center;
+  color: #1f5a3a;
+  animation: fadeIn 0.5s ease;
 
-  &:hover {
-    color: #1f5a3a; /* Dark green */
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .loading-dots {
+    display: inline-block;
+    width: 1.5em;
+    text-align: left;
+    overflow: hidden;
+    vertical-align: bottom;
+
+    &::after {
+      content: '...';
+      display: inline-block;
+      animation: dotPulse 1.5s infinite step-start;
+    }
   }
 }
 
@@ -183,7 +216,8 @@
 
   h3 {
     margin-top: 0;
-    color: #1f5a3a; /* Dark green */
+    color: #1f5a3a;
+    /* Dark green */
     font-size: 1.1rem;
   }
 
@@ -194,7 +228,8 @@
     font-size: 0.85rem;
     line-height: 1.5;
     margin-bottom: 0;
-    color: #1f5a3a; /* Dark green */
+    color: #1f5a3a;
+    /* Dark green */
   }
 }
 
@@ -212,12 +247,13 @@
   }
 }
 
-/* Animations (unchanged) */
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -225,13 +261,33 @@
 }
 
 @keyframes shake {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
-  20%, 60% {
+
+  20%,
+  60% {
     transform: translateX(-5px);
   }
-  40%, 80% {
+
+  40%,
+  80% {
     transform: translateX(5px);
+  }
+}
+
+@keyframes dotPulse {
+  0% {
+    content: '.';
+  }
+
+  33% {
+    content: '..';
+  }
+
+  66% {
+    content: '...';
   }
 }
