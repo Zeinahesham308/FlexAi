@@ -6,15 +6,24 @@
         <nav class="bg-brand-grey" aria-label="Main Navigation">
             <ul class="FLEX justify-space-between align-center">
                 <li><a routerLink="/home" class="brand-dark-green">Home</a></li>
+                <li><a routerLink="/dashboard" class="brand-dark-green">Dashboard</a></li>
+                <li class="dropdown">
+                    <button class="dropdown-toggle brand-dark-green">
+                        Programs <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a routerLink="/chatbot">Chatbot</a>
+                        <a routerLink="/posePerfect">PosePerfect</a>
+                    </div>
+                </li>
                 <li><a href="/chatbot" class="brand-dark-green">FlexAI</a></li>
-                <li><a href="#" class="brand-dark-green">Programs</a></li>
-                <li><a href="#" class="brand-dark-green">About</a></li>
+                <!-- <li><a href="#" class="brand-dark-green">About</a></li> -->
             </ul>
         </nav>
     </div>
 
     <div class="video-container">
-        <video autoplay muted loop class="video-background"  aria-label="Background video of empty gym">
+        <video autoplay muted loop class="video-background" aria-label="Background video of empty gym">
             <source src="assets/videos/home-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -161,7 +170,7 @@
             <!-- Copyright Notice -->
             <p>© 2025 FLEXAI. All rights reserved.</p>
             <!-- Back to Top Button -->
-            <button id="back-to-top" (click)="scrollToTop()"  aria-label="Go to top">
+            <button id="back-to-top" (click)="scrollToTop()" aria-label="Go to top">
                 ↑ Back to Top
             </button>
         </div>

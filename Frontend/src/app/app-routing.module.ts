@@ -4,6 +4,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { StreamlitEmbedComponent } from './streamlit-embed/streamlit-embed.component';
+import { CvVideoUploadComponent } from './cv-video-upload/cv-video-upload.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'default', pathMatch: 'full' }, // Default route redirects to Sign Up/ Sign In
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'default', component: SignUpComponent }, // Sign Up page route
   { path: 'Streamlit-chatbot', component: StreamlitEmbedComponent },
   { path: 'chatbot', component: ChatbotComponent },
+  { path: 'posePerfect',component:CvVideoUploadComponent},
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
   { path: '**', redirectTo: '/signup' } // Wildcard route for invalid paths (redirect to Sign Up/ Sign In)
 

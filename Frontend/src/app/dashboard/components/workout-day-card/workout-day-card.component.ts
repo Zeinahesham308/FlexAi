@@ -9,33 +9,33 @@ import { Workouts } from '../../../models/workouts.interface';
   styleUrl: './workout-day-card.component.scss'
 })
 export class WorkoutDayCardComponent {
-  /* @Input() exercises: Workouts[] = []; */
-  exercises: Workouts[] = [
-    {
-      name: 'Push-ups',
-      completed: false,
-      main_muscle: 'Chest',
-      sets: 3,
-      reps:"10" ,
-      body_part: 'Upper Body',
-    },
-    {
-      name: 'Squats',
-      completed: true,
-      main_muscle: 'Legs',
-      sets: 4,
-      reps: '12',
-      body_part: 'Lower Body',
-    },
-    {
-      name: 'Pull-ups',
-      completed: true,
-      main_muscle: 'Back',
-      sets: 3,
-      reps: "8",
-      body_part: 'Upper Body',
-    }
-  ];
+  @Input() exercises: Workouts[] = []; 
+  // exercises: Workouts[] = [
+  //   {
+  //     name: 'Push-ups',
+  //     completed: false,
+  //     main_muscle: 'Chest',
+  //     sets: 3,
+  //     reps:"10" ,
+  //     body_part: 'Upper Body',
+  //   },
+  //   {
+  //     name: 'Squats',
+  //     completed: true,
+  //     main_muscle: 'Legs',
+  //     sets: 4,
+  //     reps: '12',
+  //     body_part: 'Lower Body',
+  //   },
+  //   {
+  //     name: 'Pull-ups',
+  //     completed: true,
+  //     main_muscle: 'Back',
+  //     sets: 3,
+  //     reps: "8",
+  //     body_part: 'Upper Body',
+  //   }
+  // ];
   @Input() dayTitle!: string;
   @Input() isActive: boolean = false;
   @Output() exerciseSwapped = new EventEmitter<{
