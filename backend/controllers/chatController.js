@@ -152,7 +152,7 @@ const chatController = {
       sessionId
     };
 
-    const backendResponse = await fetch("http://localhost:8080/ai", {
+    const backendResponse = await fetch("http://localhost:7070/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody)
@@ -186,6 +186,38 @@ const chatController = {
         })
       }
     ]);
+
+    //get session title
+    let sessionTitle = null;
+    const needsTitleUpdate = session.sessionTitle === "New Session";
+
+    if (needsTitleUpdate) {
+      try {
+        console.log("ana gawa")
+        const titleResponse = await fetch("http://localhost:7070/ai/GetSessionTitle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId
+          })
+        });
+        console.log("Title response status:", titleResponse);
+
+        if (titleResponse.ok) {
+          const titleData = await titleResponse.json();
+          const sessionTitle = titleData.messages;
+
+          await sessionsCollection.updateOne(
+            { sessionId },
+            { $set: { sessionTitle } }
+          );
+        } else {
+          console.warn("Failed to generate session title:", await titleResponse.text());
+        }
+      } catch (err) {
+        console.error("Error calling title generation API:", err.message);
+      }
+    }
 
     res.json({
       success: true,
@@ -314,6 +346,7 @@ startNewSession: async (req, res) => {
     await sessionsCollection.insertOne({
       userId,
       sessionId,
+      sessionTitle: "New Session", // Default title
       isActive: true,
       startedAt: new Date(),
       lastUpdated: new Date()

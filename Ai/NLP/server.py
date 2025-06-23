@@ -77,7 +77,7 @@ def get_session_title():
 def index():
     return "Server is running!"
 def start_app():
-    app.run(host="0.0.0.0",port=8080)
+    app.run(host="0.0.0.0",port=7070)
 
 if __name__=="__main__":
     start_app()

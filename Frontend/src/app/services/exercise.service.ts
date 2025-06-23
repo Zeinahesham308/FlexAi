@@ -17,14 +17,14 @@ export class ExerciseService {
     userId: string,
     exceriseToReplace: string,
     targetMusc: string
-  ): Observable<Workouts> {
-    const params = {
+  ): Observable<any> {
+    const body = {
       userId,
       exceriseToReplace: exceriseToReplace,
       targetMusc
     };
 
-    return this.http.get<Workouts>(`${this.apiUrl}/api/agent//plan/update-exercise`, { params });
+    return this.http.post<Workouts>(`${this.apiUrl}/api/agent/plan/update-exercise`, { body });
   }
 
 }

@@ -72,8 +72,14 @@ const agentController = {
 
   async modfiyExerciseHandler(req, res) {
     try {
-      const { userId, exerciseToReplace, targetMusc } = req.body;
-
+      console.log("Received request body:", req.body);
+      // const { userId, exerciseToReplace, targetMusc } = req.body;
+      const userId = req.body.body.userId;
+      const exerciseToReplace = req.body.body.exceriseToReplace;
+      const targetMusc = req.body.body.targetMusc;
+      console.log("Received userId:", userId);
+      console.log("Received exerciseToReplace:", exerciseToReplace);
+      console.log("Received targetMusc:", targetMusc);
       if (!userId || !exerciseToReplace) {
         return res.status(400).json({
           success: false,
@@ -126,7 +132,7 @@ const agentController = {
         { _id: userId },
         { $set: { workoutPlan: newPlan } }
       );
-      const jsonObject = JSON.parse(newExercise);
+      const jsonObject = JSON.parse(newExercise,);
       res.json({ data: jsonObject });
     } catch (error) {
       console.error("Error in modifyExerciseHandler:", error);
