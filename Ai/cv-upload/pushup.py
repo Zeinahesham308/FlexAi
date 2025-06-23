@@ -24,6 +24,7 @@ def process(video_path):
     reached_down = False
     reached_up = True
     back_not_flat = False
+    stage = "up"
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -55,6 +56,7 @@ def process(video_path):
                     if curr_angle < 90:
                         reached_down = True
                         reached_up = False
+                        stage = "down"
                 
                 elif reached_down and curr_angle > prev_angle:
                     if curr_angle > 160:
@@ -62,6 +64,7 @@ def process(video_path):
                         # print(f"Rep {rep_count}")
                         reached_down = False
                         reached_up = True
+                        stage = "up"
                 
                 else:
                     if not reached_down and curr_angle < prev_angle and prev_angle > 90:
@@ -78,7 +81,7 @@ def process(video_path):
 
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        cv2.putText(image, f'stage: {stage:.2f}', (10, 100),
+        cv2.putText(image, f'stage: {stage}', (10, 100),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         cv2.imshow("Push-up Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
