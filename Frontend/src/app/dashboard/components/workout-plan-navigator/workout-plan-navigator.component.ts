@@ -27,8 +27,7 @@ export class WorkoutPlanNavigatorComponent {
   }
 
    loadWorkoutPlan() {
-    /* const userId = this.authService.getStoredUserId(); */
-    const userId="6856aebe32a5e2286d5d2fe5";
+    const userId = this.authService.getStoredUserId();
     this.workoutService.getWorkoutPlan(userId).subscribe({        
       next: (days) => {
         const response = days;

@@ -30,6 +30,7 @@ export class ChatbotComponent implements OnInit {
   errorMessage: string | null = null;
 
   userId!: string; // Store user ID
+  username: string = 'Guest'; // Default value
 
   private subscriptions: Subscription = new Subscription();
 
@@ -40,10 +41,13 @@ export class ChatbotComponent implements OnInit {
 
 
     // Get user id
-    this.userId = this.authService.getStoredUserId();
-    this.userId = "68548fe2bebcccec75afdb67";
+    //this.userId = this.authService.getStoredUserId();
+    this.userId = this.authService.getUserId();
+    console.log('User ID from component:', this.userId);
+    /* this.userId = "68548fe2bebcccec75afdb67"; */
     this.startNewChat(); // Start a new chat session on component initialization
     this.loadSessions();
+    this.loadUsername();
 
   }
 
@@ -83,7 +87,7 @@ export class ChatbotComponent implements OnInit {
       console.log(sessionMessages);
       this.currentSessionId = sessionId;
       console.log('API Response:', sessionMessages.messages);
-      
+
       this.messages = sessionMessages.messages;
       console.log('Message property:', this.messages);
 
@@ -99,6 +103,7 @@ export class ChatbotComponent implements OnInit {
     const sub = this.chatService.startNewChat(this.userId).subscribe({
       next: (newSession: ChatSession) => {
         this.currentSessionId = newSession.sessionId;
+        newSession.sessionTitle = "New Session";
         this.chatSessions = [newSession, ...this.chatSessions];
         this.messages = [];
         this.errorMessage = null;
@@ -181,6 +186,13 @@ export class ChatbotComponent implements OnInit {
   /* Toggle sidebar */
   toggleSidebar() {
     this.isSidebarVisible = !this.isSidebarVisible;
+  }
+
+  loadUsername(): void {
+    // Get username from AuthService
+      this.username = this.authService.getUsername();
+    console.log('Username from component:', this.username);
+    
   }
 
   // ==================== HELPERS ====================

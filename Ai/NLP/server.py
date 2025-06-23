@@ -53,6 +53,8 @@ def GetChatHistory():
     {"isBot": msg.type=="ai", "text": msg.content}
     for msg in messages
 ]
+    Belal hossam
+    12345678
     json_response={"messages":serialized}
     return Response(json.dumps(json_response))
 @app.route("/ai/GetSessionTitle",methods=["POST"])
@@ -68,7 +70,7 @@ def get_session_title():
         database_name="flexdb",
         collection_name="history"
     )
-    title=cached_chain.invoke({"input": "generate session title for this conversation and return only the title", "chat_history": cached_History.messages})
+    title=cached_chain.invoke({"input": "generate session title for this conversation and return only the title in three words", "chat_history": cached_History.messages})
     
     json_response={"messages":title}
     return Response(json.dumps(json_response))

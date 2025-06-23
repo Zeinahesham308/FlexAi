@@ -15,7 +15,7 @@ export class UserAccountInfoService {
 
     // Get single user by ID
   getUserAccount(userId: string): Observable<UserProfile> {
-    userId = "6851dbacec913c13f60890de"; // Example user ID,  TODO: remoce this hardcoded value as it is passed from the auth service in ts component
+    console.log('Fetching user account for ID:', userId);
     return this.http.get<UserProfile>(`${this.apiUrl}/${userId}`);
   }
 

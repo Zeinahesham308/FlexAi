@@ -99,14 +99,7 @@ def agent_change():
     result=find_differing_exercise(saved_plan_json,final_plan)
     print("the two exercises are")
     print(result)
-    
-    # print("new diff")
-    # difference=llm_openai.invoke("this is the plan before change "+saved_plan.replace("\\", "")+" and this is the plan after changing one exercise "+final_plan.model_dump_json().replace("\\", "")+"i want you to tell me the new exercise name with sets and reps and body part and main muscle").content
-    # print(difference)
-    # print("************************************")
-    # print(llm_openai_structured_for_change.invoke(difference))
-    # print("************************************")
-    # print(final_plan)
+
 
         
 
@@ -116,6 +109,7 @@ def agent_change():
     return Response(json.dumps(json_response), mimetype="application/json")
 @app.route("/", methods=["GET"])
 def index():
+    
     return "Server is running!"
 def start_app():
     app.run(host="0.0.0.0",port=8080)

@@ -21,13 +21,10 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/api/users/login`, user).pipe(
       tap((response: any) => {
         console.log('Login successful:', response);
-
-        this.currentUserId = response.userId; // Store userId from response
+        this.currentUserId = response.data.userId; // Store userId from response
+        console.log('tmm currentUserId', this.currentUserId);
       }),
-      (error: any) => {
-        console.error('Login failed:', error);
-        throw error; // Re-throw the error for further handling
-      }
+
 
     );
   }
@@ -39,7 +36,27 @@ export class AuthService {
 
   // Get the stored userId (sync)
   getStoredUserId(): string {
+
     console.log('tmm getStoredUserId', this.currentUserId);
     return this.currentUserId ?? '';
+  }
+  getUserId(): string {
+    const rawUserData = localStorage.getItem('userData');
+    console.log('userid from localstorage', rawUserData);
+    if (!rawUserData) {
+      return "no userId";
+    }
+    const userData = JSON.parse(rawUserData).userId;
+    return userData;
+  }
+
+  getUsername(): string {
+    const rawUserData = localStorage.getItem('userData');
+    console.log('username from localstorage', rawUserData);
+    if (!rawUserData) {
+      return "Guest";
+    }
+    const userData = JSON.parse(rawUserData).name;
+    return userData;
   }
 }
