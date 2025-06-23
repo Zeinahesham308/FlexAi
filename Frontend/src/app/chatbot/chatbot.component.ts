@@ -41,7 +41,7 @@ export class ChatbotComponent implements OnInit {
 
     // Get user id
     this.userId = this.authService.getStoredUserId();
-    this.userId = "68548fe2bebcccec75afdb67";
+    /* this.userId = "68548fe2bebcccec75afdb67"; */
     this.startNewChat(); // Start a new chat session on component initialization
     this.loadSessions();
 
