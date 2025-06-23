@@ -37,6 +37,7 @@ export class UserProfileHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     const userId = this.authService.getStoredUserId();
+    console.log('Fetching user data for userId from component:', userId);
     this.userAccountInfoService.getUserAccount(userId).subscribe({
       next: (response: any) => {
         this.userData = response.data;

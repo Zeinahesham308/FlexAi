@@ -15,6 +15,7 @@ export class UserAccountInfoService {
 
     // Get single user by ID
   getUserAccount(userId: string): Observable<UserProfile> {
+    console.log('Fetching user account for ID:', userId);
     return this.http.get<UserProfile>(`${this.apiUrl}/${userId}`);
   }
 

@@ -22,6 +22,7 @@ export class AuthService {
       tap((response: any) => {
         console.log('Login successful:', response);
         this.currentUserId = response.data.userId; // Store userId from response
+        console.log('tmm currentUserId', this.currentUserId);
       }),
      
 
