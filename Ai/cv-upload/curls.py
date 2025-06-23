@@ -27,6 +27,7 @@ def process(video_path):
     angle_history = []
     reached_up = False
     reached_down = True
+    stage = "down"
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -62,6 +63,7 @@ def process(video_path):
                     if curr_angle < 30:
                         reached_up = True
                         reached_down = False
+                        stage = "up"
 
                 elif reached_up and curr_angle > prev_angle:
                     if curr_angle > 160:
@@ -69,6 +71,7 @@ def process(video_path):
                         print(f"Rep {rep_count}: Full range of motion")
                         reached_up = False
                         reached_down = True
+                        stage = "down"
 
                 else :
                     if not reached_up and curr_angle > prev_angle and prev_angle < 160:
@@ -84,12 +87,16 @@ def process(video_path):
             if len(torso_movements) > 10:
                 delta = max(torso_movements) - min(torso_movements)
                 if delta > 0.08:
+                    cv2.putText(image,"Swinging Detected!", (10, 150),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                     print(f"[Rep {rep_count+1}] Swinging detected! Torso Y movement: {delta:.3f}")
                     swinging_reps = True
                 torso_movements.pop(0)
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(image, f'stage: {stage}', (10, 100),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         cv2.imshow("Bicep Curl Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
@@ -104,6 +111,6 @@ def process(video_path):
         s += "Do not swing with your back, This is dangerous and can cuase injuries. \n"
     else:
         if partial_reps:
-            s += "Do not do partial reps go all the way up and all the way down. \n"
+            s += "Partial Rep Detected. \n"
     print(s)
     return s

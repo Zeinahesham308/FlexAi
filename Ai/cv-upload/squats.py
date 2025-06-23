@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import math
+import pandas as pd
 
 
 def calculate_angle(a, b, c):
@@ -35,12 +36,21 @@ def process(video_path):
     pose = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.5, model_complexity=1)
     mp_drawing = mp.solutions.drawing_utils
     cap = cv2.VideoCapture(video_path)
-
+    rep_count=0
     counter = 0
-    feedback=""
+    
     stage="Standing"
     s=""
-    wrong_set = set()
+
+    Starighten_flag=False
+    partial_reps=False
+    angle_hip_history = []
+
+    squatting = False
+    Standing = True
+    return_string=""
+
+
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -95,50 +105,67 @@ def process(video_path):
            
             # torso_angle= calculate_angle(lshoulder, lhip, lankle)
             torso_angle = torso_angle_with_vertical(lshoulder, lhip)
-            knee_angle = calculate_angle(lhip, lknee, lankle)
+
 
            
             if torso_angle > 45 and stage==" down":
-                feedback=f"You needed to strigten your back at count {counter}\n"
-                wrong_set.add(feedback)
+                Starighten_flag=True
                 cv2.putText(image, "Straighten your back!",
-                (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                (int(80 * scale_factor), int(height - 50 * scale_factor)),
                 cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+                
 
             # Calculate angle
             lhip_angle = calculate_angle(lshoulder, lhip, lknee)
-           
-            print(f"Torso angle : {torso_angle} .. hip angle: {lhip_angle}.... knee angle :{knee_angle}")
-            print("-----------------------------------------------------------------------------")
-            if lhip_angle <115 and stage==" Standing":
-                stage = " down"
-                counter += 1
-                print(stage)
-            if lhip_angle >=150 and stage != 'good':
-                stage = " Standing"
+            angle_hip_history.append(lhip_angle)
+
+            if len(angle_hip_history) > 2:
+                angle_hip_history.pop(0)
+
             
+            if len(angle_hip_history) == 2:
+                prev_angle, curr_angle = angle_hip_history
+                if Standing and curr_angle < prev_angle:
+                    if curr_angle <115:
+                        squatting = True
+                        Standing = False
+                        stage=" down"
 
-                if knee_angle < 60 or knee_angle > 120 and stage==" down":
-                    warning = f"Check knee angle at count {counter}"
-                    wrong_set.add(warning)
-                    cv2.putText(image, "Fix your knees!", (50, 200), cv2.FONT_HERSHEY_SIMPLEX,
-                                font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+                elif squatting and curr_angle > prev_angle:
+                    if curr_angle >=150:
+                        rep_count += 1
+                        print(f"Rep {rep_count}: Full range of motion")
+                        squatting = False
+                        Standing = True
+                        stage=" Standing"
 
-                if lhip_angle > 100 and stage==" down":
-                    warning = f"Not squatting deep enough at count {counter}"
-                    wrong_set.add(warning)
-                    cv2.putText(image, "Go deeper!", (50, 250), cv2.FONT_HERSHEY_SIMPLEX,
-                                font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+                else :
+                    if not squatting and curr_angle > prev_angle and prev_angle >115 and prev_angle<150: #wehn moving up
+                        partial_reps = True
+                        
+                        cv2.putText(image, f"Partial rep DETECTED!!",
+                        (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
 
-            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-        
+                    if not Standing and curr_angle < prev_angle and prev_angle < 150 and prev_angle>115:
+                        partial_reps = True
+
+                        cv2.putText(image, f"Partial rep DETECTED!!",
+                        (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+
+                
+
+
+            print(f"Torso angle : {torso_angle} .. hip angle: {lhip_angle}")
+            print("-----------------------------------------------------------------------------")
         # cv2.rectangle(image, (0, 0), (225, 73), (1, 117, 16), -1)
 
         # Rep data
         cv2.putText(image, 'REPS', (int(15 * scale_factor), int(30 * scale_factor)),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 255, 0), thickness, cv2.LINE_AA)
 
-        cv2.putText(image, str(counter), (int(10 * scale_factor), int(80 * scale_factor)),
+        cv2.putText(image, str(rep_count), (int(10 * scale_factor), int(80 * scale_factor)),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale_value, (0, 255, 0), thickness + 1, cv2.LINE_AA)
 
 
@@ -158,7 +185,13 @@ def process(video_path):
     cap.release()
     cv2.destroyAllWindows()
 
-    s = f"Total Reps: {counter}. \n"
+    s = f"Total Reps: {rep_count}. \n"
     print(s)
-    return_string= s+ "\n".join(wrong_set)
+    return_string+=s
+    if Starighten_flag:
+        return_string+="Don't lean forward"
+        return return_string
+    elif partial_reps:
+        return_string+="Partial Rep Detected"
+        return return_string
     return return_string 

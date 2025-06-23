@@ -23,8 +23,9 @@ def process(video_path):
     partial_reps = False
     bad_posture_detected = False
     angle_history = []
-    reached_down = True
-    reached_up = False
+    reached_down = False
+    reached_up = True
+    stage = "up"
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -60,22 +61,26 @@ def process(video_path):
             torso_angle = calculate_angle(shoulder, hip, knee)
             if torso_angle > 120:
                 bad_posture_detected = True
+                cv2.putText(image, "Don't Lean Backward", (10, 150), cv2.FONT_HERSHEY_SIMPLEX,
+                                1, (0, 0, 255), 2)
 
             
             if len(angle_history) == 2:
                 prev_angle, curr_angle = angle_history
 
-                if reached_down and curr_angle < prev_angle:
+                if reached_up and curr_angle < prev_angle:
                     if curr_angle < 70:
-                        reached_up = True
-                        reached_down = False
+                        reached_up = False
+                        reached_down = True
+                        stage = "down"
 
-                elif reached_up and curr_angle > prev_angle:
+                elif reached_down and curr_angle > prev_angle:
                     if curr_angle > 150:
                         rep_count += 1
                         print(f"Rep {rep_count}: Full range of motion")
-                        reached_up = False
-                        reached_down = True
+                        reached_up = True
+                        reached_down = False
+                        stage = "up"
 
                 else:
                     if not reached_up and curr_angle > prev_angle and prev_angle < 150:
@@ -87,6 +92,8 @@ def process(video_path):
 
     
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(image, f'stage: {stage}', (10, 100),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         cv2.imshow("Lat Pulldown Tracker", image)
@@ -102,6 +109,6 @@ def process(video_path):
         s += "Warning: Detected excessive leaning backward.\n"
     else:
         if partial_reps:
-            s += "Warning: You performed partial reps.\n"
+            s += "Partial Rep detected.\n"
     print(s)
     return s
