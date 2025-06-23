@@ -24,7 +24,7 @@ export class AuthService {
         this.currentUserId = response.data.userId; // Store userId from response
         console.log('tmm currentUserId', this.currentUserId);
       }),
-     
+
 
     );
   }
@@ -36,7 +36,7 @@ export class AuthService {
 
   // Get the stored userId (sync)
   getStoredUserId(): string {
-    
+
     console.log('tmm getStoredUserId', this.currentUserId);
     return this.currentUserId ?? '';
   }
@@ -44,9 +44,19 @@ export class AuthService {
     const rawUserData = localStorage.getItem('userData');
     console.log('userid from localstorage', rawUserData);
     if (!rawUserData) {
-      return "dkcdjscj";
+      return "no userId";
     }
     const userData = JSON.parse(rawUserData).userId;
     return userData;
-}
+  }
+
+  getUsername(): string {
+    const rawUserData = localStorage.getItem('userData');
+    console.log('username from localstorage', rawUserData);
+    if (!rawUserData) {
+      return "Guest";
+    }
+    const userData = JSON.parse(rawUserData).name;
+    return userData;
+  }
 }
