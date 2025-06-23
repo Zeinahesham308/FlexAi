@@ -101,6 +101,7 @@ export class ChatbotComponent implements OnInit {
     const sub = this.chatService.startNewChat(this.userId).subscribe({
       next: (newSession: ChatSession) => {
         this.currentSessionId = newSession.sessionId;
+        newSession.sessionTitle="New Session";
         this.chatSessions = [newSession, ...this.chatSessions];
         this.messages = [];
         this.errorMessage = null;
