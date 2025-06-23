@@ -1,6 +1,7 @@
 
 from langchain_ollama import OllamaEmbeddings
 from langchain_milvus import Milvus
+from langchain_openai import ChatOpenAI
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
@@ -19,6 +20,7 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
+
 
 #update for bello
 def load_and_process_pdfs(pdf_folder_path):
@@ -39,6 +41,8 @@ from pymilvus import connections , utility ,db
 # filter the context thats is retrieved
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
+    os.environ["OPENAI_API_KEY"] = config["openai"]["apiKey"]
+
 def initialize_vectorstore(splits,embd):
     return FAISS.from_documents(documents=splits, embedding=embd)
 
@@ -68,13 +72,8 @@ def return_rag_chain():
     print("Vectorstore created successfully")
     # %%
     os.environ["GROQ_API_KEY"] = config['groq']['apiKey']
-    llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
-        temperature=0,
-        max_tokens=None,
-        timeout=None,
-        max_retries=2
-    )
+    llm=ChatOpenAI(temperature=0, model_name="gpt-4.1")
+
 
     # %%
 
