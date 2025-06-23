@@ -61,6 +61,8 @@ def process(video_path):
             torso_angle = calculate_angle(shoulder, hip, knee)
             if torso_angle > 120:
                 bad_posture_detected = True
+                cv2.putText(image, "Don't Lean Backward", (10, 150), cv2.FONT_HERSHEY_SIMPLEX,
+                                1, (0, 0, 255), 2)
 
             
             if len(angle_history) == 2:
