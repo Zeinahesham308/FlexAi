@@ -21,13 +21,9 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/api/users/login`, user).pipe(
       tap((response: any) => {
         console.log('Login successful:', response);
-
         this.currentUserId = response.userId; // Store userId from response
       }),
-      (error: any) => {
-        console.error('Login failed:', error);
-        throw error; // Re-throw the error for further handling
-      }
+     
 
     );
   }
