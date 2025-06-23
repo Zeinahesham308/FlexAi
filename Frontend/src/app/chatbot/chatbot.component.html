@@ -25,7 +25,7 @@
             <li *ngFor="let session of chatSessions; trackBy: trackBySessionId"
               (click)="loadChatSession(session.sessionId)" [class.active]="session.sessionId === currentSessionId">
               <i class="fa-regular fa-message"></i>
-              <span class="session-preview">{{ session.sessionId }}</span>
+              <span class="session-preview">{{ session.sessionTitle }}</span>
               <span class="session-date">{{ session.startedAt | date:'shortDate' }}</span>
             </li>
           </ul>
