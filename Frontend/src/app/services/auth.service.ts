@@ -36,7 +36,17 @@ export class AuthService {
 
   // Get the stored userId (sync)
   getStoredUserId(): string {
+    
     console.log('tmm getStoredUserId', this.currentUserId);
     return this.currentUserId ?? '';
   }
+  getUserId(): string {
+    const rawUserData = localStorage.getItem('userData');
+    console.log('userid from localstorage', rawUserData);
+    if (!rawUserData) {
+      return "dkcdjscj";
+    }
+    const userData = JSON.parse(rawUserData).userId;
+    return userData;
+}
 }
