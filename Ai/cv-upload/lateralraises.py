@@ -2,7 +2,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import math
-
+import pandas as pd
 
 def calculate_angle(a, b, c):
     a = np.array(a)
@@ -23,13 +23,16 @@ def process(video_path):
     mp_drawing = mp.solutions.drawing_utils
     cap = cv2.VideoCapture(video_path)
 
-    counter = 0
-    feedback_count=0
-    # partial_reps = False
-    # angle_history = []
-    # reached_up = False
-    # reached_down = True
 
+    rep_count=0
+    feedback=False
+    partial_reps = False
+    angle_history = []
+    reached_up = False
+    reached_down = True
+    mymax1=0
+    mymax2=0
+    stage="down"
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -37,6 +40,20 @@ def process(video_path):
             break
 
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        height, width, _ = image.shape
+
+    # Ensure the image is square before sending to MediaPipe
+        if height != width:
+            diff = abs(height - width)
+            if height < width:
+                pad_top = diff // 2
+                pad_bottom = diff - pad_top
+                image = cv2.copyMakeBorder(image, pad_top, pad_bottom, 0, 0, cv2.BORDER_CONSTANT)
+            else:
+                pad_left = diff // 2
+                pad_right = diff - pad_left
+                image = cv2.copyMakeBorder(image, 0, 0, pad_left, pad_right, cv2.BORDER_CONSTANT)
         results = pose.process(image)
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
@@ -49,7 +66,7 @@ def process(video_path):
 
         if results.pose_landmarks:
             landmarks = results.pose_landmarks.landmark
-
+    
            
             shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
                         landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
@@ -75,43 +92,61 @@ def process(video_path):
            
 
             # Calculate angle
-            angle = calculate_angle(hip, shoulder, elbow)
+            shoulderAngle = calculate_angle(hip, shoulder, elbow)
 
-            armAgnle=calculate_angle(shoulder,elbow,wrist)
-
-
-            rangle = calculate_angle(rhip, rshoulder, relbow)
-
-            rarmAgnle=calculate_angle(rshoulder,relbow,rwrist)
+            elbowAgnle=calculate_angle(shoulder,elbow,wrist)
 
 
-            if angle>90:
-                # cv2.putText(image, "please lower your left arm",
-                #             (120, 120),
-                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-                pass
-            if rangle>90:
-                # cv2.putText(image, "please lower your right arm",
-                #             (200, 200),
-                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-                pass
+            angle_history.append(shoulderAngle)
+            if len(angle_history) > 2:
+                angle_history.pop(0)
 
-            if angle <70 and armAgnle>=150 and rangle<70 and rarmAgnle>=150:
-                stage = "down"
-            if angle >70 and angle<=90 and armAgnle>=150 and rangle>70 and armAgnle>=150 and stage == 'down':
-                stage = "up"
-                counter += 1
-                print(counter)
-            if(armAgnle<=150):
-                # cv2.putText(image, "please straighten your left arm",
-                #             (0, 250),
-                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-                feedback_count+=1
-            if(rarmAgnle<=150):
-                # cv2.putText(image, "please straighten your right arm",
-                #             (0, 300),
-                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-                feedback_count+=1
+            
+            if len(angle_history) == 2:
+                prev_angle, curr_angle = angle_history
+                if reached_down and curr_angle > prev_angle:
+                    if curr_angle >=95:
+                        reached_up = True
+                        reached_down = False
+                        stage=" up"
+
+                elif reached_up and curr_angle < prev_angle:
+                    if curr_angle <30:
+                        rep_count += 1
+                        print(f"Rep {rep_count}: Full range of motion")
+                        reached_up = False
+                        reached_down = True
+                        stage=" down"
+
+                else :
+                    if not reached_up  and curr_angle+5 < prev_angle and prev_angle >=30 and prev_angle<95: #wehn moving up
+                        partial_reps = True
+                        
+                        cv2.putText(image, f"Partial rep DETECTED!!",
+                        (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+                        mymax1=max(mymax1,abs(prev_angle-curr_angle))
+                        
+
+                    if not reached_down  and curr_angle > prev_angle+5 and  prev_angle>30 and partial_reps<95: #wehn moving down
+                        partial_reps = True
+                        
+                        
+                        cv2.putText(image, f"Partial rep DETECTED!!",
+                        (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+
+                        mymax2=max(mymax2,abs(curr_angle-prev_angle))
+
+            print(f"left Shoulder Angle : {shoulderAngle} .. left elbow Angle: {elbowAgnle}")
+            print("-----------------------------------------------------------------------------")
+
+            if shoulderAngle>95 :
+                cv2.putText(image, f"Please lower your arms",
+                        (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+                feedback=True
+
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         
         # cv2.rectangle(image, (0, 0), (225, 73), (1, 117, 16), -1)
@@ -120,7 +155,7 @@ def process(video_path):
         cv2.putText(image, 'REPS', (int(15 * scale_factor), int(30 * scale_factor)),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 255, 0), thickness, cv2.LINE_AA)
 
-        cv2.putText(image, str(counter), (int(10 * scale_factor), int(80 * scale_factor)),
+        cv2.putText(image, str(rep_count), (int(10 * scale_factor), int(80 * scale_factor)),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale_value, (0, 255, 0), thickness + 1, cv2.LINE_AA)
 
 
@@ -137,11 +172,15 @@ def process(video_path):
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
 
+
+   
     cap.release()
     cv2.destroyAllWindows()
+    
+    s = f"Total Reps: {rep_count}. \n"
+    if feedback:
+        return_string=s+ "You need to lower your arms"
+    elif partial_reps:
+        return_string=s+"Partial Rep Detected\n"
 
-    s = f"Total Reps: {counter}. \n"
-    if feedback(feedback_count,counter)>=30:
-        s += "you need to straight your arms more \n"
-    print(s)
-    return s
+    return return_string

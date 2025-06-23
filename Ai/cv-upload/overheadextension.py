@@ -4,6 +4,7 @@ import numpy as np
 import math
 threshold_deg=30
 mymax=0
+import pandas as pd
 def calculate_angle(a, b, c):
     a = np.array(a)
     b = np.array(b)
@@ -13,15 +14,7 @@ def calculate_angle(a, b, c):
     if angle > 180.0:
         angle = 360 - angle
     return angle
-def is_vertical(shoulder, elbow, threshold_deg=40):
-    global mymax
-    dx = elbow[0] - shoulder[0]
-    dy = shoulder[1] - elbow[1]  # Y decreases going up
-    angle_rad = np.arctan2(dx, dy)  # dx over dy to check deviation from vertical
-    angle_deg = np.degrees(abs(angle_rad))
-    print(angle_deg)
-    mymax=max(mymax,angle_deg)
-    return angle_deg < threshold_deg  # within allowed lean
+
 
 
 
@@ -31,11 +24,22 @@ def process(video_path):
     mp_drawing = mp.solutions.drawing_utils
     cap = cv2.VideoCapture(video_path)
 
-    counter = 0
-    feedback=""
-    stage="up"
+
     s=""
-    wrong_set = set()
+    rep_count=0
+    feedback=False
+    partial_reps = False
+    angle_history = []
+    reached_up = False
+    reached_down = True
+    mymax1=0
+    mymax2=0
+    stage=" down"
+    flag=False
+
+
+
+    
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -88,49 +92,51 @@ def process(video_path):
             elbow_angle = calculate_angle(lshoulder, lelbow, lwrist)
             shoulder_angle = calculate_angle(lhip, lshoulder, lelbow)
 
-             # Repetition logic
-            if elbow_angle <=80 and stage == "up":
-                stage = "down"
-                counter += 1
-                print("Repetition:", counter)
+            angle_history.append(elbow_angle)
+            if len(angle_history) > 2:
+                angle_history.pop(0)
 
-            if elbow_angle >=150 and stage == "down":
-                stage = "up"
+            
+            if len(angle_history) == 2:
+                prev_angle, curr_angle = angle_history
+                if reached_down and curr_angle > prev_angle:
+                    if curr_angle >=150:
+                        reached_up = True
+                        reached_down = False
+                        stage=" up"
+
+                elif reached_up and curr_angle < prev_angle:
+                    if curr_angle <70:
+                        rep_count += 1
+                        print(f"Rep {rep_count}: Full range of motion")
+                        reached_up = False
+                        reached_down = True
+                        stage=" down"
+
+                else :
+                    if not reached_up  and curr_angle+10 < prev_angle and prev_angle >=70 and prev_angle<150: #wehn moving up
+                        partial_reps = True
+                        
+                        cv2.putText(image, f"Partial rep DETECTED!!",
+                        (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+                        
+                        
+
+                    if not reached_down  and curr_angle > prev_angle+10 and  prev_angle>70 and partial_reps<150: #wehn moving down
+                        partial_reps = True
+                        cv2.putText(image, f"Partial rep DETECTED!!",
+                        (int(50 * scale_factor), int(height - 50 * scale_factor)),
+                        cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
+
+                        
 
 
-            # Feedback
-            if elbow_angle>80 and elbow_angle<130 and stage=="up":
-                print("REALLY ? ")
-                feedback = f"Bend your elbow more at count {counter}"
-                wrong_set.add(feedback)
-                cv2.putText(image, "Bend your elbow more!",
-                            (50, 200), cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
-
-        
-            # if elbow_angle > 80 and stage == "down":
-            #     feedback = f"Bend your elbow more at count {counter}"
-            #     wrong_set.add(feedback)
-            #     cv2.putText(image, "Bend your elbow more!",
-            #                 (50, 200), cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
-
-            # if shoulder_angle < 60:
-            #     feedback = f"Keep arm more vertical at count {counter}"
-            #     wrong_set.add(feedback)
-            #     cv2.putText(image, "Keep arm vertical!",
-            #                 (50, 250), cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
-           
-           
-            vertical_ok = is_vertical(lshoulder, lelbow)
-            if not vertical_ok:
-                warning = f"Arm not vertical at count {counter}"
-                wrong_set.add(warning)
-                cv2.putText(image, "Keep your upper arm vertical!",
-                            (50, 300), cv2.FONT_HERSHEY_SIMPLEX,
-                            font_scale_title, (0, 0, 255), thickness, cv2.LINE_AA)
-
-
-            print(f"Elbow angle : {elbow_angle} .. Shoulder angle: {shoulder_angle}")
+            print(f"elbow_angle: {elbow_angle} .. shoulder_angle: {shoulder_angle}")
             print("-----------------------------------------------------------------------------")
+
+           
+
            
 
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
@@ -141,7 +147,7 @@ def process(video_path):
         cv2.putText(image, 'REPS', (int(15 * scale_factor), int(30 * scale_factor)),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale_title, (0, 255, 0), thickness, cv2.LINE_AA)
 
-        cv2.putText(image, str(counter), (int(10 * scale_factor), int(80 * scale_factor)),
+        cv2.putText(image, str(rep_count), (int(10 * scale_factor), int(80 * scale_factor)),
                     cv2.FONT_HERSHEY_SIMPLEX, font_scale_value, (0, 255, 0), thickness + 1, cv2.LINE_AA)
 
 
@@ -157,12 +163,13 @@ def process(video_path):
         cv2.imshow("Overhead Extension Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
-
+ 
     cap.release()
     cv2.destroyAllWindows()
 
-    s = f"Total Reps: {counter}. \n"
+    s = f"Total Reps: {rep_count}. \n"
     print(s)
-    print(f"MAX :{mymax}")
-    return_string= s+ "\n".join(wrong_set)
+    if partial_reps:
+        s+="Partial rep detected\n"
+    return_string= s
     return return_string 

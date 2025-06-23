@@ -78,6 +78,8 @@ def process(video_path):
 
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(image, f'stage: {stage:.2f}', (10, 100),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         cv2.imshow("Push-up Tracker", image)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
@@ -86,7 +88,7 @@ def process(video_path):
 
     s = f"Total Push-ups: {rep_count}. \n"
     if partial_reps:
-        s += "Do full push-ups Go all the way down and all the way up. \n"
+        s += "Partial Rep Detected. \n"
     if back_not_flat:
         s += "Your back is not flat, try to keep your back straight. \n"
     print(s)
