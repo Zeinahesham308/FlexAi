@@ -74,10 +74,14 @@ def process(video_path):
                         partial_reps = True
                         # reached_down = True
                         # print("if1")
+                        cv2.putText(image, "Partial Rep Detected", (10, 150),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                     if not reached_down and curr_angle < prev_angle and prev_angle > 70:
                         partial_reps = True
                         # reached_up = True
                         # print("if2")
+                        cv2.putText(image, "Partial Rep Detected", (10, 150),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         
         cv2.putText(image, f'Reps: {rep_count}', (10, 50),
