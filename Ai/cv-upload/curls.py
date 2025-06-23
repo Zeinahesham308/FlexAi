@@ -87,6 +87,8 @@ def process(video_path):
             if len(torso_movements) > 10:
                 delta = max(torso_movements) - min(torso_movements)
                 if delta > 0.08:
+                    cv2.putText(image,"Swinging Detected!", (10, 150),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                     print(f"[Rep {rep_count+1}] Swinging detected! Torso Y movement: {delta:.3f}")
                     swinging_reps = True
                 torso_movements.pop(0)
